@@ -8,6 +8,7 @@ from .info import company_info
 from .news import company_news
 from .info2 import twelve_data_profile
 from .history import twelve_data_stats
+from .info_all import yfinance_info
 
 @csrf_exempt
 def index(request):
@@ -28,6 +29,7 @@ def ticker(request, tid):
     context['info'] = company_info(tid)
     context['info2'] = twelve_data_profile(tid)
     context['stats'] = twelve_data_stats(tid)
+    context['infoall'] = yfinance_info(tid)
     return render(request, 'ticker.html', context)
 
 

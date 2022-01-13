@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Dividends | {{ info2.name }}'s Dividend History{% endblock %}
+{% block title %}Dividends4Income | {{ infoall.shortName }}'s Dividend History{% endblock %}
 {% block content %}
 <div class="container">    
     <div class="row mt-3">
               <div class="col-lg-3 col-md-6 col-sm-6 ">
                         <div class="card text-dark bg-light mb-3">
                           <div class="card-body" style="min-height: 124px;">
-                            <p class="fs-4 fw-bold text-center">{{ stats.statistics.dividends_and_splits.trailing_annual_dividend_rate }}</p>
+                            <p class="fs-4 fw-bold text-center">{{ infoall.trailingAnnualDividendRate }}</p>
                             <p class="fs-6 text-center">Annual Dividend Rate (Trailing)</p>
                           </div>
                         </div>
@@ -14,7 +14,7 @@
               <div class="col-lg-3 col-md-6 col-sm-6 ">
                         <div class="card text-dark bg-light mb-3">
                           <div class="card-body" style="min-height: 124px;">
-                            <p class="fs-5 fw-bold text-center">{{ stats.statistics.dividends_and_splits.forward_annual_dividend_rate }}</p>
+                            <p class="fs-5 fw-bold text-center">{{ infoall.dividendRate }}</p>
                             <p class="fs-6 text-center"><strong>Annual Dividend Rate (Forward)</strong></p>
                           </div>
                         </div>
@@ -22,7 +22,7 @@
               <div class="col-lg-3 col-md-6 col-sm-6 ">
                         <div class="card text-dark bg-light mb-3">
                           <div class="card-body" style="min-height: 124px;">
-                            <p class="fs-4 fw-bold text-center">{{ stats.statistics.dividends_and_splits.payout_ratio }}</p>
+                            <p class="fs-4 fw-bold text-center">{{ infoall.payoutRatio }}</p>
                             <p class="fs-6 text-center">Dividend Payout Ratio</p>
                           </div>
                         </div>
@@ -30,7 +30,7 @@
               <div class="col-lg-3 col-md-6 col-sm-6 ">
                         <div class="card text-dark bg-light mb-3">
                           <div class="card-body" style="min-height: 124px;">
-                            <p class="fs-4 fw-bold text-center">{{ stats.statistics.dividends_and_splits.5_year_average_dividend_yield }}</p>
+                            <p class="fs-4 fw-bold text-center">{{ infoall.fiveYearAvgDividendYield }}</p>
                             <p class="fs-6 text-center">Avg Dividend Yield (5-Year)</p>
                           </div>
                         </div>
@@ -39,7 +39,7 @@
     <div class="row">
               <div class="col-lg-6 col-md-8 col-sm-12 ">
                         <div class="card text-dark bg-light mb-3">
-                          <div class="card-header">{{ info2.name }}'s Dividend History (Quarterly)</div>
+                          <div class="card-header">{{ infoall.shortName }}'s Dividend History (Quarterly)</div>
                           <div class="card-body" style="min-height: 595px;">
                             {{ dividend | safe}}
                           </div>
@@ -47,7 +47,7 @@
               </div>
               <div class="col">
                         <div class="card text-dark bg-light mb-3" style="max-height: 362px;">
-                          <div class="card-header">{{ info2.name }}'s Dividend Chart</div>
+                          <div class="card-header">{{ infoall.shortName }}'s Dividend Chart</div>
                           <div class="card-body">
                             <div class="chart">
                               <canvas id="myChart"></canvas>
@@ -55,14 +55,13 @@
                           </div>
                         </div>
                         <div class="card text-dark bg-light mb-3">
-                          <div class="card-header">{{ info2.name }}'s Market Details</div>
+                          <div class="card-header">{{ infoall.shortName }}'s Market Details</div>
                           <div class="card-body">
-                            <p class="card-text">Last Dividend Date: {{ stats.statistics.dividends_and_splits.dividend_date }}</p>
-                            <p class="card-text">Last Ex Dividend Date: {{ stats.statistics.dividends_and_splits.ex_dividend_date }}</p>
-                            <p class="card-text">Last Split Factor: {{ stats.statistics.dividends_and_splits.last_split_factor }}</p>
-                            <p class="card-text">Last Split Date: {{ stats.statistics.dividends_and_splits.last_split_date }}</p>
-                            <p class="card-text">Annual Dividend Yield: {{ stats.statistics.dividends_and_splits.trailing_annual_dividend_yield }} (T) & 
-                              {{ stats.statistics.dividends_and_splits.forward_annual_dividend_yield }} (F)
+                            <p class="card-text">Last Dividend Value: ${{ infoall.lastDividendValue }}</p>
+                            <p class="card-text">Dividend Yield: {{ infoall.dividendYield }}</p>
+                            <p class="card-text">Last Split Factor: {{ infoall.lastSplitFactor }}</p>
+                            <p class="card-text">Peg Ratio(T): {{ infoall.trailingPegRatio }}</p>
+                            <p class="card-text">Annual Dividend Yield: {{ infoall.trailingAnnualDividendYield }}
                             </p>
                           </div>
                         </div>
@@ -72,9 +71,9 @@
     <div class="row">
               <div class="col">
                         <div class="card text-dark bg-light mb-3">
-                          <div class="card-header">About {{ info2.name }}</div>
+                          <div class="card-header">About {{ infoall.shortName }}</div>
                           <div class="card-body">
-                            <p class="card-text">{{ info2.description }}</p>
+                            <p class="card-text">{{ infoall.longBusinessSummary }}</p>
                           </div>
                         </div>
       
