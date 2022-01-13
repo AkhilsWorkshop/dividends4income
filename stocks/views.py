@@ -1,5 +1,6 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from pandas.core.frame import DataFrame
 from .forms import TickerForm
 from .dividends import company_dividend
@@ -8,6 +9,7 @@ from .news import company_news
 from .info2 import twelve_data_profile
 from .history import twelve_data_stats
 
+@csrf_exempt
 def index(request):
     if request.method == 'POST':
         form = TickerForm(request.POST)
