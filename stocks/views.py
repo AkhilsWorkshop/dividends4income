@@ -27,7 +27,7 @@ def ticker(request, tid):
     context['news'] = company_news(tid)
     context['dividend'] = company_dividend(tid)
     context['info'] = company_info(tid)
-    context['info2'] = twelve_data_profile(tid)
+    #context['info2'] = twelve_data_profile(tid)
     context['stats'] = twelve_data_stats(tid)
     context['infoall'] = yfinance_info(tid)
     return render(request, 'ticker.html', context)
