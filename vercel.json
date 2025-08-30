@@ -5,8 +5,7 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.9",
-        "includeFiles": ["backend/**"]
+        "runtime": "python3.9"
       }
     },
     {
@@ -14,8 +13,7 @@
       "use": "@vercel/static-build",
       "config": {
         "buildCommand": "cd frontend && npm run build",
-        "distDir": "dist",
-        "includeFiles": ["frontend/**"]
+        "distDir": "dist"
       }
     }
   ],
