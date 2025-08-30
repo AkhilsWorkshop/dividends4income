@@ -28,7 +28,7 @@ export const Layout = ({ ticker }: StockPageProps) => {
     const { data: stockData, loading, error, fetchData } = useApi<StockInfo>()
 
     useEffect(() => {
-        fetchData(`/api/stocks/${ticker}`)
+        fetchData(`/stocks/${ticker}`)
     }, [ticker, fetchData])
 
     if (error) {

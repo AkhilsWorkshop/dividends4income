@@ -28,7 +28,7 @@ export const PopularStocks = ({ onStockClick }: PopularStocksProps) => {
     useEffect(() => {
 
         if (!data) {
-            fetchData('/api/popular/stocks')
+            fetchData('/popular/stocks')
         }
 
     }, [fetchData, data])
