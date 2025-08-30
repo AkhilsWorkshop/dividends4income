@@ -1,14 +1,22 @@
 {
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "cd frontend && npm install",
-  "framework": null,
-  "functions": {
-    "backend/DjangoApp/wsgi.py": {
-      "runtime": "python@3.9"
+  "builds": [
+    {
+      "src": "backend/DjangoApp/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python@3.9"
+      }
+    },
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "buildCommand": "npm run build",
+        "distDir": "dist"
+      }
     }
-  },
-  "rewrites": [
+  ],
+  "routes": [
     {
       "source": "/api/(.*)",
       "destination": "backend/DjangoApp/wsgi.py"
