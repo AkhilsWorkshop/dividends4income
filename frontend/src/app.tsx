@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'preact/hooks'
-import { ErrorBoundary } from '@/components/ErrorBoundary'
-import { Header } from '@/components/Header'
+import { ErrorBoundary } from '@/components/Layout/ErrorBoundary'
+import { Header } from '@/components/Layout/Header'
 import { HomePage } from '@/pages/HomePage'
 import { StockPage } from '@/pages/StockPage'
 

@@ -1,4 +1,4 @@
-import { StockCard } from '../Reuse/StockCard'
+import { StockCard, StockCardLoading } from '../Reuse/StockCard'
 import { useEffect } from 'preact/hooks'
 import { MdError } from 'react-icons/md'
 import { useApi } from '@/hooks/useApi'
@@ -13,42 +13,25 @@ interface Stock {
     logo_url: string
 }
 
+interface StockApiResponse {
+    stocks: Stock[]
+}
+
 interface PopularStocksProps {
     onStockClick: (symbol: string) => void
 }
 
 export const PopularStocks = ({ onStockClick }: PopularStocksProps) => {
 
-    const { data: stocks, loading, error, fetchData } = useApi<Stock[]>()
+    const { data, loading, error, fetchData } = useApi<StockApiResponse>()
 
     useEffect(() => {
-        fetchData('/api/popular-stocks')
-    }, [fetchData])
 
-    if (loading) {
-        return (
-            <div>
-                <h2 className="text-2xl font-bold mb-6">Popular Dividend Stocks</h2>
-                <div className="flex items-center justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                    <span className="ml-2">Loading stocks...</span>
-                </div>
-            </div>
-        )
-    }
+        if (!data) {
+            fetchData('/api/popular/stocks')
+        }
 
-    if (error) {
-        return (
-            <div>
-                <h2 className="text-2xl font-bold mb-6">Popular Dividend Stocks</h2>
-                <div className="flex items-center justify-center py-8 text-red-600">
-                    <MdError size={24} />
-                    <span className="ml-2">Error loading stocks: {error}</span>
-                </div>
-            </div>
-        )
-    }
-
+    }, [fetchData, data])
 
     return (
 
@@ -56,21 +39,42 @@ export const PopularStocks = ({ onStockClick }: PopularStocksProps) => {
 
             <div className="text-center space-y-10 pt-[50px] lg:pt-[150px] text-primary">
                 <h2 className="text-2xl lg:text-5xl font-bold text-balance"><span className="text-secondary">Popular</span> Dividend Stocks</h2>
-                <p className="text-secondary dark:text-primary/75 text-lg">Top dividend-paying companies trusted by investors</p>
+                <p className="text-sm md:text-lg lg:text-xl text-secondary text-pretty max-w-2xl mx-auto">Top dividend-paying companies trusted by investors</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-6">
 
-                {stocks?.map((stock) => (
-                    <StockCard
-                        key={stock.symbol}
-                        stock={stock}
-                        onStockClick={onStockClick}
-                    />
-                )) || <div>No stocks available</div>}
+                {loading ?
+
+                    [...Array(6)].map((_, index) => (
+                        <StockCardLoading key={index} />
+                    ))
+
+                    :
+
+                    error ?
+
+                        <div className="flex items-center justify-center py-8 text-red-600 col-span-3">
+                            <MdError size={24} />
+                            <span className="ml-2">An error occurred while loading stocks</span>
+                        </div>
+
+                        :
+
+                        data?.stocks?.map((stock) => (
+                            <StockCard
+                                key={stock.symbol}
+                                stock={stock}
+                                onStockClick={onStockClick}
+                            />
+                        ))
+
+                }
 
             </div>
 
         </div>
     )
 }
+
+

@@ -7,7 +7,7 @@ export const Hero = () => {
                 Dividend Investing <br />Made <span className="text-secondary">Simple</span>
             </h1>
 
-            <p className="md:text-lg lg:text-xl text-secondary dark:text-primary/75 text-pretty max-w-2xl mx-auto">
+            <p className="text-sm md:text-lg lg:text-xl text-secondary text-pretty max-w-2xl mx-auto">
                 Analyze and optimize the dividends with real-time data, advanced analytics and expert
                 insights.
             </p>

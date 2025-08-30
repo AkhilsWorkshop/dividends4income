@@ -16,14 +16,20 @@
   "type": "module",
   "dependencies": {
     "@preact/signals": "^2.3.1",
+    "@radix-ui/react-select": "^2.2.6",
     "@tailwindcss/vite": "^4.1.12",
+    "apexcharts": "^5.3.4",
     "chart.js": "^4.5.0",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "lucide-react": "^0.542.0",
     "preact": "^10.27.1",
     "preact-router": "^4.1.2",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "recharts": "^2.15.4",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.2",
@@ -31,6 +37,7 @@
     "@types/node": "^24.3.0",
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.12",
+    "tw-animate-css": "^1.3.7",
     "typescript": "^5.9.2",
     "vite": "^7.1.3"
   }

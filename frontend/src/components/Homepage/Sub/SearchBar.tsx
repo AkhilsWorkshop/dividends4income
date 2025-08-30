@@ -23,7 +23,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
 
             <input
                 placeholder="Search AAPL or Apple"
-                className="w-full pl-3 pr-20 py-3 text-sm lg:text-lg border border-primary rounded-lg focus:outline-none focus:ring-1 focus:ring-primary placeholder:truncate placeholder:text-primary"
+                className="w-full pl-3 pr-20 py-3 text-sm lg:text-lg border border-primary/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary placeholder:truncate placeholder:text-primary text-primary"
             />
 
             <button

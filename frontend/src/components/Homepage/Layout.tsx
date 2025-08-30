@@ -1,5 +1,5 @@
 import { Hero } from './Sub/Hero'
-import { PopularStocks } from './Reuse/PopularStocks'
+import { PopularStocks } from './Sub/PopularStocks'
 import { SearchBar } from './Sub/SearchBar'
 
 export const Layout = () => {
@@ -17,7 +17,7 @@ export const Layout = () => {
     }
 
     return (
-        <div className="min-h-screen px-3 lg:px-6">
+        <div className="min-h-screen p-3 lg:p-6">
 
             <Hero />
 
