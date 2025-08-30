@@ -12,19 +12,19 @@
   "rewrites": [
     {
       "source": "/assets/(.*)",
-      "destination": "/dist/assets/$1"
+      "destination": "/assets/$1"
     },
     {
       "source": "/favicon.ico",
-      "destination": "/dist/favicon.ico"
+      "destination": "/favicon.ico"
     },
     {
       "source": "/images/(.*)",
-      "destination": "/dist/images/$1"
+      "destination": "/images/$1"
     },
     {
       "source": "/((?!api/).*)",
-      "destination": "/dist/index.html"
+      "destination": "/index.html"
     }
   ]
 }
