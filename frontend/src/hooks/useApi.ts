@@ -44,10 +44,10 @@ export function useApi<T>(): UseApiReturn<T> {
 
         try {
 
-            // Use backend domain in production, local in development
+            // Use relative URLs in production (same domain), full URLs in development
             const isProduction = (import.meta as any).env.PROD
             const backendUrl = isProduction
-                ? `https://api.d4i.akhilkumar.dev${url}`
+                ? url
                 : `${(import.meta as any).env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}${url}`
 
             const response = await fetch(backendUrl, {
