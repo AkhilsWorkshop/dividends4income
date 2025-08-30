@@ -10,7 +10,7 @@ export function Header() {
                 <div className="flex justify-between items-center h-16">
 
                     <a href="/" className="hover:opacity-75 duration-300 transition-opacity">
-                        <img src="/static/images/logo.png" alt="Logo" className="h-8 lg:h-10 w-fit" />
+                        <img src="/images/logo.png" alt="Logo" className="h-8 lg:h-10 w-fit" />
                     </a>
 
                     <div className="flex items-center space-x-4">
