@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "src": "backend/DjangoApp/wsgi.py",
+      "src": "backend/requirements.txt",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
