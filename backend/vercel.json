@@ -1,0 +1,22 @@
+{
+  "builds": [
+    {
+      "src": "requirements.txt",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.9"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "DjangoApp/wsgi.py"
+    }
+  ],
+  "env": {
+    "SECRET_KEY": "YTSXLkZ3276OwSZztgZ3gdJINpR5DXJ8",
+    "DEBUG": "False"
+  }
+}
