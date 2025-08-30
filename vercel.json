@@ -3,17 +3,19 @@
     {
       "src": "backend/DjangoApp/wsgi.py",
       "use": "@vercel/python",
-      "config": { 
+      "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
+        "runtime": "python3.9",
+        "includeFiles": ["backend/**"]
       }
     },
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "buildCommand": "npm run build",
-        "distDir": "dist"
+        "buildCommand": "cd frontend && npm run build",
+        "distDir": "frontend/dist",
+        "includeFiles": ["frontend/**"]
       }
     }
   ],
@@ -26,5 +28,10 @@
       "src": "/(.*)",
       "dest": "frontend/dist/$1"
     }
-  ]
+  ],
+  "functions": {
+    "backend/DjangoApp/wsgi.py": {
+      "maxDuration": 30
+    }
+  }
 }
