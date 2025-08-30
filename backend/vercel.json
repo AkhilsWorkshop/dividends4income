@@ -1,11 +1,10 @@
 {
   "builds": [
     {
-      "src": "requirements.txt",
+      "src": "DjangoApp/wsgi.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
+        "maxLambdaSize": "15mb"
       }
     }
   ],
@@ -14,9 +13,5 @@
       "src": "/(.*)",
       "dest": "DjangoApp/wsgi.py"
     }
-  ],
-  "env": {
-    "SECRET_KEY": "YTSXLkZ3276OwSZztgZ3gdJINpR5DXJ8",
-    "DEBUG": "False"
-  }
+  ]
 }
