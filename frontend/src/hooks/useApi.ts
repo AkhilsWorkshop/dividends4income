@@ -44,11 +44,7 @@ export function useApi<T>(): UseApiReturn<T> {
 
         try {
 
-            // Use relative URLs in production (same domain), full URLs in development
-            const isProduction = (import.meta as any).env.PROD
-            const backendUrl = isProduction
-                ? url
-                : `${(import.meta as any).env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}${url}`
+            const backendUrl = `${(import.meta as any).env.VITE_API_BASE_URL}${url}`
 
             const response = await fetch(backendUrl, {
                 method: 'GET',

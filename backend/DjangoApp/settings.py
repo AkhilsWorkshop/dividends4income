@@ -8,7 +8,13 @@ SECRET_KEY = config('SECRET_KEY', default='your-fallback-secret-key-for-local-de
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'd4i.akhilkumar.dev', '.vercel.app']
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    'd4i.akhilkumar.dev',
+    'api.d4i.akhilkumar.dev',
+    '.vercel.app'
+]
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
@@ -18,6 +24,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'DjangoApp.middleware.FrontendOnlyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
@@ -27,9 +34,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
-
-# Allow all origins in development only
-CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 ROOT_URLCONF = 'DjangoApp.urls'
 WSGI_APPLICATION = 'DjangoApp.wsgi.application'
