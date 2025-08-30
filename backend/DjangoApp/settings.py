@@ -4,11 +4,11 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='your-fallback-secret-key-for-local-dev')
 
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost:3000', '127.0.0.1', 'd4i.akhilkumar.dev', '.vercel.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'd4i.akhilkumar.dev', '.vercel.app']
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
@@ -27,6 +27,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+# Allow all origins in development only
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 ROOT_URLCONF = 'DjangoApp.urls'
 WSGI_APPLICATION = 'DjangoApp.wsgi.application'
