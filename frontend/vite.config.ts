@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
             },
         },
         build: {
-            outDir: '../frontend/dist',
+            outDir: '../dist',
             emptyOutDir: true,
             rollupOptions: {
                 output: {
