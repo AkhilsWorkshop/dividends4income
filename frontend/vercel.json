@@ -9,16 +9,22 @@
       }
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/dist/$1"
-    }
-  ],
   "rewrites": [
     {
+      "source": "/assets/(.*)",
+      "destination": "/dist/assets/$1"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/dist/favicon.ico"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "/dist/images/$1"
+    },
+    {
       "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "destination": "/dist/index.html"
     }
   ]
 }

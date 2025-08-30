@@ -1,3 +1,4 @@
+import { route } from 'preact-router'
 import { FaArrowLeft } from "react-icons/fa6";
 
 interface HeadProps {
@@ -12,9 +13,7 @@ interface HeadProps {
 export const Head = ({ stock, loading }: HeadProps) => {
 
     const handleBack = () => {
-        const newPath = '/'
-        window.history.pushState({}, '', newPath)
-        window.dispatchEvent(new PopStateEvent('popstate'))
+        route('/')
     }
 
     return (

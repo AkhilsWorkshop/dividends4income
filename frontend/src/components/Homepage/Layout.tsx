@@ -1,19 +1,12 @@
+import { route } from 'preact-router'
 import { Hero } from './Sub/Hero'
 import { PopularStocks } from './Sub/PopularStocks'
 import { SearchBar } from './Sub/SearchBar'
 
 export const Layout = () => {
 
-    const handleTickerSubmit = (ticker: string) => {
-        const newPath = `/stock/${ticker}`
-        window.history.pushState({}, '', newPath)
-        window.dispatchEvent(new PopStateEvent('popstate'))
-    }
-
     const handleStockClick = (symbol: string) => {
-        const newPath = `/stock/${symbol}`
-        window.history.pushState({}, '', newPath)
-        window.dispatchEvent(new PopStateEvent('popstate'))
+        route(`/stock/${symbol}`)
     }
 
     return (
@@ -21,7 +14,7 @@ export const Layout = () => {
 
             <Hero />
 
-            <SearchBar onSearch={handleTickerSubmit} />
+            <SearchBar onSearch={handleStockClick} />
 
             <PopularStocks onStockClick={handleStockClick} />
 
