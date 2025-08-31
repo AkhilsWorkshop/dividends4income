@@ -90,7 +90,7 @@ export const Analysis = ({ ticker, prevLoading }: AnalysisProps) => {
 
                 <div className="flex items-center justify-center gap-2 text-secondary bg-layer rounded-xl border border-border shadow-sm p-6">
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
-                    <span className="text-sm">Analyzing...</span>
+                    <span className="text-sm">Analyzing, please wait...</span>
                 </div>
 
                 :

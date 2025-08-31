@@ -99,7 +99,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
                 value={query}
                 onInput={handleInputChange}
                 placeholder="Search AAPL or Apple"
-                className={cn('w-full pl-3 pr-20 py-3 text-sm lg:text-lg border border-primary/10 rounded-lg focus:outline-none placeholder:truncate placeholder:text-primary text-primary',
+                className={cn('w-full pl-3 pr-20 py-3 text-base lg:text-lg border border-primary/10 rounded-lg focus:outline-none placeholder:truncate placeholder:text-primary text-primary',
                     (showDropdown && (suggestions.length > 0) && !loading) ? 'rounded-b-none' : 'rounded-b-lg'
                 )}
             />
