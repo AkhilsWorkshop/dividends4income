@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'preact/hooks'
 import { cn } from '@/utils'
 import { themeStore } from '@/stores/theme'
+import { FaArrowTrendUp } from 'react-icons/fa6'
 
 interface DividendData {
     date: string
@@ -220,18 +221,15 @@ export const DividendsChart = ({ dividends = [], loading }: StockChartProps) => 
 
             {loading ?
 
-                <div className="flex justify-between items-start p-6 min-h-[400px]">
+                <div className="flex flex-col lg:flex-row gap-3 justify-start items-start p-4 lg:p-6 min-h-[400px]">
 
-                    <div className="flex flex-col gap-2">
+                    <div className="animate-pulse flex items-center gap-3 max-w-md w-full">
 
-                        <div className="bg-surface/50 h-6 lg:h-10 w-16 lg:w-32 animate-pulse rounded-sm" />
+                        <div className="bg-surface/50 h-10 lg:h-14 w-10 lg:w-14 animate-pulse rounded-lg aspect-square" />
 
-                        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center gap-1">
-
-                            <div className="bg-surface/75 h-4 lg:h-6 w-18 animate-pulse rounded-sm" />
-
-                            <div className="bg-surface/50 h-5 lg:h-6 w-24 lg:w-32 animate-pulse rounded-sm" />
-
+                        <div className="space-y-2 w-full">
+                            <div className="h-6 bg-surface/75 rounded-sm w-1/3" />
+                            <div className="h-4 bg-surface/50 rounded-sm w-1/2" />
                         </div>
 
                     </div>
@@ -244,31 +242,41 @@ export const DividendsChart = ({ dividends = [], loading }: StockChartProps) => 
 
                 <>
 
-                    <div className="flex justify-between items-center p-6">
+                    <div className="flex flex-col lg:flex-row gap-3 justify-between items-start p-4 lg:p-6">
 
-                        <div className="flex flex-col items-start justify-center gap-2">
+                        <div className="flex items-center justify-center gap-3">
 
-                            <h1 className="font-bold text-xl lg:text-3xl">Trend</h1>
+                            <div className="p-2 lg:p-4 bg-layer border border-border rounded-lg shadow-sm text-primary">
+                                <FaArrowTrendUp size={24} />
+                            </div>
 
-                            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center gap-1">
+                            <div>
 
-                                {trendData.trend === 'up' &&
-                                    <p className="text-sm font-bold">
-                                        +${trendData.changeAmount.toFixed(2)} <span className="text-secondary font-normal">{trendData.period}</span>
-                                    </p>
-                                }
+                                <h1 className="font-bold text-xl lg:text-2xl text-primary">
+                                    Trend
+                                </h1>
 
-                                {trendData.trend === 'down' &&
-                                    <p className="text-sm font-bold">
-                                        -${trendData.changeAmount.toFixed(2)} <span className="text-secondary font-normal">{trendData.period}</span>
-                                    </p>
-                                }
+                                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center gap-1">
 
-                                {trendData.trend === 'flat' &&
-                                    <p className="text-sm font-bold">
-                                        {trendData.hasPreviousData ? 'No change' : 'No data'} <span className="text-secondary font-normal">{trendData.period}</span>
-                                    </p>
-                                }
+                                    {trendData.trend === 'up' &&
+                                        <p className="text-sm font-bold">
+                                            +${trendData.changeAmount.toFixed(2)} <span className="text-secondary font-normal">{trendData.period}</span>
+                                        </p>
+                                    }
+
+                                    {trendData.trend === 'down' &&
+                                        <p className="text-sm font-bold">
+                                            -${trendData.changeAmount.toFixed(2)} <span className="text-secondary font-normal">{trendData.period}</span>
+                                        </p>
+                                    }
+
+                                    {trendData.trend === 'flat' &&
+                                        <p className="text-sm font-bold">
+                                            {trendData.hasPreviousData ? 'No change' : 'No data'} <span className="text-secondary font-normal">{trendData.period}</span>
+                                        </p>
+                                    }
+
+                                </div>
 
                             </div>
 
@@ -284,7 +292,7 @@ export const DividendsChart = ({ dividends = [], loading }: StockChartProps) => 
 
                     </div>
 
-                    <div ref={chartRef} className="h-fit w-full px-6" />
+                    <div ref={chartRef} className="h-fit w-full px-4 lg:px-6" />
 
                 </>
 
