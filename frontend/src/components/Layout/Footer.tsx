@@ -39,7 +39,7 @@ export const Footer = () => {
                         </p>
 
                         <a
-                            href="//www.dmca.com/Protection/Status.aspx?ID=3f08f315-fb90-42df-b35a-a2659fe02a35&refurl=https://d4i.akhilkumar.dev/"
+                            href="//www.dmca.com/Protection/Status.aspx?ID=3f08f315-fb90-42df-b35a-a2659fe02a35&refurl=https://d4i.akhilkumar.dev"
                             target="_blank"
                             rel="noopener noreferrer"
                             title="DMCA.com Protection Status"
