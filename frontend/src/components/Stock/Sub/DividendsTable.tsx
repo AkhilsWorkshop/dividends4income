@@ -2,6 +2,7 @@ import { useState, useMemo } from 'preact/hooks'
 import { cn } from "@/utils"
 import { MdTrendingDown, MdTrendingFlat, MdTrendingUp } from 'react-icons/md'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6'
+import { RiStockFill } from 'react-icons/ri'
 
 interface DividendData {
     date: string
@@ -141,9 +142,18 @@ export const DividendsTable = ({ dividends, loading }: DividendsTableProps) => {
 
                 <>
 
-                    <div className="flex justify-between items-center p-6">
+                    <div className="flex justify-between items-center p-4 lg:p-6">
 
-                        <div className="bg-surface/50 h-8 lg:h-10 w-24 lg:w-32 animate-pulse rounded-sm" />
+                        <div className="animate-pulse flex items-center gap-3 max-w-md w-full">
+
+                            <div className="bg-surface/50 h-10 lg:h-14 w-10 lg:w-14 animate-pulse rounded-lg aspect-square" />
+
+                            <div className="space-y-2 w-full">
+                                <div className="h-6 bg-surface/75 rounded-sm w-1/3" />
+                                <div className="h-4 bg-surface/50 rounded-sm w-1/2" />
+                            </div>
+
+                        </div>
 
                         <div className="bg-surface/50 h-5 w-20 lg:w-22 animate-pulse rounded-sm" />
 
@@ -165,9 +175,24 @@ export const DividendsTable = ({ dividends, loading }: DividendsTableProps) => {
 
                 <>
 
-                    <div className="flex justify-between items-center p-6">
+                    <div className="flex justify-between items-center p-4 lg:p-6">
 
-                        <h1 className="font-bold text-xl lg:text-3xl">Dividends</h1>
+                        <div className="flex items-center gap-3">
+
+                            <div className="p-2 lg:p-4 bg-layer border border-border rounded-lg shadow-sm text-primary">
+                                <RiStockFill size={24} />
+                            </div>
+
+                            <div>
+                                <h1 className="font-bold text-xl lg:text-2xl text-primary">
+                                    Dividends
+                                </h1>
+                                <p className="text-sm text-secondary">
+                                    Payments history
+                                </p>
+                            </div>
+
+                        </div>
 
                         <span className="text-[10px] text-secondary bg-background px-2 py-1 rounded-sm border border-border">
                             Showing <span className="font-semibold">{startIndex + 1}-{Math.min(endIndex, sortedDividends.length)}</span> of <span className="font-semibold">{sortedDividends.length}</span>

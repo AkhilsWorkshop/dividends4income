@@ -1,3 +1,4 @@
+import { route } from 'preact-router'
 import { FaArrowLeft } from "react-icons/fa6";
 
 interface HeadProps {
@@ -12,9 +13,7 @@ interface HeadProps {
 export const Head = ({ stock, loading }: HeadProps) => {
 
     const handleBack = () => {
-        const newPath = '/'
-        window.history.pushState({}, '', newPath)
-        window.dispatchEvent(new PopStateEvent('popstate'))
+        route('/')
     }
 
     return (
@@ -45,7 +44,7 @@ export const Head = ({ stock, loading }: HeadProps) => {
 
                 <div className="flex items-center space-x-4">
 
-                    <img src={stock?.logo_url} alt={`${stock?.name} logo`} className="w-12 h-12 rounded-sm shadow-md" />
+                    <img src={stock?.logo_url} alt={`${stock?.name} logo`} className="w-12 h-12 rounded-sm" />
 
                     <div className="flex flex-col items-start justify-between">
                         <h1 className="text-lg font-bold">{stock?.symbol}</h1>

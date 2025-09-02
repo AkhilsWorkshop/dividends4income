@@ -1,30 +1,43 @@
-import { Hero } from './Sub/Hero'
+import { route } from 'preact-router'
+import { Features } from './Sub/Features'
+import { HowItWorks } from './Sub/HowItWorks'
 import { PopularStocks } from './Sub/PopularStocks'
-import { SearchBar } from './Sub/SearchBar'
+import { Hero } from './Sub/Hero'
+import { FAQ } from './Sub/FAQ'
+import { PreFooter } from './Sub/PreFooter'
 
 export const Layout = () => {
 
-    const handleTickerSubmit = (ticker: string) => {
-        const newPath = `/stock/${ticker}`
-        window.history.pushState({}, '', newPath)
-        window.dispatchEvent(new PopStateEvent('popstate'))
+    const handleStockClick = (symbol: string) => {
+        route(`/stock/${symbol}`)
     }
 
-    const handleStockClick = (symbol: string) => {
-        const newPath = `/stock/${symbol}`
-        window.history.pushState({}, '', newPath)
-        window.dispatchEvent(new PopStateEvent('popstate'))
+    const handleCTAClick = () => {
+
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+
+        setTimeout(() => {
+            if ((window as any).focusHeroSearch) {
+                (window as any).focusHeroSearch()
+            }
+        }, 500)
     }
 
     return (
-        <div className="min-h-screen p-3 lg:p-6">
+        <>
 
-            <Hero />
+            <Hero onSearch={handleStockClick} />
 
-            <SearchBar onSearch={handleTickerSubmit} />
+            <Features />
+
+            <HowItWorks />
 
             <PopularStocks onStockClick={handleStockClick} />
 
-        </div>
+            <FAQ />
+
+            <PreFooter onCTAClick={handleCTAClick} />
+
+        </>
     )
 }
