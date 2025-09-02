@@ -25,6 +25,7 @@ A clean, fast web app for tracking dividend stocks and getting company insights.
 
 **Backend:**
 - [Django](https://www.djangoproject.com/) - Python web framework
+- [Redis](https://redis.io/) - Fast in-memory DB
 
 **Data Sources:**
 - [Yahoo Finance / Y Finance](https://finance.yahoo.com/) - Stock prices and fundamentals
