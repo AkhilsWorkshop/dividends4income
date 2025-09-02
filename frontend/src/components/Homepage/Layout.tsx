@@ -9,9 +9,6 @@ import { PreFooter } from './Sub/PreFooter'
 export const Layout = () => {
 
     const handleStockClick = (symbol: string) => {
-
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-
         route(`/stock/${symbol}`)
     }
 

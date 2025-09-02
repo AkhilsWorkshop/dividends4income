@@ -75,6 +75,7 @@ export function Header() {
     }
 
     const handleMenuClick = (href: string) => (e: Event) => {
+
         e.preventDefault()
         setIsMenuOpen(false)
 

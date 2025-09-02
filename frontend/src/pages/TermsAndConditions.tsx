@@ -1,4 +1,11 @@
+import { useEffect } from "preact/hooks"
+
 export const TermsAndConditions = () => {
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [])
+
     return (
         <div className="min-h-screen">
 

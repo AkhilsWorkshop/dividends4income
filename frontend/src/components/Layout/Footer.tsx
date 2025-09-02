@@ -31,15 +31,17 @@ export const Footer = () => {
                     <div className="col-span-2 space-y-4">
 
                         <h3 className="text-xl font-bold text-primary">
-                            D4i
+                            Dividends4Income
                         </h3>
 
                         <p className="text-secondary text-sm leading-relaxed max-w-md">
-                            Making dividend investing simple with real-time data, advanced analytics, and expert insights.
+                            Making dividend investing simple with real-time data, advanced analytics and expert insights.
                         </p>
 
                         <a
-                            href="//www.dmca.com/Protection/Status.aspx?ID=3f08f315-fb90-42df-b35a-a2659fe02a35"
+                            href="//www.dmca.com/Protection/Status.aspx?ID=3f08f315-fb90-42df-b35a-a2659fe02a35&refurl=https://d4i.akhilkumar.dev/"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             title="DMCA.com Protection Status"
                             className="text-primary hover:text-secondary duration-300 transition-colors text-sm flex items-center gap-2 border w-fit p-2 rounded">
                             <svg className="w-auto h-5" viewBox="0 0 85 24">
@@ -112,14 +114,12 @@ export const Footer = () => {
 
                             <a
                                 href="/privacy-policy"
-                                onClick={(e) => { e.preventDefault(); window.scrollTo(0, 0) }}
                                 className="block text-secondary hover:text-primary transition-colors duration-200 text-sm text-left">
                                 Privacy Policy
                             </a>
 
                             <a
                                 href="/terms-and-conditions"
-                                onClick={(e) => { e.preventDefault(); window.scrollTo(0, 0) }}
                                 className="block text-secondary hover:text-primary transition-colors duration-200 text-sm text-left">
                                 Terms & Conditions
                             </a>
@@ -142,7 +142,7 @@ export const Footer = () => {
 
                             <span>Built by </span>
                             <a
-                                href="https://github.com/AkhilsWorkshop"
+                                href="https://akhilkumar.dev"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-secondary hover:text-primary transition-colors duration-200 font-medium">

@@ -48,6 +48,7 @@ export const Layout = ({ ticker }: StockPageProps) => {
     const { data: stockData, loading, error, fetchData } = useApi<StockInfo>()
 
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         fetchData(`/stocks/${ticker}`)
     }, [ticker, fetchData])
 

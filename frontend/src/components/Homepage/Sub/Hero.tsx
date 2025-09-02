@@ -104,7 +104,7 @@ export const Hero = ({ onSearch }: HeroProps) => {
 
     return (
 
-        <div className="relative py-[50px] lg:py-[0px] pt-22 lg:min-h-screen flex flex-col justify-center items-center text-primary px-3 lg:px-6 pb-10 space-y-12 overflow-hidden bg-gradient-to-br from-secondary/10 via-transparent to-secondary/10">
+        <div className="relative py-[50px] lg:py-[0px] pt-22 lg:min-h-screen flex flex-col justify-center items-center text-primary px-3 lg:px-6 pb-10 space-y-12 bg-gradient-to-br from-secondary/10 via-transparent to-secondary/10">
 
             <div className="relative z-10 text-center space-y-8 max-w-4xl mx-auto">
 
