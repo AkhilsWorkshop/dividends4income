@@ -87,11 +87,19 @@ def api_ticker(request, tid):
     
 @csrf_exempt
 @require_http_methods(["GET"])
-def api_reddit_data(request, tid):
+def api_reddit_data(request):
 
     try:
 
-        stock = PopularStocksService.get_reddit_posts_and_summary(tid)
+        ticker = request.GET.get('ticker', '').strip()
+        tickerName = request.GET.get('tickerName', '').strip()
+
+        if not ticker:
+            return JsonResponse({
+                'error': 'Ticker parameter is required'
+            }, status=400)
+
+        stock = PopularStocksService.get_reddit_posts_and_summary(ticker, tickerName)
 
         response = JsonResponse({
             'reddit': stock,
@@ -101,7 +109,7 @@ def api_reddit_data(request, tid):
 
     except Exception as e:
         response = JsonResponse({
-            'error': f'Failed to fetch data for {tid}',
+            'error': f'Failed to fetch Reddit data for {request.GET.get("ticker", "unknown ticker")}',
             'details': str(e)
         }, status=500)
         return response

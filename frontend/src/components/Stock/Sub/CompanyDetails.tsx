@@ -91,7 +91,7 @@ export const CompanyDetails = ({
                             </p>
                         </div>
 
-                        <img src={logoURL} alt={`${name} logo`} className="w-8 lg:w-10 h-8 lg:h-10 rounded-sm shadow-md ml-auto" />
+                        <img src={logoURL} alt={`${name} logo`} className="w-8 lg:w-10 h-8 lg:h-10 rounded-sm ml-auto" />
 
                     </div>
 

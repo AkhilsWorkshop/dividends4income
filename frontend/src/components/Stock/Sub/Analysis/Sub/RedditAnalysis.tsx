@@ -1,4 +1,4 @@
-import { FaThumbsUp } from 'react-icons/fa6'
+import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa6'
 
 interface SentimentAnalysisProps {
     redditPrediction?: string
@@ -28,20 +28,11 @@ export const RedditAnalysis = ({ redditPrediction, keyPoints }: SentimentAnalysi
 
                     </div>
 
-
                     <p className="text-sm text-secondary leading-relaxed italic pt-3">"{redditPrediction}"</p>
 
                     <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mt-3" />
 
-                    <div className="flex justify-center items-center gap-2 pt-3 bg-gradient-to-r from-transparent via-border to-transparent pb-3">
-
-                        <p className="text-primary text-sm font-bold">
-                            Overall sentiment
-                        </p>
-
-                        <p className="bg-green-100 text-green-800 w-fit flex justify-center items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-sm border border-green-800/20">Positive <FaThumbsUp size={15} /> </p>
-
-                    </div>
+                    <Sentiment sentiment={redditPrediction} />
 
                     <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent" />
 
@@ -67,6 +58,32 @@ export const RedditAnalysis = ({ redditPrediction, keyPoints }: SentimentAnalysi
                 <div className="text-center py-8 text-secondary">
                     <p className="text-sm mt-2">No analysis available</p>
                 </div>
+
+            }
+
+        </div>
+    )
+}
+
+const Sentiment = ({ sentiment }: { sentiment: string }) => {
+    return (
+        <div className="flex justify-center items-center gap-2 pt-3 bg-gradient-to-r from-transparent via-border to-transparent pb-3">
+
+            <p className="text-primary text-sm font-bold">
+                Overall sentiment
+            </p>
+
+            {sentiment?.toLowerCase() === "positive" ?
+
+                <p className="bg-green-100 text-green-800 w-fit flex justify-center items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-sm border border-green-800/20">Positive <FaThumbsUp size={15} /> </p>
+
+                : sentiment?.toLowerCase() === "negative" ?
+
+                    <p className="bg-red-100 text-red-800 w-fit flex justify-center items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-sm border border-red-800/20">Negative <FaThumbsDown size={15} /> </p>
+
+                    :
+
+                    <p className="bg-gray-100 text-gray-800 w-fit flex justify-center items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-sm border border-gray-800/20">Neutral <span className="font-bold">~</span> </p>
 
             }
 

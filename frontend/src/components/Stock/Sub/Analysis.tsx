@@ -1,9 +1,9 @@
 import { useEffect } from 'preact/hooks'
 import { useApi } from '@/hooks/useApi'
-import { RedditAnalysis } from './RedditAnalysis/Sub/RedditAnalysis'
-import { Predictions } from './RedditAnalysis/Sub/Predictions'
-import { RedditPosts } from './RedditAnalysis/Sub/RedditPosts'
-import { Disclaimer } from './RedditAnalysis/Sub/Disclaimer'
+import { RedditAnalysis } from './Analysis/Sub/RedditAnalysis'
+import { Predictions } from './Analysis/Sub/Predictions'
+import { RedditPosts } from './Analysis/Sub/RedditPosts'
+import { Disclaimer } from './Analysis/Sub/Disclaimer'
 import { GrAnalytics } from 'react-icons/gr'
 import { MdError } from 'react-icons/md'
 
@@ -19,7 +19,6 @@ interface RedditData {
             author: string
             subreddit: string
         }[]
-        summary: string
         reddit_key_points: string[]
         reddit_prediction: string
         ai_key_points: string[]
@@ -29,22 +28,23 @@ interface RedditData {
 
 interface AnalysisProps {
     ticker: string
+    tickerName: string
     prevLoading: boolean
 }
 
-export const Analysis = ({ ticker, prevLoading }: AnalysisProps) => {
+export const Analysis = ({ ticker, tickerName, prevLoading }: AnalysisProps) => {
 
     const { data: redditData, loading, error, fetchData } = useApi<RedditData>()
 
     useEffect(() => {
-        fetchData(`/stocks/reddit-analysis/${ticker}`)
+        fetchData(`/stocks/analysis/reddit?ticker=${encodeURIComponent(ticker)}&tickerName=${encodeURIComponent(tickerName)}`)
     }, [ticker, fetchData])
 
     if (error) {
         return (
             <div className="bg-layer rounded-xl border border-border shadow-sm p-6 flex items-center justify-center text-red-600">
                 <MdError size={24} />
-                <span className="ml-2">An error occurred while analyzing {ticker.toUpperCase()}</span>
+                <span className="ml-2">{error || `An error occurred while analyzing ${ticker.toUpperCase()}`}</span>
             </div>
         )
     }

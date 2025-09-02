@@ -53,6 +53,10 @@ export function useApi<T>(): UseApiReturn<T> {
                 }
             })
 
+            if (response.status === 429) {
+                throw new Error("You are being rate limited, please try again later.")
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`)
             }

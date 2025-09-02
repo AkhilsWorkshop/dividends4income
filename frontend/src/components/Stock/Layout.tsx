@@ -53,9 +53,9 @@ export const Layout = ({ ticker }: StockPageProps) => {
 
     if (error) {
         return (
-            <div className="bg-layer rounded-xl border border-border shadow-sm p-6 flex items-center justify-center my-8 text-red-600">
+            <div className="min-h-screen p-6 flex items-center justify-center my-8 text-red-600">
                 <MdError size={24} />
-                <span className="ml-2">An error occurred while loading stocks</span>
+                <span className="ml-2">{error || 'An error occurred while loading stocks'}</span>
             </div>
         )
     }
@@ -64,7 +64,7 @@ export const Layout = ({ ticker }: StockPageProps) => {
     const dividends = stockInfo?.all_dividends || []
 
     return (
-        <div className="space-y-3 lg:space-y-6 p-3 lg:p-6">
+        <div className="max-w-7xl container mx-auto space-y-3 lg:space-y-6 p-3 lg:p-6 pt-20 lg:pt-22">
 
             <Head
                 loading={loading}
@@ -133,9 +133,14 @@ export const Layout = ({ ticker }: StockPageProps) => {
 
             </div>
 
-            <Analysis
-                prevLoading={loading}
-                ticker={ticker || ''} />
+            {!loading &&
+
+                <Analysis
+                    prevLoading={loading}
+                    ticker={ticker || ''}
+                    tickerName={stockInfo?.name || ''} />
+
+            }
 
         </div>
     )

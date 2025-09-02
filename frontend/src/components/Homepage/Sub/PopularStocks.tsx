@@ -35,10 +35,10 @@ export const PopularStocks = ({ onStockClick }: PopularStocksProps) => {
 
     return (
 
-        <div className="container mx-auto space-y-10">
+        <div id="popular-stocks" className="max-w-7xl container mx-auto space-y-3 lg:space-y-6 py-[50px] lg:py-[100px] px-3 lg:px-6">
 
-            <div className="text-center space-y-10 pt-[50px] lg:pt-[150px] text-primary">
-                <h2 className="text-2xl lg:text-5xl font-bold text-balance"><span className="text-secondary">Popular</span> Dividend Stocks</h2>
+            <div className="text-center space-y-10 text-primary pb-10">
+                <h2 className="text-2xl lg:text-5xl font-semibold text-balance"><span className="text-secondary">Popular</span> Dividend Stocks</h2>
                 <p className="text-sm md:text-lg lg:text-xl text-secondary text-pretty max-w-2xl mx-auto">Top dividend-paying companies trusted by investors</p>
             </div>
 
@@ -46,7 +46,7 @@ export const PopularStocks = ({ onStockClick }: PopularStocksProps) => {
 
                 {loading ?
 
-                    [...Array(6)].map((_, index) => (
+                    [...Array(9)].map((_, index) => (
                         <StockCardLoading key={index} />
                     ))
 
@@ -56,7 +56,7 @@ export const PopularStocks = ({ onStockClick }: PopularStocksProps) => {
 
                         <div className="flex items-center justify-center py-8 text-red-600 col-span-3">
                             <MdError size={24} />
-                            <span className="ml-2">An error occurred while loading stocks</span>
+                            <span className="ml-2">{error || 'An error occurred while loading stocks'}</span>
                         </div>
 
                         :

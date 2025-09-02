@@ -10,8 +10,8 @@ import re
 class PopularStocksService:
 
     POPULAR_TICKERS = [
-        'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA',
-         'JPM', 'V',  'KO',  'VZ'
+        'AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 
+        'JPM', 'V', 'VZ', 'PFE'
     ]
 
     @staticmethod
@@ -200,25 +200,37 @@ class PopularStocksService:
             return None
         
     @staticmethod
-    def get_reddit_posts_and_summary(ticker_symbol: str) -> Dict[str, Any]:
+    def get_reddit_posts_and_summary(ticker: str, tickerName: str) -> Dict[str, Any]:
 
         try:
 
             reddit = praw.Reddit(
                 client_id=config('REDDIT_CLIENT_ID'),
-                client_secret=config('REDDIT_CLIENT_SECRET'), 
+                client_secret=config('REDDIT_CLIENT_SECRET'),
                 user_agent=config('REDDIT_USER_AGENT')
             )
 
             subreddits = reddit.subreddit('stocks+investing+wallstreetbets+StockMarket')
-            
-            search_query = f'"{ticker_symbol}"'
-            posts = list(subreddits.search(search_query, sort='new', time_filter='week', limit=10))
-            
+
+            if len(ticker) == 1:
+                search_query = f'"{ticker}" "{tickerName.split()[0]}"'
+            else:
+                search_query = f'"{ticker}"'
+
+            posts = []
+
+            try:
+                posts = list(subreddits.search(search_query, sort='hot', time_filter='all', limit=15))
+
+            except Exception as e:
+                try:
+                    posts = list(subreddits.search(ticker, sort='hot', time_filter='all', limit=15))
+                except Exception as e2:
+                    posts = []
+
             if not posts:
                 return {
                     "posts": [],
-                    "summary": None,
                     "reddit_key_points": [],
                     "reddit_prediction": None,
                     "reddit_overall_sentiment": None,
@@ -227,28 +239,75 @@ class PopularStocksService:
                     "ai_overall_sentiment": None
                 }
 
+            relevant_posts = []
+
+            for post in posts:
+
+                post_text = f"{post.title} {post.selftext}".lower()
+
+                ticker_pattern = r'\b' + re.escape(ticker.lower()) + r'\b'
+                has_ticker = bool(re.search(ticker_pattern, post_text))
+
+                if has_ticker:
+
+                    company_words = [word.lower() for word in tickerName.split() if len(word) > 2]
+                    has_company_match = any(word in post_text for word in company_words)
+
+                    ticker_pos = post_text.find(ticker.lower())
+                    context_relevance = False
+
+                    if ticker_pos != -1:
+
+                        start = max(0, ticker_pos - 100)
+                        end = min(len(post_text), ticker_pos + len(ticker) + 100)
+                        context = post_text[start:end]
+
+                        financial_keywords = ['stock', 'price', 'buy', 'sell', 'invest', 'earnings', 'revenue', 'market', 'shares']
+                        context_relevance = any(keyword in context for keyword in financial_keywords)
+
+                    is_relevant = (
+                        (has_ticker and has_company_match) or
+                        (has_ticker and context_relevance) or
+                        (has_ticker and len(post.selftext or '') > 50)
+                    )
+
+                    if is_relevant:
+                        relevant_posts.append(post)
+
+            if len(relevant_posts) < 1:
+                return {
+                    "posts": [],
+                    "reddit_key_points": [],
+                    "reddit_prediction": None,
+                    "reddit_overall_sentiment": None,
+                    "ai_key_points": [],
+                    "ai_prediction": None,
+                    "ai_overall_sentiment": None
+                }
+
+            relevant_posts = relevant_posts[:10]
+
             serialized_posts = []
             all_text = []
-            
-            for post in posts[:10]:
+
+            for post in relevant_posts:
                 post_data = {
                     'title': post.title,
                     'url': post.url,
                     'score': post.score,
                     'num_comments': post.num_comments,
                     'created_utc': datetime.fromtimestamp(post.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
-                    'selftext': post.selftext[:500] if post.selftext else '',
+                    'selftext': post.selftext[:300] if post.selftext else '',
                     'author': str(post.author) if post.author else 'Unknown',
                     'subreddit': str(post.subreddit) if post.subreddit else 'Unknown'
                 }
                 serialized_posts.append(post_data)
                 all_text.append(f"{post.title} {post.selftext}")
 
-            summary = PopularStocksService.generate_reddit_summary(all_text, ticker_symbol)
-            
+            summary = PopularStocksService.generate_reddit_summary(all_text, ticker)
+
             return {
                 'posts': serialized_posts,
-                'summary': summary.get('summary', None),
                 'reddit_key_points': summary.get('reddit_key_points', []),
                 'reddit_prediction': summary.get('reddit_prediction', None),
                 'reddit_overall_sentiment': summary.get('reddit_overall_sentiment', None),
@@ -256,12 +315,11 @@ class PopularStocksService:
                 'ai_prediction': summary.get('ai_prediction', None),
                 'ai_overall_sentiment': summary.get('ai_overall_sentiment', None)
             }
-        
+
         except Exception as e:
-            print(f"Error fetching Reddit data for {ticker_symbol}: {e}")
+            print(f"Error fetching Reddit data for {ticker}: {e}")
             return {
                 "posts": [],
-                "summary": None,
                 "reddit_key_points": [],
                 "reddit_prediction": None,
                 "reddit_overall_sentiment": None,
@@ -275,7 +333,6 @@ class PopularStocksService:
 
         if not texts:
             return {
-                "summary": None,
                 "reddit_key_points": [],
                 "reddit_prediction": None,
                 "reddit_overall_sentiment": None,
@@ -289,31 +346,17 @@ class PopularStocksService:
             combined_text = ' '.join(texts)
             
             prompt = f"""
-                Analyze the following Reddit posts discussing the stock {ticker_symbol} and return a comprehensive analysis in the specified JSON format.
+                Analyze Reddit posts about {ticker_symbol} stock. Return JSON with:
+                - reddit_key_points: 3 key points from posts
+                - reddit_prediction: Community outlook
+                - reddit_overall_sentiment: positive/negative/neutral
+                - ai_key_points: 3 AI insights (not including Reddit posts but real market data)
+                - ai_prediction: AI market outlook (not including Reddit posts but real market data)
+                - ai_overall_sentiment: positive/negative/neutral (not including Reddit posts but real market data)
 
-                - Focus exclusively on information found in the provided Reddit posts and objective, widely-known facts about the stock.
-                - Do NOT include any markdown formatting, explanatory text, or comments.
-                - The reddit_key_points should detail the reasons behind their respective sentiment scores based upon the provided reddit posts content. 
-                - The ai_key_points should detail the reasons behind their respective sentiment scores based upon your own analysis and not based upon reddit posts content. 
-                - Avoid repeating points between the two sections; each set must contain distinct insights or analysis supporting its sentiment value.
-                - All key points must clearly justify the overall_sentiment value for their respective section.
-                - Use professional, analytic, and objective language throughout each key point and summary.
-                - Ensure the returned JSON strictly matches the following schema and contains no extraneous content.
+                Posts: {combined_text[:3000]}
 
-                Input:
-                Reddit Posts Content:
-                {combined_text[:4000]}
-
-                Required JSON output:
-                {{
-                    "summary": "A concise summary of the overall discussion and sentiment",
-                    "reddit_key_points": ["Key point 1", "Key point 2", "Key point 3", "Key point 4", "Key point 5"],
-                    "reddit_prediction": "Reddit users' collective view on the stock's future performance",
-                    "reddit_overall_sentiment": "Overall sentiment derived from Reddit discussions: positive, negative, or neutral",
-                    "ai_key_points": ["AI key point 1", "AI key point 2", "AI key point 3", "AI key point 4", "AI key point 5"],
-                    "ai_prediction": "Objective AI analysis of the stock's potential future based on both the Reddit discussion and general market knowledge",
-                    "ai_overall_sentiment": "Overall sentiment derived from AI analysis: positive, negative, or neutral"
-                }}
+                Return only valid JSON.
             """
 
             api_key = config('OPENROUTER_API_KEY')
@@ -329,11 +372,11 @@ class PopularStocksService:
                 "messages": [
                     {"role": "user", "content": prompt}
                 ],
-                "max_tokens": 4000,
+                "max_tokens": 1500,
                 "temperature": 0.3
             }
             
-            response = requests.post(url, headers=headers, json=data, timeout=30)
+            response = requests.post(url, headers=headers, json=data, timeout=10)
             response.raise_for_status()
             
             result = response.json()
@@ -355,7 +398,6 @@ class PopularStocksService:
                         pass
                 
                 return {
-                    "summary": None,
                     "reddit_key_points": [],
                     "reddit_prediction": None,
                     "reddit_overall_sentiment": None,
@@ -367,7 +409,6 @@ class PopularStocksService:
         except requests.RequestException as e:
             print(f"Error calling OpenRouter API: {e}")
             return {
-                "summary": None,
                 "reddit_key_points": [],
                 "reddit_prediction": None,
                 "reddit_overall_sentiment": None,
@@ -375,22 +416,10 @@ class PopularStocksService:
                 "ai_prediction": None,
                 "ai_overall_sentiment": None
             }
-
-        except requests.RequestException as e:
-            print(f"Error calling OpenRouter API: {e}")
-            return {
-                "summary": None,
-                "reddit_key_points": [],
-                "reddit_prediction": None,
-                "reddit_overall_sentiment": None,
-                "ai_key_points": [],
-                "ai_prediction": None,
-                "ai_overall_sentiment": None
-            }
+        
         except Exception as e:
             print(f"Error generating Reddit summary: {e}")
             return {
-                "summary": None,
                 "reddit_key_points": [],
                 "reddit_prediction": None,
                 "reddit_overall_sentiment": None,
