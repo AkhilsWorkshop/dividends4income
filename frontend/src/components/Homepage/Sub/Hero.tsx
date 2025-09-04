@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { cn } from '@/utils'
 import { AiOutlineLoading } from "react-icons/ai"
+import Cube from '../Effects/Cube'
 
 interface HeroProps {
     onSearch?: (query: string) => void
@@ -106,18 +107,31 @@ export const Hero = ({ onSearch }: HeroProps) => {
 
         <div className="relative py-[50px] lg:py-[0px] pt-22 lg:min-h-screen flex flex-col justify-center items-center text-primary px-3 lg:px-6 pb-10 space-y-12 bg-gradient-to-br from-secondary/10 via-transparent to-secondary/10">
 
+            <div className="absolute inset-0 -z-10 h-full dark:opacity-50">
+                <Cube
+                    timeScale={0.3}
+                    height={3.5}
+                    baseWidth={5.5}
+                    scale={3.6}
+                    hueShift={0}
+                    colorFrequency={2}
+                    noise={0.1}
+                    glow={1}
+                />
+            </div>
+
             <div className="relative z-10 text-center space-y-8 max-w-4xl mx-auto">
 
                 <div className="space-y-4">
 
-                    <h1 className="text-4xl lg:text-7xl font-semibold text-balance leading-tight">
+                    <h1 className="text-4xl lg:text-7xl font-semibold text-balance leading-tight dark:[text-shadow:0_0_20px_rgba(0,0,0,0.3),0_0_40px_rgba(0,0,0,0.2)]">
                         Dividend Investing <br />
                         <span className="bg-gradient-to-r from-secondary to-secondary/80 bg-clip-text text-transparent">
                             Made Simple
                         </span>
                     </h1>
 
-                    <p className="text-sm md:text-lg lg:text-xl text-secondary/80 max-w-2xl mx-auto leading-relaxed text-pretty">
+                    <p className="text-sm md:text-lg lg:text-xl text-secondary/80 max-w-2xl mx-auto leading-relaxed text-pretty dark:[text-shadow:0_0_10px_rgba(0,0,0,0.5)]">
                         No overwhelming charts or complex jargon. Just clear, actionable insights for confident investing.
                     </p>
 
@@ -126,12 +140,13 @@ export const Hero = ({ onSearch }: HeroProps) => {
                 <div className="max-w-xl mx-auto relative w-full space-y-4">
 
                     <div className="relative">
+
                         <input
                             ref={inputRef}
                             value={query}
                             onInput={handleInputChange}
                             placeholder="Search a Ticker or Company"
-                            className={cn('w-full pl-3 pr-20 py-4 text-base border border-primary/10 rounded-lg focus:outline-none placeholder:truncate placeholder:text-primary text-primary bg-layer/80 backdrop-blur-sm',
+                            className={cn('w-full pl-3 pr-20 py-4 text-base border border-primary/40 rounded-lg focus:outline-none placeholder:truncate placeholder:text-primary text-primary bg-layer/10 backdrop-blur-lg',
                                 (showDropdown && (suggestions.length > 0) && !loading) ? 'rounded-b-none' : 'rounded-b-lg'
                             )}
                         />
@@ -161,7 +176,9 @@ export const Hero = ({ onSearch }: HeroProps) => {
                             </div>
 
                         }
+
                     </div>
+
                 </div>
 
             </div>

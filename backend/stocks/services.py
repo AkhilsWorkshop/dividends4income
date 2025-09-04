@@ -364,13 +364,18 @@ class PopularStocksService:
             
             headers = {
                 "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://d4i.akhilkumar.dev",
+                "X-Title": "Dividends 4 Income",
             }
             
             data = {
-                "model": "deepseek/deepseek-chat",
+                "model": "deepseek/deepseek-chat-v3.1:free",
                 "messages": [
-                    {"role": "user", "content": prompt}
+                    {
+                        "role": "user", 
+                        "content": prompt
+                    }
                 ],
                 "max_tokens": 1500,
                 "temperature": 0.3
