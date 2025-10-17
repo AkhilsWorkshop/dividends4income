@@ -331,6 +331,13 @@ class PopularStocksService:
     @staticmethod
     def generate_reddit_summary(texts: List[str], ticker_symbol: str) -> Dict[str, Any]:
 
+        MODEL_SEQUENCE = [
+            "deepseek/deepseek-chat-v3.1:free",
+            "meta-llama/llama-3.2-3b-instruct:free", 
+            "microsoft/wizardlm-2-8x22b:free",
+            "deepseek/deepseek-chat-v3.1"
+        ]
+
         if not texts:
             return {
                 "reddit_key_points": [],
@@ -368,23 +375,58 @@ class PopularStocksService:
                 "HTTP-Referer": "https://d4i.akhilkumar.dev",
                 "X-Title": "Dividends 4 Income",
             }
+
+            successful_response = None
+
+            for model in MODEL_SEQUENCE:
+
+                try:
+
+                    print(f"Trying model: {model}")
             
-            data = {
-                "model": "deepseek/deepseek-chat-v3.1:free",
-                "messages": [
-                    {
-                        "role": "user", 
-                        "content": prompt
+                    data = {
+                        "model": model,
+                        "messages": [
+                            {
+                                "role": "user", 
+                                "content": prompt
+                            }
+                        ],
+                        "max_tokens": 1500,
+                        "temperature": 0.3
                     }
-                ],
-                "max_tokens": 1500,
-                "temperature": 0.3
-            }
+                    
+                    response = requests.post(url, headers=headers, json=data, timeout=10)
+
+                    if response.status_code == 429:
+                        print(f"Rate limited on {model}, trying next model...")
+                        continue 
+                    
+                    if response.status_code != 200:
+                        print(f"OpenRouter API error on {model}: {response.status_code} - {response.text}")
+                        continue
+                    
+                    successful_response = response
+                    break
+                
+                except Exception as e:
+                    print(f"Error with model {model}: {e}")
+                    continue
+
+            if successful_response is None:
+                print("All models failed or rate limited")
+                return {
+                    "reddit_key_points": [],
+                    "reddit_prediction": None,
+                    "reddit_overall_sentiment": None,
+                    "ai_key_points": [],
+                    "ai_prediction": None,
+                    "ai_overall_sentiment": None
+                }
+    
+            successful_response.raise_for_status()
             
-            response = requests.post(url, headers=headers, json=data, timeout=10)
-            response.raise_for_status()
-            
-            result = response.json()
+            result = successful_response.json()
             content = result['choices'][0]['message']['content'].strip()
             
             try:
