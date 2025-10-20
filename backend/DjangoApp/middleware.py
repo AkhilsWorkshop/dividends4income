@@ -29,7 +29,20 @@ class FrontendOnlyMiddleware:
         else:
             return HttpResponseForbidden('Access denied: Missing origin or referer')
         
+        if request.method == 'OPTIONS':
+            response = HttpResponse()
+            response['Access-Control-Allow-Origin'] = origin or allowed_origins[0]
+            response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+            response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+            response['Access-Control-Max-Age'] = '86400'
+            return response
+        
         response = self.get_response(request)
+        
+        response['Access-Control-Allow-Origin'] = origin or allowed_origins[0]
+        response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+        
         return response
 
 def get_client_ip(request):

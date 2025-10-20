@@ -4,7 +4,7 @@ A clean, fast web app for tracking dividend stocks and getting company insights.
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[![Livse Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-blue?style=for-the-badge&logo=vercel)](https://d4i.akhilkumar.dev)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Now-blue?style=for-the-badge&logo=vercel)](https://d4i.akhilkumar.dev)
 
 ## What it does
 
@@ -26,6 +26,7 @@ A clean, fast web app for tracking dividend stocks and getting company insights.
 **Backend:**
 - [Django](https://www.djangoproject.com/) - Python web framework
 - [Redis](https://redis.io/) - Fast in-memory DB
+- [OpenRouter](https://openrouter.ai/) - Language model API for company insights and analysis
 
 **Data Sources:**
 - [Yahoo Finance / Y Finance](https://finance.yahoo.com/) - Stock prices and fundamentals
