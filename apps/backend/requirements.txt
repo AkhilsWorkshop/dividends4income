@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+mangum
+requests
+httpx
+yfinance
+praw
+python-decouple
+python-dotenv

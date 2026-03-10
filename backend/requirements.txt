@@ -1,8 +1,0 @@
-Django>=4.2,<5.0
-django-cors-headers
-django-redis
-redis
-requests
-yfinance
-praw
-python-decouple

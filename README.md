@@ -39,19 +39,40 @@ A clean, fast web app for tracking dividend stocks and getting company insights.
 
 ## Quick Start
 
+This repository is organized as a simple **monorepo** with two top‑level
+packages: `backend` (Django) and `frontend` (Next.js). The root package uses
+npm **workspaces** so you can install all JavaScript dependencies from the
+repository root and share tooling.
+
 ```bash
+# from the repository root (install once)
+npm install             # installs frontend deps via workspace + dev tools
+python -m pip install -r backend/requirements.txt
+
+# start everything together
+npm run dev:full        # runs frontend and Django side-by-side
+
+# (or run each service manually if you prefer)
 # Backend
 cd backend
-pip install -r requirements.txt
 python manage.py runserver
 
 # Frontend (new terminal)
 cd frontend
-npm install
 npm run dev
 ```
 
-Visit `http://localhost:5173` for the app, `http://localhost:8000` for the API.
+Everything runs from the correct working directory, so `npm run dev:full` no
+longer throws missing-module errors.
+
+Once running you can browse the app at `http://localhost:3000` and the API at
+`http://localhost:8000`.
+
+> **Tip:** the backend expects a Redis instance on `localhost:6379`. If you
+> see `Connection refused` errors, start Redis (`brew services start redis` on
+> macOS) or adjust `REDIS_URL` in `backend/.env`.
+
+Visit `http://localhost:3000` for the app, `http://localhost:8000` for the API.
 
 ## Support
 
