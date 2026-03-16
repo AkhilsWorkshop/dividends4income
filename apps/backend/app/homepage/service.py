@@ -4,7 +4,7 @@ import time
 import yfinance as yf
 from typing import List, Dict, Any
 
-from app.config import TICKER_URL, SEC_USER_AGENT, SEC_CONTACT_EMAIL
+from app.config import LOGO_DEV_PUBLIC_KEY, TICKER_URL, SEC_USER_AGENT, SEC_CONTACT_EMAIL
 from app.stock.service import StockService
 
 class HomePageService:
@@ -69,14 +69,14 @@ class HomePageService:
                 query_lower = query.lower()
 
                 filtered_tickers = [
-                    {'ticker': t['ticker'], 'title': t['title']}
+                    {'ticker': t['ticker'], 'title': t['title'], 'logo_url': f"https://img.logo.dev/ticker/{t['ticker']}?token={LOGO_DEV_PUBLIC_KEY}"}
                     for t in all_tickers
                     if query_lower in t['ticker'].lower() or query_lower in t['title'].lower()
                 ][:10]
 
-                return {'suggestions': filtered_tickers}
+                return filtered_tickers
 
-            return {'suggestions': []}
+            return []
 
         except requests.RequestException as e:
             raise HTTPException(status_code=500, detail=f"Failed to fetch ticker data from SEC: {str(e)}")

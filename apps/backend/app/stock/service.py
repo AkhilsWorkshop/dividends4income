@@ -1,13 +1,28 @@
+import asyncio
 import yfinance as yf
 from typing import List, Dict, Any
 import praw
 from datetime import datetime
-import requests
+import httpx
 import json
 import re
 from fastapi import HTTPException
 
-from app.config import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT, OPENROUTER_API_KEY, LOGO_DEV_PUBLIC_KEY
+from app.cache import get_redis
+from app.config import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT, GROQ_API_KEY, LOGO_DEV_PUBLIC_KEY
+
+GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_PRIMARY_MODEL = "compound-beta"
+GROQ_FALLBACK_MODEL = "llama-3.1-8b-instant"
+
+EMPTY_SUMMARY = {
+    "reddit_key_points": [],
+    "reddit_prediction": None,
+    "reddit_overall_sentiment": None,
+    "ai_key_points": [],
+    "ai_prediction": None,
+    "ai_overall_sentiment": None
+}
 
 class StockService:
 
@@ -47,7 +62,7 @@ class StockService:
         except KeyError:
             print(f"Ticker {ticker_symbol} not found in Tickers object")
             return None
-        
+
         except Exception as e:
             print(f"Error extracting data for {ticker_symbol}: {e}")
             return None
@@ -90,16 +105,14 @@ class StockService:
             return []
 
     @staticmethod
-    def get_stock_info(ticker_symbol: str) -> Dict[str, Any]:
+    async def get_stock_info(ticker_symbol: str) -> Dict[str, Any]:
 
-        try:
+        def _fetch():
 
             ticker = yf.Ticker(ticker_symbol.upper())
-
             info = ticker.info
 
             current_price = info.get('currentPrice', info.get('regularMarketPrice', 0))
-
             previous_close = info.get('previousClose', current_price)
             change = current_price - previous_close if current_price and previous_close else 0
             change_percent = (change / previous_close * 100) if previous_close else 0
@@ -112,24 +125,6 @@ class StockService:
             dividend_rate = info.get('dividendRate', 0)
             dividends_data = StockService.serialize_dividends(ticker.dividends)
 
-            market_cap = info.get('marketCap')
-            volume = info.get('volume')
-            average_volume = info.get('averageVolume')
-            fifty_two_week_high = info.get('fiftyTwoWeekHigh')
-            fifty_two_week_low = info.get('fiftyTwoWeekLow')
-            trailing_pe = info.get('trailingPE')
-            forward_pe = info.get('forwardPE')
-            trailing_eps = info.get('trailingEps')
-            forward_eps = info.get('forwardEps')
-            beta = info.get('beta')
-            sector = info.get('sector')
-            industry = info.get('industry')
-            long_business_summary = info.get('longBusinessSummary')
-            currency = info.get('currency')
-            exchange = info.get('exchange')
-            country = info.get('country')
-            full_time_employees = info.get('fullTimeEmployees')
-
             return {
                 'symbol': ticker_symbol.upper(),
                 'name': info.get('longName', info.get('shortName', ticker_symbol.upper())),
@@ -139,189 +134,114 @@ class StockService:
                 'dividend_yield': f"{dividend_yield:.2f}%" if dividend_yield else "0.00%",
                 'logo_url': f"https://img.logo.dev/ticker/{ticker_symbol}?token={LOGO_DEV_PUBLIC_KEY}",
                 'all_dividends': dividends_data,
-                'market_cap': market_cap,
-                'volume': volume,
-                'average_volume': average_volume,
-                'fifty_two_week_high': fifty_two_week_high,
-                'fifty_two_week_low': fifty_two_week_low,
-                'trailing_pe': trailing_pe,
-                'forward_pe': forward_pe,
-                'trailing_eps': trailing_eps,
-                'forward_eps': forward_eps,
-                'beta': beta,
-                'sector': sector,
-                'industry': industry,
-                'long_business_summary': long_business_summary,
-                'currency': currency,
-                'exchange': exchange,
-                'country': country,
-                'full_time_employees': full_time_employees
-            }
-
-        except Exception as e:
-            print(f"Error fetching stock info for {ticker_symbol}: {e}")
-            return None
-         
-class RedditSummaryService:
-
-    @staticmethod
-    def generate_reddit_summary(texts: List[str], ticker_symbol: str) -> Dict[str, Any]:
-
-        MODEL_SEQUENCE = [
-            "deepseek/deepseek-chat-v3.1:free",
-            "meta-llama/llama-3.2-3b-instruct:free",
-            "microsoft/wizardlm-2-8x22b:free",
-            "deepseek/deepseek-chat-v3.1"
-        ]
-
-        if not texts:
-            return {
-                "reddit_key_points": [],
-                "reddit_prediction": None,
-                "reddit_overall_sentiment": None,
-                "ai_key_points": [],
-                "ai_prediction": None,
-                "ai_overall_sentiment": None
+                'market_cap': info.get('marketCap'),
+                'volume': info.get('volume'),
+                'average_volume': info.get('averageVolume'),
+                'fifty_two_week_high': info.get('fiftyTwoWeekHigh'),
+                'fifty_two_week_low': info.get('fiftyTwoWeekLow'),
+                'trailing_pe': info.get('trailingPE'),
+                'forward_pe': info.get('forwardPE'),
+                'trailing_eps': info.get('trailingEps'),
+                'forward_eps': info.get('forwardEps'),
+                'beta': info.get('beta'),
+                'sector': info.get('sector'),
+                'industry': info.get('industry'),
+                'long_business_summary': info.get('longBusinessSummary'),
+                'currency': info.get('currency'),
+                'exchange': info.get('exchange'),
+                'country': info.get('country'),
+                'full_time_employees': info.get('fullTimeEmployees')
             }
 
         try:
+            return await asyncio.to_thread(_fetch)
+        
+        except Exception as e:
+            print(f"Error fetching stock info for {ticker_symbol}: {e}")
+            return None
 
-            combined_text = ' '.join(texts)
 
-            prompt = f"""
-                Analyze Reddit posts about {ticker_symbol} stock. Return JSON with:
-                - reddit_key_points: 3 key points from posts
-                - reddit_prediction: Community outlook
-                - reddit_overall_sentiment: positive/negative/neutral
-                - ai_key_points: 3 AI insights (not including Reddit posts but real market data)
-                - ai_prediction: AI market outlook (not including Reddit posts but real market data)
-                - ai_overall_sentiment: positive/negative/neutral (not including Reddit posts but real market data)
+class RedditSummaryService:
 
-                Posts: {combined_text[:3000]}
+    @staticmethod
+    async def generate_reddit_summary(texts: List[str], ticker_symbol: str) -> Dict[str, Any]:
 
-                Return only valid JSON.
-            """
+        if not texts:
+            return EMPTY_SUMMARY
 
-            api_key = OPENROUTER_API_KEY
-            url = "https://openrouter.ai/api/v1/chat/completions"
+        combined_text = ' '.join(texts)
 
-            headers = {
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "https://d4i.akhilkumar.dev",
-                "X-Title": "Dividends 4 Income",
-            }
+        prompt = f"""
+            Analyze Reddit posts about {ticker_symbol} stock. Return JSON with:
+            - reddit_key_points: 3 key points from posts
+            - reddit_prediction: Community outlook
+            - reddit_overall_sentiment: positive/negative/neutral
+            - ai_key_points: 3 AI insights (not including Reddit posts but real market data)
+            - ai_prediction: AI market outlook (not including Reddit posts but real market data)
+            - ai_overall_sentiment: positive/negative/neutral (not including Reddit posts but real market data)
 
-            successful_response = None
+            Posts: {combined_text[:3000]}
 
-            for model in MODEL_SEQUENCE:
+            Return only valid JSON.
+        """
 
-                try:
+        headers = {
+            "Authorization": f"Bearer {GROQ_API_KEY}",
+            "Content-Type": "application/json",
+        }
 
-                    print(f"Trying model: {model}")
+        payload = {
+            "model": GROQ_PRIMARY_MODEL,
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": 1500,
+            "temperature": 0.3
+        }
 
-                    data = {
-                        "model": model,
-                        "messages": [
-                            {
-                                "role": "user",
-                                "content": prompt
-                            }
-                        ],
-                        "max_tokens": 1500,
-                        "temperature": 0.3
-                    }
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
 
-                    response = requests.post(url, headers=headers, json=data, timeout=10)
+                print(f"Trying Groq model: {GROQ_PRIMARY_MODEL}")
+                response = await client.post(GROQ_URL, headers=headers, json=payload)
 
-                    if response.status_code == 429:
-                        print(f"Rate limited on {model}, trying next model...")
-                        continue
+                if response.status_code == 429:
 
-                    if response.status_code != 200:
-                        print(f"OpenRouter API error on {model}: {response.status_code} - {response.text}")
-                        continue
+                    print(f"Rate limited on {GROQ_PRIMARY_MODEL}, falling back to {GROQ_FALLBACK_MODEL}...")
 
-                    successful_response = response
-                    break
+                    payload["model"] = GROQ_FALLBACK_MODEL
+                    response = await client.post(GROQ_URL, headers=headers, json=payload)
 
-                except Exception as e:
-                    print(f"Error with model {model}: {e}")
-                    continue
+                if response.status_code != 200:
 
-            if successful_response is None:
-                print("All models failed or rate limited")
-                return {
-                    "reddit_key_points": [],
-                    "reddit_prediction": None,
-                    "reddit_overall_sentiment": None,
-                    "ai_key_points": [],
-                    "ai_prediction": None,
-                    "ai_overall_sentiment": None
-                }
+                    print(f"Groq API error: {response.status_code} - {response.text}")
+                    return EMPTY_SUMMARY
 
-            successful_response.raise_for_status()
-
-            result = successful_response.json()
-            content = result['choices'][0]['message']['content'].strip()
+                result = response.json()
+                content = result['choices'][0]['message']['content'].strip()
 
             try:
-                parsed_response = json.loads(content)
-                return parsed_response
-
+                return json.loads(content)
+            
             except json.JSONDecodeError:
 
                 json_match = re.search(r'\{.*\}', content, re.DOTALL)
 
                 if json_match:
                     try:
-                        parsed_response = json.loads(json_match.group())
-                        return parsed_response
+                        return json.loads(json_match.group())
+                    
                     except json.JSONDecodeError:
                         pass
 
-                return {
-                    "reddit_key_points": [],
-                    "reddit_prediction": None,
-                    "reddit_overall_sentiment": None,
-                    "ai_key_points": [],
-                    "ai_prediction": None,
-                    "ai_overall_sentiment": None
-                }
-
-        except requests.RequestException as e:
-            print(f"Error calling OpenRouter API: {e}")
-            return {
-                "reddit_key_points": [],
-                "reddit_prediction": None,
-                "reddit_overall_sentiment": None,
-                "ai_key_points": [],
-                "ai_prediction": None,
-                "ai_overall_sentiment": None
-            }
+                return EMPTY_SUMMARY
 
         except Exception as e:
-            print(f"Error generating Reddit summary: {e}")
-            return {
-                "reddit_key_points": [],
-                "reddit_prediction": None,
-                "reddit_overall_sentiment": None,
-                "ai_key_points": [],
-                "ai_prediction": None,
-                "ai_overall_sentiment": None
-            }
-        
+            print(f"Error calling Groq API: {e}")
+            return EMPTY_SUMMARY
+
     @staticmethod
-    def get_reddit_posts_and_summary(ticker: str, tickerName: str) -> Dict[str, Any]:
-
-        ticker = ticker.strip()
-        tickerName = tickerName.strip()
-
-        if not ticker:
-            raise HTTPException(status_code=400, detail="Ticker parameter is required")
+    def _fetch_reddit_posts_sync(ticker: str, tickerName: str) -> Dict[str, Any]:
 
         try:
-
             reddit = praw.Reddit(
                 client_id=REDDIT_CLIENT_ID,
                 client_secret=REDDIT_CLIENT_SECRET,
@@ -339,32 +259,22 @@ class RedditSummaryService:
 
             try:
                 posts = list(subreddits.search(search_query, sort='hot', time_filter='all', limit=15))
+            except Exception:
 
-            except Exception as e:
-                
                 try:
                     posts = list(subreddits.search(ticker, sort='hot', time_filter='all', limit=15))
 
-                except Exception as e2:
+                except Exception:
                     posts = []
 
             if not posts:
-                return {
-                    "posts": [],
-                    "reddit_key_points": [],
-                    "reddit_prediction": None,
-                    "reddit_overall_sentiment": None,
-                    "ai_key_points": [],
-                    "ai_prediction": None,
-                    "ai_overall_sentiment": None
-                }
+                return {'serialized_posts': [], 'all_text': []}
 
             relevant_posts = []
 
             for post in posts:
 
                 post_text = f"{post.title} {post.selftext}".lower()
-
                 ticker_pattern = r'\b' + re.escape(ticker.lower()) + r'\b'
                 has_ticker = bool(re.search(ticker_pattern, post_text))
 
@@ -377,11 +287,9 @@ class RedditSummaryService:
                     context_relevance = False
 
                     if ticker_pos != -1:
-
                         start = max(0, ticker_pos - 100)
                         end = min(len(post_text), ticker_pos + len(ticker) + 100)
                         context = post_text[start:end]
-
                         financial_keywords = ['stock', 'price', 'buy', 'sell', 'invest', 'earnings', 'revenue', 'market', 'shares']
                         context_relevance = any(keyword in context for keyword in financial_keywords)
 
@@ -394,16 +302,8 @@ class RedditSummaryService:
                     if is_relevant:
                         relevant_posts.append(post)
 
-            if len(relevant_posts) < 1:
-                return {
-                    "posts": [],
-                    "reddit_key_points": [],
-                    "reddit_prediction": None,
-                    "reddit_overall_sentiment": None,
-                    "ai_key_points": [],
-                    "ai_prediction": None,
-                    "ai_overall_sentiment": None
-                }
+            if not relevant_posts:
+                return {'serialized_posts': [], 'all_text': []}
 
             relevant_posts = relevant_posts[:10]
 
@@ -411,7 +311,7 @@ class RedditSummaryService:
             all_text = []
 
             for post in relevant_posts:
-                post_data = {
+                serialized_posts.append({
                     'title': post.title,
                     'url': post.url,
                     'score': post.score,
@@ -420,30 +320,63 @@ class RedditSummaryService:
                     'selftext': post.selftext[:300] if post.selftext else '',
                     'author': str(post.author) if post.author else 'Unknown',
                     'subreddit': str(post.subreddit) if post.subreddit else 'Unknown'
-                }
-                serialized_posts.append(post_data)
+                })
                 all_text.append(f"{post.title} {post.selftext}")
 
-            summary = RedditSummaryService.generate_reddit_summary(all_text, ticker)
-
-            return {
-                'posts': serialized_posts,
-                'reddit_key_points': summary.get('reddit_key_points', []),
-                'reddit_prediction': summary.get('reddit_prediction', None),
-                'reddit_overall_sentiment': summary.get('reddit_overall_sentiment', None),
-                'ai_key_points': summary.get('ai_key_points', []),
-                'ai_prediction': summary.get('ai_prediction', None),
-                'ai_overall_sentiment': summary.get('ai_overall_sentiment', None)
-            }
+            return {'serialized_posts': serialized_posts, 'all_text': all_text}
 
         except Exception as e:
-            print(f"Error fetching Reddit data for {ticker}: {e}")
-            return {
-                "posts": [],
-                "reddit_key_points": [],
-                "reddit_prediction": None,
-                "reddit_overall_sentiment": None,
-                "ai_key_points": [],
-                "ai_prediction": None,
-                "ai_overall_sentiment": None
-            }
+            print(f"Error fetching Reddit posts for {ticker}: {e}")
+            return {'serialized_posts': [], 'all_text': []}
+
+    @staticmethod
+    async def get_reddit_posts_and_summary(ticker: str, tickerName: str) -> Dict[str, Any]:
+
+        cache_key = f"stocks/{ticker}/reddit"
+
+        try:
+
+            redis = await get_redis()
+            cached = await redis.get(cache_key)
+
+            if cached:
+                return json.loads(cached)
+            
+        except Exception as e:
+            print(f"Redis read error (reddit): {e}")
+
+        ticker = ticker.strip()
+        tickerName = tickerName.strip()
+
+        if not ticker:
+            raise HTTPException(status_code=400, detail="Ticker parameter is required")
+
+        posts_data = await asyncio.to_thread(
+            RedditSummaryService._fetch_reddit_posts_sync, ticker, tickerName
+        )
+
+        if not posts_data['serialized_posts']:
+            return {"posts": [], **EMPTY_SUMMARY}
+
+        summary = await RedditSummaryService.generate_reddit_summary(posts_data['all_text'], ticker)
+
+        data = {
+            'posts': posts_data['serialized_posts'],
+            'reddit_key_points': summary.get('reddit_key_points', []),
+            'reddit_prediction': summary.get('reddit_prediction', None),
+            'reddit_overall_sentiment': summary.get('reddit_overall_sentiment', None),
+            'ai_key_points': summary.get('ai_key_points', []),
+            'ai_prediction': summary.get('ai_prediction', None),
+            'ai_overall_sentiment': summary.get('ai_overall_sentiment', None)
+        }
+
+        if data:
+
+            try:
+                redis = await get_redis()
+                await redis.setex(cache_key, 3600, json.dumps(data))
+                
+            except Exception as e:
+                print(f"Redis write error (reddit): {e}")
+
+        return data

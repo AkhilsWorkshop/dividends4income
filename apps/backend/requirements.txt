@@ -7,3 +7,4 @@ yfinance
 praw
 python-decouple
 python-dotenv
+redis[asyncio]

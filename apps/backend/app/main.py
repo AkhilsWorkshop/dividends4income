@@ -1,22 +1,17 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from app.config import CORS_ORIGINS
 from app.homepage.controller import router as homepage_router
 from app.stock.controller import router as stocks_router
+from app.middleware.service import Middleware
 
 app = FastAPI(title="Dividends 4 Income API")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
-    allow_methods=["GET"],
-    allow_headers=["*"],
-)
+Middleware.register_security(app)
+Middleware.register_cors(app)
 
 app.include_router(homepage_router, tags=["Homepage"])
 app.include_router(stocks_router, tags=["Stocks"])

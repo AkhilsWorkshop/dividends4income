@@ -7,6 +7,7 @@ import { cn } from '@/utils'
 import { AiOutlineLoading } from "react-icons/ai"
 import { searchTickers } from '@/actions/search'
 import type { Suggestion } from '@/actions/search'
+import Image from 'next/image'
 
 export const Hero = () => {
 
@@ -84,7 +85,7 @@ export const Hero = () => {
 
     return (
 
-        <div className="relative py-[50px] lg:py-[0px] pt-22 lg:min-h-screen flex flex-col justify-center items-center text-primary px-3 lg:px-6 pb-10 space-y-12 bg-gradient-to-br from-secondary/10 via-transparent to-secondary/10">
+        <div className="relative py-12.5 lg:py-0 pt-22 lg:min-h-screen flex flex-col justify-center items-center text-primary px-3 lg:px-6 pb-10 space-y-12 bg-linear-to-br from-secondary/10 via-transparent to-secondary/10">
 
             <div className="relative z-10 text-center space-y-8 max-w-4xl mx-auto">
 
@@ -92,7 +93,7 @@ export const Hero = () => {
 
                     <h1 className="text-4xl lg:text-7xl font-semibold text-balance leading-tight dark:[text-shadow:0_0_20px_rgba(0,0,0,0.3),0_0_40px_rgba(0,0,0,0.2)]">
                         Dividend Investing <br />
-                        <span className="bg-gradient-to-r from-secondary to-secondary/80 bg-clip-text text-transparent">
+                        <span className="bg-linear-to-r from-secondary to-secondary/80 bg-clip-text text-transparent">
                             Made Simple
                         </span>
                     </h1>
@@ -128,13 +129,34 @@ export const Hero = () => {
                                 <div className="max-h-60 overflow-y-auto">
 
                                     {suggestions.map((suggestion) => (
+
                                         <div
                                             key={suggestion.ticker}
                                             onClick={() => handleSuggestionClick(suggestion.ticker)}
-                                            className="px-4 py-2 hover:bg-primary/10 cursor-pointer text-primary border-b border-primary/5 last:border-b-0 flex flex-col justify-start items-start">
-                                            <div className="font-semibold">{suggestion.ticker}</div>
-                                            <div className="text-sm text-secondary">{suggestion.title}</div>
+                                            className="px-4 py-2 hover:bg-primary/10 cursor-pointer text-primary border-b border-primary/5 last:border-b-0 flex justify-start items-center gap-2">
+                                                
+                                            {suggestion.logo_url &&
+
+                                                <Image 
+                                                    loading='lazy'
+                                                    src={suggestion.logo_url} 
+                                                    alt={`${suggestion.title} logo`} 
+                                                    width={32} 
+                                                    height={32} 
+                                                    className="rounded-sm"
+                                                 />
+
+                                            }
+
+                                            <div className='flex flex-col items-start justify-start'>
+
+                                                <div className="font-semibold text-left">{suggestion.ticker}</div>
+                                                <div className="text-sm text-secondary text-left">{suggestion.title}</div>
+
+                                            </div>
+
                                         </div>
+
                                     ))}
 
                                 </div>

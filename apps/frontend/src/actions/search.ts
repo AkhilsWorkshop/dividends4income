@@ -3,6 +3,7 @@
 export interface Suggestion {
     ticker: string
     title: string
+    logo_url?: string
 }
 
 export async function searchTickers(query: string): Promise<Suggestion[]> {
@@ -23,7 +24,7 @@ export async function searchTickers(query: string): Promise<Suggestion[]> {
         if (!res.ok) return []
 
         const data = await res.json()
-        return data.suggestions ?? []
+        return data ?? []
 
     } catch {
         return []

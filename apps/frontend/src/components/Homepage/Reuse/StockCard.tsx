@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { BasicStockInfo } from "@/types"
+import Image from 'next/image'
 
 interface StockCardProps {
     stock: BasicStockInfo
@@ -11,7 +12,7 @@ export const StockCard = ({ stock }: StockCardProps) => {
 
             <div className="flex items-center space-x-4">
 
-                <img src={stock.logo_url} alt={`${stock.name} logo`} className="w-12 h-12 rounded-sm" />
+                <Image src={stock.logo_url} alt={`${stock.name} logo`} width={48} height={48} className="rounded-sm" />
 
                 <div className="flex flex-col items-start justify-between">
                     <h1 className="text-lg font-bold">{stock.symbol}</h1>
