@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from mangum import Mangum
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,5 +18,3 @@ app.include_router(stocks_router, tags=["Stocks"])
 @app.get("/")
 def api_root():
     return {"message": "Not much to see here."}
-
-handler = Mangum(app)

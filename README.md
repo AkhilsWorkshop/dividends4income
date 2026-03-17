@@ -26,7 +26,6 @@ A clean, fast web app for tracking dividend stocks and getting company insights.
 
 **Backend:**
 - [FastAPI](https://fastapi.tiangolo.com/) - Python web framework
-- [Mangum](https://mangum.fastapiexpert.com/) - Serverless adapter for Vercel/Lambda
 - [Redis](https://redis.io/) - Server-side caching
 - [Groq](https://groq.com/) - LLM inference for Reddit sentiment analysis
 
