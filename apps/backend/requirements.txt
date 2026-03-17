@@ -1,6 +1,5 @@
 fastapi
 uvicorn[standard]
-mangum
 requests
 httpx
 yfinance
