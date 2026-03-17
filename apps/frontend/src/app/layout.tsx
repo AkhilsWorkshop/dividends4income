@@ -11,8 +11,8 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'Dividends4Income - Stock Dividend Tracker',
         description: 'Making dividend investing simple with real-time data, advanced analytics and expert insights.',
-        images: ['https://d4i.akhilkumar.dev/images/og-image.png'],
-        url: 'https://d4i.akhilkumar.dev',
+        images: [`${process.env.DOMAIN}/images/og-image.png`],
+        url: process.env.DOMAIN,
         type: 'website',
     },
     icons: {
@@ -20,13 +20,9 @@ export const metadata: Metadata = {
     },
 }
 
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode
-}) {
-    
-    const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+
+    const gaMeasurementId = process.env.GA_MEASUREMENT_ID
 
     return (
         <html lang="en" suppressHydrationWarning>
@@ -49,7 +45,7 @@ export default function RootLayout({
                 />
 
                 {gaMeasurementId && (
-                    
+
                     <>
 
                         <script

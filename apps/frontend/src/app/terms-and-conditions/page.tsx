@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
     title: 'Terms & Conditions - Dividends4Income',
     description: 'Terms and Conditions for Dividends4Income dividend investing platform.',

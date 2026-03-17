@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import type { StockDetail } from '@/lib/api'
 import { DividendsChart } from '@/components/Stock/Sub/DividendsChart'
 import { DividendsTable } from '@/components/Stock/Sub/DividendsTable'
 import { Head } from './Sub/Head'
@@ -8,6 +7,7 @@ import { KeyMetrics } from './Sub/KeyMetrics'
 import { CompanyDetails } from './Sub/CompanyDetails'
 import { InitialMetrics } from './Sub/InitialMetrics'
 import { Analysis } from './Sub/Analysis'
+import { StockDetail } from '@/types'
 
 interface LayoutProps {
     ticker: string

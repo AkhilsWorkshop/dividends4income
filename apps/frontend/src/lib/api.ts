@@ -1,71 +1,33 @@
 import 'server-only'
 
 import { notFound } from 'next/navigation'
-import type { BasicStockInfo } from '@/types'
+import type { PopularStocksData, RedditData, StockDetail } from '@/types'
 
-const BASE = () => {
-    const url = process.env.API_BASE_URL
-    if (!url) throw new Error('API_BASE_URL env var is not set')
-    return url
+export const BASE = () => {
+
+    const url = process.env.SERVER_URL
+    const apiKey = process.env.SERVER_API_KEY
+
+    if (!apiKey) throw new Error('SERVER_API_KEY env var is not set')
+
+    if (!url) throw new Error('SERVER_URL env var is not set')
+
+    return { url, apiKey }
 }
 
-export interface DividendData {
-    date: string
-    amount: number
-    change_percent: number
-}
+export const fetchPopularStocks = async (): Promise<PopularStocksData> => {
 
-export interface StockDetail extends BasicStockInfo {
-    market_cap?: number
-    volume?: number
-    average_volume?: number
-    fifty_two_week_high?: number
-    fifty_two_week_low?: number
-    trailing_pe?: number
-    forward_pe?: number
-    trailing_eps?: number
-    forward_eps?: number
-    beta?: number
-    sector?: string
-    industry?: string
-    long_business_summary?: string
-    currency?: string
-    exchange?: string
-    country?: string
-    full_time_employees?: number
-    all_dividends: DividendData[]
-}
+    const { url, apiKey } = BASE()
 
-export interface RedditData {
-    posts: RedditPost[]
-    reddit_key_points: string[]
-    reddit_prediction: string
-    ai_key_points: string[]
-    ai_prediction: string
-}
+    if (!url || !apiKey) return { stocks: [] }
 
-export interface RedditPost {
-    title: string
-    url: string
-    score: number
-    num_comments: number
-    created_utc: string
-    selftext: string
-    author: string
-    subreddit: string
-}
-
-export interface PopularStocksData {
-    stocks: BasicStockInfo[]
-}
-
-export async function fetchPopularStocks(): Promise<PopularStocksData> {
-
-    const base = process.env.API_BASE_URL
-
-    if (!base) return { stocks: [] }
-
-    const res = await fetch(`${base}/popular/stocks`, {
+    const res = await fetch(`${url}/popular/stocks`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Dividends4Income Frontend',
+            'x-api-key': apiKey || '',
+        },
         next: { revalidate: 3600 },
     })
 
@@ -74,9 +36,17 @@ export async function fetchPopularStocks(): Promise<PopularStocksData> {
     return res.json()
 }
 
-export async function fetchStockData(ticker: string): Promise<StockDetail | null> {
+export const fetchStockData = async (ticker: string): Promise<StockDetail | null> => {
 
-    const res = await fetch(`${BASE()}/stocks/${ticker}`, {
+    const { url, apiKey } = BASE()
+
+    const res = await fetch(`${url}/stocks/${ticker}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Dividends4Income Frontend',
+            'x-api-key': apiKey || '',
+        },
         cache: 'no-store',
     })
 
@@ -86,16 +56,24 @@ export async function fetchStockData(ticker: string): Promise<StockDetail | null
     return res.json()
 }
 
-export async function fetchRedditAnalysis(
+export const fetchRedditAnalysis = async (
     ticker: string,
     tickerName: string,
-): Promise<RedditData | null> {
+): Promise<RedditData | null> => {
 
-    const res = await fetch(
-        `${BASE()}/stocks/analysis/reddit?ticker=${encodeURIComponent(ticker)}&tickerName=${encodeURIComponent(tickerName)}`,
-        { cache: 'no-store' },
-    )
+    const { url, apiKey } = BASE()
+
+    const res = await fetch(`${url}/stocks/analysis/reddit?ticker=${encodeURIComponent(ticker)}&tickerName=${encodeURIComponent(tickerName)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Dividends4Income Frontend',
+            'x-api-key': apiKey || '',
+        },
+        cache: 'no-store'
+    })
 
     if (!res.ok) return null
+
     return res.json()
 }

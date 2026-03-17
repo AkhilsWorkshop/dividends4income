@@ -12,8 +12,7 @@ from app.cache import get_redis
 from app.config import REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT, GROQ_API_KEY, LOGO_DEV_PUBLIC_KEY
 
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_PRIMARY_MODEL = "compound-beta"
-GROQ_FALLBACK_MODEL = "llama-3.1-8b-instant"
+GROQ_PRIMARY_MODEL = "llama-3.1-8b-instant"
 
 EMPTY_SUMMARY = {
     "reddit_key_points": [],
@@ -203,13 +202,6 @@ class RedditSummaryService:
                 print(f"Trying Groq model: {GROQ_PRIMARY_MODEL}")
                 response = await client.post(GROQ_URL, headers=headers, json=payload)
 
-                if response.status_code == 429:
-
-                    print(f"Rate limited on {GROQ_PRIMARY_MODEL}, falling back to {GROQ_FALLBACK_MODEL}...")
-
-                    payload["model"] = GROQ_FALLBACK_MODEL
-                    response = await client.post(GROQ_URL, headers=headers, json=payload)
-
                 if response.status_code != 200:
 
                     print(f"Groq API error: {response.status_code} - {response.text}")
@@ -332,7 +324,7 @@ class RedditSummaryService:
     @staticmethod
     async def get_reddit_posts_and_summary(ticker: str, tickerName: str) -> Dict[str, Any]:
 
-        cache_key = f"stocks/{ticker}/reddit"
+        cache_key = f"d4i/stocks/{ticker}/reddit"
 
         try:
 
