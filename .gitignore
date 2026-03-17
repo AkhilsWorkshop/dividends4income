@@ -4,3 +4,9 @@ __pycache__/
 
 .env
 node_modules
+
+apps/frontend/node_modules
+apps/frontend/.next
+apps/frontend/.env.local
+
+apps/backend/.env
