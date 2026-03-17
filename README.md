@@ -37,12 +37,11 @@ A clean, fast web app for tracking dividend stocks and getting company insights.
 - [Reddit API / PRAW](https://www.reddit.com/dev/api/) - Community posts for sentiment analysis
 
 **Monorepo & Deployment:**
-- [Turborepo](https://turbo.build/repo) - Monorepo build system
 - [Vercel](https://vercel.com/) - Hosting for both frontend and backend
 
 ## Quick Start
 
-This repository is organized as a **Turborepo monorepo** with two apps under `apps/`: `frontend` (Next.js) and `backend` (FastAPI). The root uses npm **workspaces** so you can install all JavaScript dependencies from the repository root.
+This repository is organized as a **Monorepo** with two apps under `apps/`: `frontend` (Next.js) and `backend` (FastAPI). The root uses npm **workspaces** so you can install all JavaScript dependencies from the repository root.
 
 ```bash
 # from the repository root (install once)
