@@ -4,9 +4,6 @@
     "scripts": {
         "dev:full": "concurrently \"npm run dev --prefix apps/frontend\" \"source .venv/bin/activate && cd apps/backend && python3 dev_server.py\""
     },
-    "engines": {
-        "node": ">=18"
-    },
     "packageManager": "npm@11.5.1",
     "workspaces": [
         "apps/*"
