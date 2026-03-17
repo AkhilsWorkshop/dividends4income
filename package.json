@@ -1,23 +1,14 @@
 {
-  "name": "dividends4income",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "dev:full": "concurrently \"npm run dev --prefix apps/frontend\" \"source .venv/bin/activate && cd apps/backend && python3 dev_server.py\""
-  },
-  "devDependencies": {
-    "concurrently": "^9.2.0",
-    "prettier": "^3.4.2",
-    "turbo": "^2.5.5"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "npm@11.5.1",
-  "workspaces": [
-    "apps/*"
-  ]
+    "name": "dividends4income",
+    "private": true,
+    "scripts": {
+        "dev:full": "concurrently \"npm run dev --prefix apps/frontend\" \"source .venv/bin/activate && cd apps/backend && python3 dev_server.py\""
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "packageManager": "npm@11.5.1",
+    "workspaces": [
+        "apps/*"
+    ]
 }
