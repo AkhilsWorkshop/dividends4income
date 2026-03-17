@@ -8,5 +8,6 @@ node_modules
 apps/frontend/node_modules
 apps/frontend/.next
 apps/frontend/.env.local
+apps/frontend/.next-env.d.ts
 
 apps/backend/.env
