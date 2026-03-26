@@ -1,4 +1,9 @@
-import { MdOutlineInsertChart } from "react-icons/md"
+'use client'
+
+import { memo } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { staggerContainer, fadeUp } from '@/animations/variants'
+import { MdOutlineInsertChart } from 'react-icons/md'
 
 interface KeyMetricsProps {
     marketCap?: number
@@ -15,7 +20,7 @@ interface KeyMetricsProps {
     exchange?: string
 }
 
-export const KeyMetrics = ({
+export const KeyMetrics = memo(({
     marketCap,
     volume,
     averageVolume,
@@ -29,6 +34,8 @@ export const KeyMetrics = ({
     currency,
     exchange
 }: KeyMetricsProps) => {
+
+    const shouldReduce = useReducedMotion()
 
     const formatNumber = (num?: number) => {
         if (!num) return 'N/A'
@@ -47,52 +54,50 @@ export const KeyMetrics = ({
         return num.toString()
     }
 
+    const metrics = [
+        { label: 'Market Cap', value: formatNumber(marketCap) },
+        { label: 'Beta', value: beta ? beta.toFixed(2) : 'N/A' },
+        { label: 'Volume', value: formatVolume(volume) },
+        { label: 'Avg Volume', value: formatVolume(averageVolume) },
+        { label: '52W High', value: fiftyTwoWeekHigh ? `$${fiftyTwoWeekHigh.toFixed(2)}` : 'N/A' },
+        { label: '52W Low', value: fiftyTwoWeekLow ? `$${fiftyTwoWeekLow.toFixed(2)}` : 'N/A' },
+        { label: 'Trailing P/E', value: trailingPE ? trailingPE.toFixed(2) : 'N/A' },
+        { label: 'Forward P/E', value: forwardPE ? forwardPE.toFixed(2) : 'N/A' },
+        { label: 'Trailing EPS', value: trailingEPS ? `$${trailingEPS.toFixed(2)}` : 'N/A' },
+        { label: 'Forward EPS', value: forwardEPS ? `$${forwardEPS.toFixed(2)}` : 'N/A' },
+        { label: 'Currency', value: currency ?? 'N/A' },
+        { label: 'Exchange', value: exchange ?? 'N/A' },
+    ]
+
     return (
-        <div className="bg-layer rounded-xl border border-border shadow-sm p-4 lg:p-6 text-primary space-y-6">
+        <div className="glass-card p-4 lg:p-6 text-primary space-y-6">
 
             <div className="flex items-center gap-3">
-
-                <div className="p-2 lg:p-4 bg-layer border border-border rounded-lg shadow-sm text-primary">
-                    <MdOutlineInsertChart size={24} />
+                <div className="p-3 glass-card text-accent">
+                    <MdOutlineInsertChart size={22} />
                 </div>
-
                 <div>
-                    <h1 className="font-bold text-xl lg:text-2xl text-primary">
-                        Key Metrics
-                    </h1>
-                    <p className="text-sm text-secondary">
-                        Important financial metrics and ratios
-                    </p>
+                    <h2 className="font-bold text-xl text-primary">Key Metrics</h2>
+                    <p className="text-sm text-secondary">Important financial metrics and ratios</p>
                 </div>
-
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-
-                <DataItem label="Market Cap" value={formatNumber(marketCap)} />
-                <DataItem label="Beta" value={beta ? beta.toFixed(2) : 'N/A'} />
-                <DataItem label="Volume" value={formatVolume(volume)} />
-                <DataItem label="Avg Volume" value={formatVolume(averageVolume)} />
-                <DataItem label="52W High" value={fiftyTwoWeekHigh ? `$${fiftyTwoWeekHigh.toFixed(2)}` : 'N/A'} />
-                <DataItem label="52W Low" value={fiftyTwoWeekLow ? `$${fiftyTwoWeekLow.toFixed(2)}` : 'N/A'} />
-                <DataItem label="Trailing P/E" value={trailingPE ? trailingPE.toFixed(2) : 'N/A'} />
-                <DataItem label="Forward P/E" value={forwardPE ? forwardPE.toFixed(2) : 'N/A'} />
-                <DataItem label="Trailing EPS" value={trailingEPS ? `$${trailingEPS.toFixed(2)}` : 'N/A'} />
-                <DataItem label="Forward EPS" value={forwardEPS ? `$${forwardEPS.toFixed(2)}` : 'N/A'} />
-                <DataItem label="Currency" value={currency ? currency : 'N/A'} />
-                <DataItem label="Exchange" value={exchange ? exchange : 'N/A'} />
-
-            </div>
+            <motion.div
+                variants={staggerContainer}
+                initial={shouldReduce ? false : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="grid grid-cols-2 gap-4">
+                {metrics.map((item) => (
+                    <motion.div key={item.label} variants={fadeUp} className="space-y-1">
+                        <p className="text-xs text-secondary uppercase tracking-wide">{item.label}</p>
+                        <p className="text-lg font-semibold text-primary">{item.value}</p>
+                    </motion.div>
+                ))}
+            </motion.div>
 
         </div>
     )
-}
+})
 
-const DataItem = ({ label, value }: { label: string; value: string | number }) => {
-    return (
-        <div className="space-y-1">
-            <p className="text-sm text-secondary">{label}</p>
-            <p className="text-xl font-semibold text-primary">{value}</p>
-        </div>
-    )
-}
+KeyMetrics.displayName = 'KeyMetrics'

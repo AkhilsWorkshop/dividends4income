@@ -11,4 +11,7 @@ async def api_ticker_search(q: str = Query("", description="Search query")):
 @router.get("/popular/stocks")
 async def api_popular_stocks():
     return HomePageService.get_popular_stocks()
-    
+
+@router.get("/marquee/tickers")
+async def api_marquee_tickers():
+    return HomePageService.get_marquee_tickers()

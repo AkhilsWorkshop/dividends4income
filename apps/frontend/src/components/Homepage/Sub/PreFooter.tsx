@@ -1,8 +1,12 @@
 'use client'
 
-import { MdCreditCard } from "react-icons/md"
+import { motion, useReducedMotion } from 'motion/react'
+import { fadeUp } from '@/animations/variants'
+import { MdCreditCard } from 'react-icons/md'
 
 export const PreFooter = () => {
+
+    const shouldReduce = useReducedMotion()
 
     const handleCTAClick = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -14,24 +18,37 @@ export const PreFooter = () => {
     }
 
     return (
-        <div className="max-w-7xl container mx-auto space-y-10 py-[50px] lg:py-[100px] px-3 lg:px-6">
+        <div className="max-w-7xl container mx-auto space-y-10 py-[50px] lg:py-[100px] px-4 lg:px-6">
 
-            <div className="text-center space-y-10 text-primary">
-                <h2 className="text-2xl lg:text-5xl font-semibold text-balance">Ready to discover <br /> dividends? <span className="text-secondary">Let's begin.</span></h2>
-                <p className="text-sm md:text-lg lg:text-xl text-secondary text-pretty max-w-2xl mx-auto">Completely free with no hidden costs</p>
-            </div>
+            <motion.div
+                variants={fadeUp}
+                initial={shouldReduce ? false : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="text-center space-y-8">
 
-            <div className="flex flex-col justify-center items-center">
+                <h2 className="text-2xl lg:text-5xl font-semibold text-balance">
+                    Ready to discover dividends? <br />
+                    <span className="text-accent">Let&apos;s begin.</span>
+                </h2>
 
-                <button
-                    onClick={handleCTAClick}
-                    className="bg-primary hover:bg-primary/90 text-background font-semibold px-10 py-3 rounded-md text-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg focus:outline-none w-fit cursor-pointer">
-                    Explore Now
-                </button>
+                <p className="text-sm md:text-lg text-secondary max-w-2xl mx-auto">Completely free with no hidden costs</p>
 
-                <p className="text-sm text-secondary/70 mt-4 inline-flex justify-center items-center gap-2"><MdCreditCard size={16} /> No credit card required</p>
+                <div className="flex flex-col items-center gap-3">
+                    <motion.button
+                        onClick={handleCTAClick}
+                        whileHover={shouldReduce ? undefined : { scale: 1.04 }}
+                        whileTap={shouldReduce ? undefined : { scale: 0.97 }}
+                        style={{ willChange: 'transform' }}
+                        className="bg-accent hover:brightness-110 text-background font-semibold px-10 py-3 rounded-xl text-base transition-all duration-200 cursor-pointer">
+                        Explore Now
+                    </motion.button>
+                    <p className="text-xs text-secondary/60 inline-flex items-center gap-1.5">
+                        <MdCreditCard size={14} /> No credit card required
+                    </p>
+                </div>
 
-            </div>
+            </motion.div>
 
         </div>
     )

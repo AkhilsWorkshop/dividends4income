@@ -1,9 +1,11 @@
 'use client'
 
-import { cn } from "@/utils"
-import { useState } from 'react'
-import { FaBuilding } from "react-icons/fa6"
-import { MdExpandMore } from "react-icons/md"
+import { memo, useState } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { staggerContainer, fadeUp } from '@/animations/variants'
+import { FaBuilding } from 'react-icons/fa6'
+import { MdExpandMore } from 'react-icons/md'
+import { cn } from '@/utils'
 
 interface CompanyDetailsProps {
     sector?: string
@@ -15,17 +17,18 @@ interface CompanyDetailsProps {
     name?: string
 }
 
-export const CompanyDetails = ({
+export const CompanyDetails = memo(({
     sector,
     industry,
     country,
     fullTimeEmployees,
-    businessSummary = "",
+    businessSummary = '',
     logoURL,
     name
 }: CompanyDetailsProps) => {
 
     const [isExpanded, setIsExpanded] = useState(false)
+    const shouldReduce = useReducedMotion()
 
     const formatEmployees = (num?: number) => {
         if (!num) return 'N/A'
@@ -42,54 +45,54 @@ export const CompanyDetails = ({
     ]
 
     return (
-        <div className="bg-layer rounded-xl border border-border shadow-sm p-4 lg:p-6 text-primary space-y-6">
+        <div className="glass-card p-4 lg:p-6 text-primary space-y-6">
 
             <div className="flex items-center gap-3">
-
-                <div className="p-2 lg:p-4 bg-layer border border-border rounded-lg shadow-sm text-primary">
-                    <FaBuilding size={24} />
+                <div className="p-3 glass-card text-accent">
+                    <FaBuilding size={20} />
                 </div>
-
-                <div className="w-fit overflow-hidden">
-                    <h1 className="font-bold text-xl lg:text-2xl text-primary">
-                        Company Details
-                    </h1>
-                    <p className="text-sm text-secondary truncate">
-                        About {name}
-                    </p>
+                <div className="flex-1 overflow-hidden">
+                    <h2 className="font-bold text-xl text-primary">Company Details</h2>
+                    <p className="text-sm text-secondary truncate">About {name}</p>
                 </div>
-
-                <img src={logoURL} alt={`${name} logo`} className="w-8 lg:w-10 h-8 lg:h-10 rounded-sm ml-auto" />
-
+                {logoURL && <img src={logoURL} alt={`${name} logo`} className="w-9 h-9 rounded-lg ml-auto" />}
             </div>
 
-            <div className="grid grid-cols-1">
-
+            <motion.div
+                variants={staggerContainer}
+                initial={shouldReduce ? false : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true }}>
                 {infoItems.map((item, index) => (
-                    <div key={index} className="flex justify-between items-center py-2 border-y border-border first:border-t-0 last:border-b-0">
+                    <motion.div
+                        key={index}
+                        variants={fadeUp}
+                        className="flex justify-between items-center py-2.5 border-b border-border/40 last:border-b-0">
                         <span className="text-sm text-secondary">{item.label}</span>
-                        <span className="text-sm font-bold text-primary">{item.value}</span>
-                    </div>
+                        <span className="text-sm font-semibold text-primary">{item.value ?? 'N/A'}</span>
+                    </motion.div>
                 ))}
+            </motion.div>
 
-            </div>
-
-            <div className="grid grid-cols-1">
-
-                <h3 className="text-lg font-semibold text-primary">About</h3>
-
-                <p className={cn("text-sm text-secondary leading-relaxed", isExpanded ? '' : 'line-clamp-[9]')}>
-                    {businessSummary}
-                </p>
-
-                <span
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="flex items-center gap-1 text-sm text-primary transition-colors font-bold cursor-pointer">
-                    Show {isExpanded ? 'Less' : 'More'} <span className={cn(isExpanded ? 'rotate-180' : 'rotate-0', 'duration-300 transition-all')}><MdExpandMore size={16} /></span>
-                </span>
-
-            </div>
+            {businessSummary && (
+                <div className="space-y-2">
+                    <h3 className="text-xs font-semibold text-primary uppercase tracking-wide">About</h3>
+                    <p className={cn('text-sm text-secondary leading-relaxed', isExpanded ? '' : 'line-clamp-[6]')}>
+                        {businessSummary}
+                    </p>
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="flex items-center gap-1 text-xs text-accent font-medium cursor-pointer hover:brightness-110 transition-all duration-200">
+                        Show {isExpanded ? 'Less' : 'More'}
+                        <span className={cn(isExpanded ? 'rotate-180' : '', 'transition-transform duration-300')}>
+                            <MdExpandMore size={14} />
+                        </span>
+                    </button>
+                </div>
+            )}
 
         </div>
     )
-}
+})
+
+CompanyDetails.displayName = 'CompanyDetails'

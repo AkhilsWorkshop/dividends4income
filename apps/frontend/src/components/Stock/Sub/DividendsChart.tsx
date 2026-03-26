@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { scaleIn } from '@/animations/variants'
 import { cn } from '@/utils'
-import { useTheme } from '@/contexts/ThemeContext'
 import { FaArrowTrendUp } from 'react-icons/fa6'
 
 interface DividendData {
@@ -17,10 +18,12 @@ interface StockChartProps {
 
 type TimePeriod = '5years' | '10years' | 'all'
 
+const CHART_COLOR = '#00d09c'
+
 export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
 
     const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('all')
-    const { isDark } = useTheme()
+    const shouldReduce = useReducedMotion()
 
     const chartRef = useRef<HTMLDivElement>(null)
     const apexChartRef = useRef<any>(null)
@@ -46,10 +49,7 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
         }
 
         return dividends
-            .filter(dividend => {
-                const dividendDate = parseDate(dividend.date)
-                return dividendDate >= cutoffDate
-            })
+            .filter(dividend => parseDate(dividend.date) >= cutoffDate)
             .map(dividend => ({
                 date: dividend.date,
                 amount: dividend.amount,
@@ -62,85 +62,50 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
 
     const chartOptions = useMemo(() => ({
         chart: {
-            // height: "100%",
-            // width: "100%",
-            type: "area" as const,
-            fontFamily: "Inter, sans-serif",
-            dropShadow: {
-                enabled: false,
-            },
-            toolbar: {
-                show: false,
-            },
+            type: 'area' as const,
+            fontFamily: 'Inter, sans-serif',
+            dropShadow: { enabled: false },
+            toolbar: { show: false },
             background: 'transparent',
-            offsetX: 0,
-            offsetY: 0,
+            animations: { enabled: !shouldReduce },
         },
         tooltip: {
             enabled: true,
-            x: {
-                show: false,
-            },
-            y: {
-                formatter: (value: number) => `$${value.toFixed(2)}`,
-            },
-            theme: isDark ? 'dark' : 'light',
+            x: { show: false },
+            y: { formatter: (value: number) => `$${value.toFixed(2)}` },
+            theme: 'dark',
         },
         fill: {
-            type: "gradient" as const,
+            type: 'gradient' as const,
             gradient: {
-                opacityFrom: 0.70,
-                opacityTo: 0,
-                shade: isDark ? "#65675c" : "#74774b",
-                gradientToColors: isDark ? ["#65675c"] : ["#74774b"],
+                opacityFrom: 0.5,
+                opacityTo: 0.02,
+                shade: CHART_COLOR,
+                gradientToColors: [CHART_COLOR],
             },
         },
-        dataLabels: {
-            enabled: false,
-        },
-        stroke: {
-            width: 4,
-            colors: isDark ? ["#65675c"] : ["#74774b"],
-        },
+        dataLabels: { enabled: false },
+        stroke: { width: 2.5, colors: [CHART_COLOR] },
         grid: {
-            show: false,
+            show: true,
+            borderColor: 'rgba(30,42,58,0.4)',
             strokeDashArray: 4,
-            padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            },
+            padding: { left: 0, right: 0, top: 0, bottom: 0 },
         },
-        series: [
-            {
-                name: "Dividend Amount",
-                data: filteredData.map(d => d.amount),
-                color: isDark ? "#65675c" : "#74774b",
-            },
-        ],
+        series: [{
+            name: 'Dividend Amount',
+            data: filteredData.map(d => d.amount),
+            color: CHART_COLOR,
+        }],
         xaxis: {
             categories: filteredData.map(d => d.formattedDate),
-            labels: {
-                show: false,
-            },
-            axisBorder: {
-                show: false,
-            },
-            axisTicks: {
-                show: false,
-            },
+            labels: { show: false },
+            axisBorder: { show: false },
+            axisTicks: { show: false },
         },
-        yaxis: {
-            show: false,
-        },
-        margin: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        }
-    }), [filteredData, isDark])
+        yaxis: { show: false },
+        theme: { mode: 'dark' as const },
+    }), [filteredData, shouldReduce])
 
     useEffect(() => {
 
@@ -149,66 +114,39 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
         const container = chartRef.current
 
         import('apexcharts').then((ApexCharts) => {
-
-            if (apexChartRef.current) {
-                apexChartRef.current.destroy()
-            }
-
+            if (apexChartRef.current) apexChartRef.current.destroy()
             apexChartRef.current = new ApexCharts.default(container, chartOptions)
             apexChartRef.current.render()
         })
 
         return () => {
-            if (apexChartRef.current) {
-                apexChartRef.current.destroy()
-            }
+            if (apexChartRef.current) apexChartRef.current.destroy()
         }
 
     }, [chartOptions, filteredData])
 
     const trendData = useMemo(() => {
 
-        if (!dividends.length) {
-            return {
-                changePercent: 0,
-                changeAmount: 0,
-                trend: 'flat' as const,
-                period: 'this month'
-            }
-        }
+        if (!dividends.length) return { changePercent: 0, changeAmount: 0, trend: 'flat' as const, period: 'this month', hasPreviousData: false }
 
         const now = new Date()
         const currentMonth = now.getMonth()
         const currentYear = now.getFullYear()
-
         const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1
         const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear
 
-        const monthlyTotals: { [key: string]: number } = {}
-
+        const monthlyTotals: Record<string, number> = {}
         dividends.forEach(dividend => {
             const date = parseDate(dividend.date)
             const monthKey = `${date.getFullYear()}-${date.getMonth()}`
             monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + dividend.amount
         })
 
-        const currentMonthKey = `${currentYear}-${currentMonth}`
-        const prevMonthKey = `${prevYear}-${prevMonth}`
-
-        const currentTotal = monthlyTotals[currentMonthKey] || 0
-        const prevTotal = monthlyTotals[prevMonthKey] || 0
-
-        let changePercent = 0
-        let changeAmount = currentTotal - prevTotal
-
-        if (prevTotal > 0) {
-            changePercent = ((currentTotal - prevTotal) / prevTotal) * 100
-        }
-
-        let trend: 'up' | 'down' | 'flat' = 'flat'
-
-        if (changeAmount > 0.01) trend = 'up'
-        else if (changeAmount < -0.01) trend = 'down'
+        const currentTotal = monthlyTotals[`${currentYear}-${currentMonth}`] || 0
+        const prevTotal = monthlyTotals[`${prevYear}-${prevMonth}`] || 0
+        const changeAmount = currentTotal - prevTotal
+        const changePercent = prevTotal > 0 ? ((currentTotal - prevTotal) / prevTotal) * 100 : 0
+        const trend: 'up' | 'down' | 'flat' = changeAmount > 0.01 ? 'up' : changeAmount < -0.01 ? 'down' : 'flat'
 
         return {
             changePercent: Math.abs(changePercent),
@@ -221,65 +159,41 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
     }, [dividends])
 
     return (
-        <div className='w-full h-full col-span-5 lg:col-span-3 bg-layer rounded-xl border border-border shadow-sm space-y-6 text-primary'>
+        <motion.div
+            variants={scaleIn}
+            initial={shouldReduce ? false : 'hidden'}
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="w-full h-full col-span-5 lg:col-span-3 glass-card space-y-4 text-primary">
 
-            <>
+            <div className="flex flex-col lg:flex-row gap-3 justify-between items-start p-4 lg:p-6">
 
-                <div className="flex flex-col lg:flex-row gap-3 justify-between items-start p-4 lg:p-6">
-
-                        <div className="flex items-center justify-center gap-3">
-
-                            <div className="p-2 lg:p-4 bg-layer border border-border rounded-lg shadow-sm text-primary">
-                                <FaArrowTrendUp size={24} />
-                            </div>
-
-                            <div>
-
-                                <h1 className="font-bold text-xl lg:text-2xl text-primary">
-                                    Trend
-                                </h1>
-
-                                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center gap-1">
-
-                                    {trendData.trend === 'up' &&
-                                        <p className="text-sm font-bold">
-                                            +${trendData.changeAmount.toFixed(2)} <span className="text-secondary font-normal">{trendData.period}</span>
-                                        </p>
-                                    }
-
-                                    {trendData.trend === 'down' &&
-                                        <p className="text-sm font-bold">
-                                            -${trendData.changeAmount.toFixed(2)} <span className="text-secondary font-normal">{trendData.period}</span>
-                                        </p>
-                                    }
-
-                                    {trendData.trend === 'flat' &&
-                                        <p className="text-sm font-bold">
-                                            {trendData.hasPreviousData ? 'No change' : 'No data'} <span className="text-secondary font-normal">{trendData.period}</span>
-                                        </p>
-                                    }
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div className="flex space-x-1 p-1 rounded-lg">
-
-                            {tabButton('all', selectedPeriod, setSelectedPeriod)}
-                            {tabButton('10years', selectedPeriod, setSelectedPeriod)}
-                            {tabButton('5years', selectedPeriod, setSelectedPeriod)}
-
-                        </div>
-
+                <div className="flex items-center gap-3">
+                    <div className="p-3 glass-card text-accent">
+                        <FaArrowTrendUp size={20} />
                     </div>
+                    <div>
+                        <h2 className="font-bold text-xl text-primary">Trend</h2>
+                        <div className="flex items-center gap-1.5 text-sm">
+                            {trendData.trend === 'up' && <span className="font-bold text-gain">+${trendData.changeAmount.toFixed(2)}</span>}
+                            {trendData.trend === 'down' && <span className="font-bold text-loss">-${trendData.changeAmount.toFixed(2)}</span>}
+                            {trendData.trend === 'flat' && <span className="text-secondary">{trendData.hasPreviousData ? 'No change' : 'No data'}</span>}
+                            <span className="text-secondary">{trendData.period}</span>
+                        </div>
+                    </div>
+                </div>
 
-                    <div ref={chartRef} className="h-fit w-full px-4 lg:px-6" />
+                <div className="flex gap-1 p-1 glass-card rounded-lg">
+                    {tabButton('all', selectedPeriod, setSelectedPeriod)}
+                    {tabButton('10years', selectedPeriod, setSelectedPeriod)}
+                    {tabButton('5years', selectedPeriod, setSelectedPeriod)}
+                </div>
 
-            </>
+            </div>
 
-        </div>
+            <div ref={chartRef} className="h-fit w-full px-2 pb-2" />
+
+        </motion.div>
     )
 }
 
@@ -290,29 +204,25 @@ const parseDate = (dateString: string): Date => {
 
 const formatDate = (dateString: string): string => {
     const date = parseDate(dateString)
-    return date.toLocaleDateString('en-US', {
-        month: 'short',
-        year: 'numeric'
-    })
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
 const tabButton = (
     period: TimePeriod,
     selectedPeriod: TimePeriod,
     setSelectedPeriod: (period: TimePeriod) => void
-) => {
-    return (
-        <button
-            onClick={() => setSelectedPeriod(period)}
-            className={cn(
-                "px-3 py-2 text-xs lg:text-sm font-medium rounded-md transition-colors relative z-10 cursor-pointer",
-                selectedPeriod === period
-                    ? "bg-primary text-background shadow-sm"
-                    : "text-primary hover:text-background hover:bg-primary/80"
-            )}>
-            {period === 'all' && 'All'}
-            {period === '10years' && '10Y'}
-            {period === '5years' && '5Y'}
-        </button>
-    )
-}
+) => (
+    <button
+        key={period}
+        onClick={() => setSelectedPeriod(period)}
+        className={cn(
+            'px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 cursor-pointer',
+            selectedPeriod === period
+                ? 'bg-accent text-background shadow-sm'
+                : 'text-secondary hover:text-primary'
+        )}>
+        {period === 'all' && 'All'}
+        {period === '10years' && '10Y'}
+        {period === '5years' && '5Y'}
+    </button>
+)

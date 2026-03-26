@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { notFound } from 'next/navigation'
-import type { PopularStocksData, RedditData, StockDetail } from '@/types'
+import type { PopularStocksData, RedditData, StockDetail, MarqueeTicker } from '@/types'
 
 export const BASE = () => {
 
@@ -32,6 +32,27 @@ export const fetchPopularStocks = async (): Promise<PopularStocksData> => {
     })
 
     if (!res.ok) return { stocks: [] }
+
+    return res.json()
+}
+
+export const fetchMarqueeTickers = async (): Promise<MarqueeTicker[]> => {
+
+    const { url, apiKey } = BASE()
+
+    if (!url || !apiKey) return []
+
+    const res = await fetch(`${url}/marquee/tickers`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Dividends4Income Frontend',
+            'x-api-key': apiKey || '',
+        },
+        next: { revalidate: 300 },
+    })
+
+    if (!res.ok) return []
 
     return res.json()
 }

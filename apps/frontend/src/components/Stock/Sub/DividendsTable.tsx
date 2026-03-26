@@ -137,158 +137,158 @@ export const DividendsTable = ({ dividends }: DividendsTableProps) => {
     }
 
     return (
-        <div className='w-full col-span-5 lg:col-span-2 bg-layer rounded-xl border border-border shadow-sm text-primary'>
+        <div className='w-full col-span-5 lg:col-span-2 glass-card text-primary'>
 
             <>
 
                 <div className="flex justify-between items-center p-4 lg:p-6">
 
-                        <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
 
-                            <div className="p-2 lg:p-4 bg-layer border border-border rounded-lg shadow-sm text-primary">
-                                <RiStockFill size={24} />
-                            </div>
-
-                            <div>
-                                <h1 className="font-bold text-xl lg:text-2xl text-primary">
-                                    Dividends
-                                </h1>
-                                <p className="text-sm text-secondary">
-                                    Payments history
-                                </p>
-                            </div>
-
+                        <div className="p-3 glass-card text-accent">
+                            <RiStockFill size={20} />
                         </div>
 
-                        <span className="text-[10px] text-secondary bg-background px-2 py-1 rounded-sm border border-border">
-                            Showing <span className="font-semibold">{startIndex + 1}-{Math.min(endIndex, sortedDividends.length)}</span> of <span className="font-semibold">{sortedDividends.length}</span>
-                        </span>
+                        <div>
+                            <h2 className="font-bold text-xl text-primary">
+                                Dividends
+                            </h2>
+                            <p className="text-sm text-secondary">
+                                Payments history
+                            </p>
+                        </div>
 
                     </div>
 
-                    <div className="overflow-x-auto">
+                    <span className="text-[10px] text-secondary bg-background px-2 py-1 rounded-sm border border-border">
+                        Showing <span className="font-semibold">{startIndex + 1}-{Math.min(endIndex, sortedDividends.length)}</span> of <span className="font-semibold">{sortedDividends.length}</span>
+                    </span>
 
-                        <table className="min-w-full table-auto">
+                </div>
 
-                            <thead>
+                <div className="overflow-x-auto">
 
-                                <tr className="bg-background border-y border-border text-xs lg:text-sm">
+                    <table className="min-w-full table-auto dividend-table">
 
-                                    <th
-                                        className="text-left py-2 px-6 font-semibold cursor-pointer transition-colors"
-                                        onClick={() => handleSort('date')}>
-                                        Date <SortIcon field="date" />
-                                    </th>
+                        <thead>
 
-                                    <th
-                                        className="text-left py-2 px-6 font-semibold cursor-pointer transition-colors"
-                                        onClick={() => handleSort('amount')}>
-                                        Amount <SortIcon field="amount" />
-                                    </th>
+                            <tr className="bg-background border-y border-border text-xs lg:text-sm">
 
-                                    <th
-                                        className="text-left py-2 px-6 font-semibold cursor-pointer transition-colors"
-                                        onClick={() => handleSort('change_percent')}>
-                                        Change % <SortIcon field="change_percent" />
-                                    </th>
+                                <th
+                                    className="text-left py-2 px-6 font-semibold cursor-pointer transition-colors"
+                                    onClick={() => handleSort('date')}>
+                                    Date <SortIcon field="date" />
+                                </th>
 
-                                </tr>
+                                <th
+                                    className="text-left py-2 px-6 font-semibold cursor-pointer transition-colors"
+                                    onClick={() => handleSort('amount')}>
+                                    Amount <SortIcon field="amount" />
+                                </th>
 
-                            </thead>
+                                <th
+                                    className="text-left py-2 px-6 font-semibold cursor-pointer transition-colors"
+                                    onClick={() => handleSort('change_percent')}>
+                                    Change % <SortIcon field="change_percent" />
+                                </th>
 
-                            <tbody>
+                            </tr>
 
-                                {currentDividends.map((dividend, index) => (
+                        </thead>
 
-                                    <tr key={index} className="border-b border-border hover:bg-background transition-colors">
+                        <tbody>
 
-                                        <td className="py-2 px-6 text-xs lg:text-sm">{dividend.date}</td>
-                                        <td className="py-2 px-6 text-sm lg:text-base">${dividend.amount.toFixed(2)}</td>
+                            {currentDividends.map((dividend, index) => (
 
-                                        <td className="py-2 px-6">
+                                <tr key={index} className="border-b border-border hover:bg-background transition-colors">
 
-                                            {dividend.change_percent > 0 ?
+                                    <td className="py-2 px-6 text-xs lg:text-sm">{dividend.date}</td>
+                                    <td className="py-2 px-6 text-sm lg:text-base">${dividend.amount.toFixed(2)}</td>
 
-                                                <span className="bg-green-500/40 text-green-900 dark:bg-green-500/20 dark:text-green-500 px-2 rounded-md text-[10px] py-0.5 font-medium inline-flex items-center justify-center gap-1">
-                                                    <MdTrendingUp size={13} /> {dividend.change_percent.toFixed(2)}%
+                                    <td className="py-2 px-6">
+
+                                        {dividend.change_percent > 0 ?
+
+                                            <span className="bg-gain/10 text-gain px-2 rounded-md text-[10px] py-0.5 font-medium inline-flex items-center justify-center gap-1">
+                                                <MdTrendingUp size={13} /> {dividend.change_percent.toFixed(2)}%
+                                            </span>
+
+                                            :
+
+                                            dividend.change_percent < 0 ?
+
+                                                <span className="bg-loss/10 text-loss px-2 rounded-md text-[10px] py-0.5 font-medium inline-flex items-center justify-center gap-1">
+                                                    <MdTrendingDown size={13} /> {dividend.change_percent.toFixed(2)}%
                                                 </span>
 
                                                 :
 
-                                                dividend.change_percent < 0 ?
+                                                <span className="bg-surface/30 text-secondary px-2 rounded-md text-[10px] py-0.5 font-medium inline-flex items-center justify-center gap-1">
+                                                    <MdTrendingFlat size={13} /> {dividend.change_percent.toFixed(2)}%
+                                                </span>
 
-                                                    <span className="bg-red-500/40 text-red-900 dark:bg-red-500/20 dark:text-red-500 px-2 rounded-md text-[10px] py-0.5 font-medium inline-flex items-center justify-center gap-1">
-                                                        <MdTrendingDown size={13} /> {dividend.change_percent.toFixed(2)}%
-                                                    </span>
+                                        }
 
-                                                    :
+                                    </td>
 
-                                                    <span className="bg-yellow-500/40 text-yellow-900 dark:bg-yellow-500/20 dark:text-yellow-500 px-2 rounded-md text-[10px] py-0.5 font-medium inline-flex items-center justify-center gap-1">
-                                                        <MdTrendingFlat size={13} /> {dividend.change_percent.toFixed(2)}%
-                                                    </span>
+                                </tr>
 
-                                            }
+                            ))}
 
-                                        </td>
+                        </tbody>
 
-                                    </tr>
+                    </table>
 
-                                ))}
+                </div>
 
-                            </tbody>
+                {totalPages > 1 && (
 
-                        </table>
+                    <div className="flex justify-between items-center p-6">
 
-                    </div>
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                            disabled={currentPage === 1}
+                            className="h-8 w-8 text-sm text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary not-disabled:cursor-pointer duration-300 transition-all rounded-sm flex justify-center items-center">
+                            <FaArrowLeft size={15} />
+                        </button>
 
-                    {totalPages > 1 && (
+                        <div className="flex space-x-1">
 
-                        <div className="flex justify-between items-center p-6">
+                            {visiblePages.map((page, index) =>
 
-                            <button
-                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                disabled={currentPage === 1}
-                                className="h-8 w-8 text-sm text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary not-disabled:cursor-pointer duration-300 transition-all rounded-sm flex justify-center items-center">
-                                <FaArrowLeft size={15} />
-                            </button>
+                                page === '...' ?
 
-                            <div className="flex space-x-1">
+                                    <span key={`ellipsis-${index}`} className="px-2 text-primary">
+                                        ...
+                                    </span>
 
-                                {visiblePages.map((page, index) =>
+                                    :
 
-                                    page === '...' ?
+                                    <button
+                                        key={page}
+                                        onClick={() => setCurrentPage(page as number)}
+                                        className={cn(
+                                            "h-8 w-8 text-xs lg:text-sm duration-300 transition-all rounded-sm cursor-pointer",
+                                            currentPage === page
+                                                ? "bg-primary text-background"
+                                                : "bg-transparent hover:bg-primary/80 hover:text-background"
+                                        )}>
+                                        {page}
+                                    </button>
 
-                                        <span key={`ellipsis-${index}`} className="px-2 text-primary">
-                                            ...
-                                        </span>
-
-                                        :
-
-                                        <button
-                                            key={page}
-                                            onClick={() => setCurrentPage(page as number)}
-                                            className={cn(
-                                                "h-8 w-8 text-xs lg:text-sm duration-300 transition-all rounded-sm cursor-pointer",
-                                                currentPage === page
-                                                    ? "bg-primary text-background"
-                                                    : "bg-transparent hover:bg-primary/80 hover:text-background"
-                                            )}>
-                                            {page}
-                                        </button>
-
-                                )}
-
-                            </div>
-
-                            <button
-                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                disabled={currentPage === totalPages}
-                                className="h-8 w-8 text-sm disabled:cursor-not-allowed text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary duration-300 transition-all rounded-sm cursor-pointer flex justify-center items-center">
-                                <FaArrowRight size={15} />
-                            </button>
+                            )}
 
                         </div>
-                    )}
+
+                        <button
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage === totalPages}
+                            className="h-8 w-8 text-sm disabled:cursor-not-allowed text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary duration-300 transition-all rounded-sm cursor-pointer flex justify-center items-center">
+                            <FaArrowRight size={15} />
+                        </button>
+
+                    </div>
+                )}
 
             </>
 

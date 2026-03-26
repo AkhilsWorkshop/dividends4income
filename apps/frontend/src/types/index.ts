@@ -66,3 +66,10 @@ export interface RedditPost {
 export interface PopularStocksData {
     stocks: BasicStockInfo[]
 }
+
+export interface MarqueeTicker {
+    symbol: string
+    price: string
+    change: string
+    up: boolean
+}

@@ -1,47 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap');
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcviYwY.woff2') format('woff2');
+}
 
 @layer base {
     html {
         scroll-behavior: smooth;
-        @apply transition-colors duration-500;
     }
 
     body {
-        @apply bg-background;
+        @apply bg-background text-primary font-sans antialiased;
     }
 }
 
 @theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
     --color-background: var(--background);
     --color-border: var(--border);
     --color-layer: var(--layer);
     --color-surface: var(--surface);
     --color-primary: var(--text-primary);
     --color-secondary: var(--text-secondary);
+
+    --color-gain: var(--gain);
+    --color-loss: var(--loss);
+    --color-accent: var(--accent);
 }
 
+@theme inline {
+
+    --animate-marquee: marquee var(--duration) infinite linear;
+    --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
+    }
+
+    @keyframes marquee-vertical {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(calc(-100% - var(--gap)));
+        }
+    }
+}
+
+
 :root {
-    --background: #fbfcd9;
-    --border: #edeeb0;
-    --layer: #f7f8cb;
-    --surface: #74774b;
-    --text-primary: #1E201E;
-    --text-secondary: #3E3F29;
+    --background: #0d1117;
+    --border: #1e2a3a;
+    --layer: #161b22;
+    --surface: #2d3748;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+
+    --gain: #00d09c;
+    --loss: #eb5757;
+    --accent: #ffd900;
 }
 
 .dark {
-    --background: #1E201E;
-    --border: #3a3b3a;
-    --layer: #282b28;
-    --surface: #65675c;
-    --text-primary: #fbfcd9;
-    --text-secondary: #9aab94;
+    --background: #0d1117;
+    --border: #1e2a3a;
+    --layer: #161b22;
+    --surface: #2d3748;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+
+    --gain: #00d09c;
+    --loss: #eb5757;
+    --accent: #ffd900;
 }
 
+
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -50,7 +98,7 @@
 
 ::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -61,4 +109,78 @@
 ::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;
+}
+
+/* ─── Playfair Display ─── */
+.font-playfair {
+    font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* ─── Terminal mode ─── */
+html.terminal {
+    --background: #0a0a0a;
+    --layer: #0f0f0f;
+    --surface: #111;
+    --border: #1a2a1a;
+    --text-primary: #00ff41;
+    --text-secondary: #00aa25;
+    --accent: #00ff41;
+    --gain: #00ff41;
+    --loss: #ff4444;
+}
+
+html.terminal body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.12) 0px,
+            transparent 2px,
+            transparent 4px);
+}
+
+/* ─── Custom cursor trail ─── */
+.has-cursor {
+    cursor: none;
+}
+
+/* ─── Dividend table row hover underline ─── */
+.dividend-table tbody tr {
+    position: relative;
+}
+
+.dividend-table tbody tr::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+
+.dividend-table tbody tr:hover::after {
+    transform: scaleX(1);
+}
+
+/* ─── Aristocrat badge shimmer ─── */
+@keyframes aristocrat-shimmer {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+}
+
+.aristocrat-badge:hover {
+    animation: aristocrat-shimmer 1.2s ease-in-out infinite;
 }

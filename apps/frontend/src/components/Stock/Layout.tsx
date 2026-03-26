@@ -7,7 +7,8 @@ import { KeyMetrics } from './Sub/KeyMetrics'
 import { CompanyDetails } from './Sub/CompanyDetails'
 import { InitialMetrics } from './Sub/InitialMetrics'
 import { Analysis } from './Sub/Analysis'
-import { StockDetail } from '@/types'
+import { ChartSkeleton, MetricCardSkeleton } from '@/components/Skeleton'
+import type { StockDetail } from '@/types'
 
 interface LayoutProps {
     ticker: string
@@ -18,9 +19,11 @@ export const Layout = ({ ticker, stockInfo }: LayoutProps) => {
 
     if (!stockInfo) {
         return (
-            <div className="min-h-screen p-6 flex items-center justify-center my-8 text-red-600">
-                <MdError size={24} />
-                <span className="ml-2">An error occurred while loading stock data.</span>
+            <div className="min-h-screen flex items-center justify-center pt-20">
+                <div className="glass-card p-8 flex items-center gap-3 text-loss">
+                    <MdError size={24} />
+                    <span>An error occurred while loading stock data.</span>
+                </div>
             </div>
         )
     }
@@ -28,7 +31,7 @@ export const Layout = ({ ticker, stockInfo }: LayoutProps) => {
     const dividends = stockInfo.all_dividends || []
 
     return (
-        <div className="max-w-7xl container mx-auto space-y-3 lg:space-y-6 p-3 lg:p-6 pt-20 lg:pt-22">
+        <div className="max-w-7xl container mx-auto space-y-3 lg:space-y-5 p-3 lg:p-6 pt-20 lg:pt-22">
 
             <Head stock={stockInfo} />
 
@@ -39,26 +42,18 @@ export const Layout = ({ ticker, stockInfo }: LayoutProps) => {
                 dividendsLength={dividends.length}
             />
 
-            {dividends.length === 0 ?
-
-                <div className="w-full bg-layer rounded-xl border border-border shadow-sm text-primary p-6">
-                    <p className="text-center">No dividends found.</p>
+            {dividends.length === 0 ? (
+                <div className="glass-card p-8 text-center text-secondary">
+                    <p className="text-sm">No dividend history available for {ticker.toUpperCase()}.</p>
                 </div>
-
-                :
-
-                <div className="grid grid-cols-5 gap-3 lg:gap-6 w-full">
-
+            ) : (
+                <div className="grid grid-cols-5 gap-3 lg:gap-5 w-full">
                     <DividendsTable dividends={dividends} />
-
                     <DividendsChart dividends={dividends} />
-
                 </div>
+            )}
 
-            }
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-6">
-
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-5">
                 <KeyMetrics
                     marketCap={stockInfo.market_cap}
                     volume={stockInfo.volume}
@@ -73,7 +68,6 @@ export const Layout = ({ ticker, stockInfo }: LayoutProps) => {
                     currency={stockInfo.currency}
                     exchange={stockInfo.exchange}
                 />
-
                 <CompanyDetails
                     sector={stockInfo.sector}
                     industry={stockInfo.industry}
@@ -83,13 +77,12 @@ export const Layout = ({ ticker, stockInfo }: LayoutProps) => {
                     logoURL={stockInfo.logo_url}
                     name={stockInfo.name}
                 />
-
             </div>
 
             <Suspense fallback={
-                <div className="flex items-center justify-center gap-2 text-secondary bg-layer rounded-xl border border-border shadow-sm p-6">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
-                    <span className="text-sm">Analyzing, please wait...</span>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+                    <ChartSkeleton />
+                    <MetricCardSkeleton />
                 </div>
             }>
                 <Analysis ticker={ticker} tickerName={stockInfo.name} />

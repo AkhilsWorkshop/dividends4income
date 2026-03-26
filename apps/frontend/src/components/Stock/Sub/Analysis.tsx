@@ -16,18 +16,18 @@ export const Analysis = async ({ ticker, tickerName }: AnalysisProps) => {
     const redditData = await fetchRedditAnalysis(ticker, tickerName)
 
     return (
-        <div className="space-y-3 lg:space-y-6">
+        <div className="space-y-4 lg:space-y-6">
 
             <div className="flex items-center gap-3">
 
-                <div className="p-2 lg:p-4 bg-layer border border-border rounded-lg shadow-sm text-primary">
-                    <GrAnalytics size={24} />
+                <div className="p-3 glass-card text-accent">
+                    <GrAnalytics size={20} />
                 </div>
 
                 <div>
-                    <h1 className="font-bold text-xl lg:text-2xl text-primary">
+                    <h2 className="font-bold text-xl text-primary">
                         Analysis
-                    </h1>
+                    </h2>
                     <p className="text-sm text-secondary">
                         Reddit analysis and discussions for {ticker.toUpperCase()}
                     </p>
@@ -37,9 +37,9 @@ export const Analysis = async ({ ticker, tickerName }: AnalysisProps) => {
 
             {!redditData ?
 
-                <div className="bg-layer rounded-xl border border-border shadow-sm p-6 flex items-center text-red-600">
-                    <MdError size={24} />
-                    <span className="ml-2">{`An error occurred while analyzing ${ticker.toUpperCase()}`}</span>
+                <div className="glass-card p-6 flex items-center gap-3 text-loss">
+                    <MdError size={22} />
+                    <span className="text-sm">{`An error occurred while analyzing ${ticker.toUpperCase()}`}</span>
                 </div>
 
                 :
@@ -48,7 +48,7 @@ export const Analysis = async ({ ticker, tickerName }: AnalysisProps) => {
 
                     <Disclaimer />
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
 
                         <RedditAnalysis
                             keyPoints={redditData.reddit_key_points}

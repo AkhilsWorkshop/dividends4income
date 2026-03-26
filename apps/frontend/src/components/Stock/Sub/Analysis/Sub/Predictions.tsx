@@ -1,3 +1,8 @@
+'use client'
+
+import { memo } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { staggerContainer, fadeUp } from '@/animations/variants'
 import { FaThumbsUp } from 'react-icons/fa6'
 
 interface PredictionsProps {
@@ -5,71 +10,63 @@ interface PredictionsProps {
     keyPoints?: string[]
 }
 
-export const Predictions = ({ aiPrediction, keyPoints }: PredictionsProps) => {
+export const Predictions = memo(({ aiPrediction, keyPoints }: PredictionsProps) => {
+
+    const shouldReduce = useReducedMotion()
+
+    if (!aiPrediction) {
+        return (
+            <div className="glass-card p-6 text-center py-10 text-secondary">
+                <p className="text-sm">No AI analysis available</p>
+            </div>
+        )
+    }
 
     return (
-        <div className="bg-layer rounded-xl border border-border shadow-sm p-4 lg:p-6">
+        <div className="glass-card p-4 lg:p-6 space-y-4">
 
-            {aiPrediction ?
+            <div>
+                <p className="font-bold text-lg text-primary">Our Prediction</p>
+                <p className="text-sm text-secondary">AI-powered insights and analysis</p>
+            </div>
 
+            <p className="text-sm text-secondary leading-relaxed italic">&ldquo;{aiPrediction}&rdquo;</p>
+
+            <div className="w-full h-px bg-border/40" />
+
+            <div className="flex items-center gap-3">
+                <p className="text-sm text-primary font-medium">Overall sentiment</p>
+                <motion.span
+                    animate={shouldReduce ? {} : { opacity: [1, 0.6, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-gain/10 text-gain border border-gain/20">
+                    Positive <FaThumbsUp size={12} />
+                </motion.span>
+            </div>
+
+            <div className="w-full h-px bg-border/40" />
+
+            {keyPoints && keyPoints.length > 0 && (
                 <>
-
-                    <div className="flex justify-start items-center gap-2">
-
-                        <div className="flex flex-col justify-center items-start">
-
-                            <p className="font-bold text-lg lg:text-xl text-primary">
-                                Our Prediction
-                            </p>
-
-                            <p className="text-sm text-secondary">AI-powered insights and analysis</p>
-
-                        </div>
-
-                    </div>
-
-
-                    <p className="text-sm text-secondary leading-relaxed italic pt-3">"{aiPrediction}"</p>
-
-                    <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mt-3" />
-
-                    <div className="flex justify-center items-center gap-2 pt-3 bg-gradient-to-r from-transparent via-border to-transparent pb-3">
-
-                        <p className="text-primary text-sm font-bold">
-                            Overall sentiment
-                        </p>
-
-                        <p className="bg-green-100 text-green-800 w-fit flex justify-center items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-sm border border-green-800/20">Positive <FaThumbsUp size={15} /> </p>
-
-                    </div>
-
-                    <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent" />
-
-                    <p className="font-semibold text-primary pt-3 pb-2">
-                        Why?
-                    </p>
-
-                    {keyPoints && keyPoints.length > 0 &&
-                        <ul className="space-y-2 text-sm">
-                            {keyPoints?.map((point, index) => (
-                                <li key={index} className="flex items-start gap-2">
-                                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0 text-primary" />
-                                    <span className='text-secondary'>{point}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    }
-
+                    <p className="text-sm font-semibold text-primary">Key Points</p>
+                    <motion.ul
+                        variants={staggerContainer}
+                        initial={shouldReduce ? false : 'hidden'}
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        className="space-y-2">
+                        {keyPoints.map((point, index) => (
+                            <motion.li key={index} variants={fadeUp} className="flex items-start gap-2 text-sm">
+                                <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
+                                <span className="text-secondary">{point}</span>
+                            </motion.li>
+                        ))}
+                    </motion.ul>
                 </>
-
-                :
-
-                <div className="text-center py-8 text-secondary">
-                    <p className="text-sm mt-2">No analysis available</p>
-                </div>
-
-            }
+            )}
 
         </div>
     )
-}
+})
+
+Predictions.displayName = 'Predictions'

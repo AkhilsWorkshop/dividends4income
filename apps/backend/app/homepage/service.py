@@ -89,6 +89,47 @@ class HomePageService:
         'JPM', 'V', 'VZ', 'PFE'
     ]
 
+    MARQUEE_TICKERS = [
+        'AAPL', 'MSFT', 'JNJ', 'KO', 'PG', 'VZ', 'T', 'MCD', 'MMM', 'PEP',
+        'ABBV', 'CVX', 'XOM', 'ENB', 'O', 'MO', 'AVGO', 'TXN', 'BMY', 'WMT'
+    ]
+
+    @staticmethod
+    def get_marquee_tickers() -> List[Dict[str, Any]]:
+
+        result = []
+
+        try:
+            tickers = yf.Tickers(' '.join(HomePageService.MARQUEE_TICKERS))
+
+            for symbol in HomePageService.MARQUEE_TICKERS:
+
+                try:
+                    ticker = tickers.tickers[symbol.upper()]
+                    info = ticker.info
+
+                    current_price = info.get('currentPrice', info.get('regularMarketPrice', 0))
+                    previous_close = info.get('previousClose', current_price)
+                    change = current_price - previous_close if current_price and previous_close else 0
+                    change_percent = (change / previous_close * 100) if previous_close else 0
+
+                    result.append({
+                        'symbol': symbol.upper(),
+                        'price': f"${current_price:.2f}" if current_price else "$0.00",
+                        'change': f"{change_percent:+.2f}%" if change_percent else "0.00%",
+                        'up': change_percent >= 0,
+                    })
+
+                except Exception as e:
+                    print(f"Error processing marquee ticker {symbol}: {e}")
+                    continue
+
+        except Exception as e:
+            print(f"Error fetching marquee tickers: {e}")
+            return []
+
+        return result
+
     @staticmethod
     def get_popular_stocks() -> List[Dict[str, Any]]:
 

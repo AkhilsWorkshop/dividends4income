@@ -1,11 +1,14 @@
 import { HomepageLayout } from '@/components/Homepage/Layout'
-import { fetchPopularStocks } from '@/lib/api'
+import { fetchPopularStocks, fetchMarqueeTickers } from '@/lib/api'
 
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
 
-    const popularStocksData = await fetchPopularStocks()
+    const [popularStocksData, marqueeTickers] = await Promise.all([
+        fetchPopularStocks(),
+        fetchMarqueeTickers(),
+    ])
 
-    return <HomepageLayout popularStocks={popularStocksData.stocks} />
+    return <HomepageLayout popularStocks={popularStocksData.stocks} marqueeTickers={marqueeTickers} />
 }

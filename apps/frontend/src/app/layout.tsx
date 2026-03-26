@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
+import { Toaster } from 'sonner'
+
 import './globals.css'
 import { Header } from '@/components/Layout/Header'
 import { Footer } from '@/components/Layout/Footer'
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary'
-import { ThemeProvider } from '@/contexts/ThemeContext'
 
 export const metadata: Metadata = {
     title: 'Dividends4Income - Stock Dividend Tracker',
@@ -25,24 +26,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const gaMeasurementId = process.env.GA_MEASUREMENT_ID
 
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" className="dark" suppressHydrationWarning>
 
             <head>
 
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-                            (function() {
-                                try {
-                                    var stored = localStorage.getItem('theme');
-                                    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                                    var isDark = stored ? stored === 'dark' : prefersDark;
-                                    if (isDark) document.documentElement.classList.add('dark');
-                                } catch(e) {}
-                            })();
-                        `,
-                    }}
-                />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
                 {gaMeasurementId && (
 
@@ -72,24 +61,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <body>
 
-                <ThemeProvider>
+                <Toaster
+                    theme="dark"
+                    position="bottom-right"
+                    toastOptions={{
+                        style: {
+                            background: '#161b22',
+                            border: '1px solid #1e2a3a',
+                            color: '#e6edf3',
+                        },
+                    }}
+                />
 
-                    <ErrorBoundary>
-                        <div className="min-h-screen">
+                <ErrorBoundary>
 
-                            <Header />
+                    <div className="min-h-screen relative z-0">
 
-                            <main className="mx-auto">
-                                {children}
-                            </main>
+                        <Header />
 
-                            <Footer />
+                        <main className="mx-auto">
+                            {children}
+                        </main>
 
-                        </div>
+                        <Footer />
 
-                    </ErrorBoundary>
+                    </div>
 
-                </ThemeProvider>
+                </ErrorBoundary>
 
             </body>
 
