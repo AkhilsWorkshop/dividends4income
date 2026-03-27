@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState, type ComponentPropsWithoutRef } from "react"
-import { useInView, useMotionValue, useSpring } from "motion/react"
+import { useMotionValue, useSpring } from "motion/react"
 import { cn } from "@/utils"
 
 interface CounterProps extends ComponentPropsWithoutRef<"span"> {
@@ -28,17 +28,13 @@ export function Counter({
         stiffness: 100,
     })
 
-    const isInView = useInView(ref, { once: true, margin: "0px" })
-
     useEffect(() => {
 
         let timer: ReturnType<typeof setTimeout> | null = null
 
-        if (isInView) {
-            timer = setTimeout(() => {
-                motionValue.set(direction === "down" ? startValue : value)
-            }, 0)
-        }
+        timer = setTimeout(() => {
+            motionValue.set(direction === "down" ? startValue : value)
+        }, 0)
 
         return () => {
             if (timer !== null) {
@@ -46,7 +42,7 @@ export function Counter({
             }
         }
 
-    }, [motionValue, isInView, value, direction, startValue])
+    }, [motionValue, value, direction, startValue])
 
     useEffect(() => {
 
@@ -75,14 +71,14 @@ export function Counter({
 
     useEffect(() => {
         setFinished(false)
-    }, [value, startValue, direction, isInView])
+    }, [value, startValue, direction])
 
     return (
         <span
             ref={ref}
             className={cn(
                 "inline-block tracking-wider tabular-nums transform transition-transform duration-300 ease-out",
-                finished && "scale-125",
+                finished && "scale-120",
                 className
             )}>
             {startValue}

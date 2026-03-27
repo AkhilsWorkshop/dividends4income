@@ -15,3 +15,11 @@ async def api_popular_stocks():
 @router.get("/marquee/tickers")
 async def api_marquee_tickers():
     return HomePageService.get_marquee_tickers()
+
+@router.get("/upcoming/dividends")
+async def api_upcoming_dividends():
+    return HomePageService.get_upcoming_dividends()
+
+@router.get("/reddit/posts")
+async def api_homepage_reddit_posts():
+    return HomePageService.get_homepage_reddit_posts()

@@ -1,5 +1,7 @@
+"use client"
+
 import { fadeUp } from '@/animations/variants'
-import * as motion from "motion/react-m"
+import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
 
 const NavigateToStocks = () => {
 
@@ -9,15 +11,19 @@ const NavigateToStocks = () => {
     }
 
     return (
-        <motion.div variants={fadeUp} className="text-center">
+        <MotionDiv
+            variants={fadeUp}
+            useDefaultInView={false}
+            includeLazyMotion={false}
+            className="text-center">
 
             <button
                 onClick={() => scrollTo('popular-stocks')}
-                className="border border-border/60 hover:border-accent/50 text-primary font-semibold px-7 py-3.5 rounded-xl text-sm hover:bg-linear-to-br from-accent/10 via-accent/30 to-accent/10 backdrop-blur-xs transition-all duration-200 cursor-pointer z-0">
+                className="border border-accent/50 hover:border-accent/60 text-accent font-semibold px-7 py-3.5 rounded-lg hover:rounded-2xl text-sm backdrop-blur-xs transition-all duration-200 cursor-pointer z-0">
                 Explore Stocks →
             </button>
 
-        </motion.div>
+        </MotionDiv>
     )
 }
 

@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { notFound } from 'next/navigation'
-import type { PopularStocksData, RedditData, StockDetail, MarqueeTicker } from '@/types'
+import type { PopularStocksData, RedditData, RedditPost, StockDetail, MarqueeTicker, UpcomingDividend } from '@/types'
 
 export const BASE = () => {
 
@@ -73,6 +73,48 @@ export const fetchStockData = async (ticker: string): Promise<StockDetail | null
 
     if (res.status === 404) notFound()
     if (!res.ok) return null
+
+    return res.json()
+}
+
+export const fetchUpcomingDividends = async (): Promise<UpcomingDividend[]> => {
+
+    const { url, apiKey } = BASE()
+
+    if (!url || !apiKey) return []
+
+    const res = await fetch(`${url}/upcoming/dividends`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Dividends4Income Frontend',
+            'x-api-key': apiKey || '',
+        },
+        next: { revalidate: 3600 },
+    })
+
+    if (!res.ok) return []
+
+    return res.json()
+}
+
+export const fetchHomepageRedditPosts = async (): Promise<RedditPost[]> => {
+
+    const { url, apiKey } = BASE()
+
+    if (!url || !apiKey) return []
+
+    const res = await fetch(`${url}/reddit/posts`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Dividends4Income Frontend',
+            'x-api-key': apiKey || '',
+        },
+        next: { revalidate: 1800 },
+    })
+
+    if (!res.ok) return []
 
     return res.json()
 }

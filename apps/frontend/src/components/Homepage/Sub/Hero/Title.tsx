@@ -1,11 +1,15 @@
-import { fadeUp } from "@/animations/variants"
+import { fadeIn } from "@/animations/variants"
 import { Counter } from "@/components/Common/Reuse/Effects/Counter"
 import { Highlighter } from "@/components/Common/Reuse/Effects/Highlighter"
-import * as motion from "motion/react-m"
+import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
 
 export const Title = () => {
     return (
-        <motion.div variants={fadeUp} className="text-center space-y-4">
+        <MotionDiv
+            variants={fadeIn}
+            useDefaultInView={false}
+            includeLazyMotion={false}
+            className="text-center space-y-4">
 
             <div className="flex justify-center items-center gap-1 font-sans text-4xl lg:text-6xl font-black text-primary tracking-wider">
                 <span>Dividends</span> <NumberCounter /> <span>Income</span>
@@ -17,7 +21,7 @@ export const Title = () => {
                 Every day.
             </p>
 
-        </motion.div>
+        </MotionDiv>
     )
 }
 
@@ -26,7 +30,7 @@ const HightLight = () => {
         <Highlighter
             color="#ffd900"
             action="underline"
-            delay={1200}>Every cent.</Highlighter>
+            delay={400}>Every cent.</Highlighter>
     )
 }
 

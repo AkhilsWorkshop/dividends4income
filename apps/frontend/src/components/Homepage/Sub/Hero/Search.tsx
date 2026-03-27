@@ -2,9 +2,9 @@
 
 import { searchTickers, Suggestion } from "@/actions/search"
 import { fadeUp } from "@/animations/variants"
+import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
 import { useDebounce } from "@/hooks/useDebounce"
 import { cn } from "@/utils"
-import * as motion from "motion/react-m"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
@@ -88,7 +88,11 @@ const Search = () => {
     const showSuggestions = showDropdown && suggestions.length > 0 && !loading
 
     return (
-        <motion.div variants={fadeUp} className="w-full">
+        <MotionDiv
+            variants={fadeUp}
+            useDefaultInView={false}
+            includeLazyMotion={false}
+            className="w-full">
 
             <div className="relative">
 
@@ -100,10 +104,10 @@ const Search = () => {
                     onChange={handleInputChange}
                     placeholder="Search a ticker or company (e.g. AAPL)"
                     className={cn(
-                        'w-full pl-12 pr-12 py-4 text-base border rounded-xl focus:outline-none focus:ring focus:ring-accent placeholder:text-secondary/50 text-primary bg-layer/60 backdrop-blur-xs transition-all duration-200',
+                        'w-full pl-12 pr-12 py-4 text-base border border-border/60 rounded-xl focus:outline-none focus:ring focus:ring-accent/50 placeholder:text-secondary/50 text-primary bg-layer/60 backdrop-blur-xs transition-all duration-200 ',
                         showSuggestions
-                            ? 'border-accent/40 rounded-b-none'
-                            : 'border-border/60 hover:border-border'
+                            ? 'rounded-b-none'
+                            : 'hover:border-border'
                     )}
                 />
 
@@ -154,7 +158,7 @@ const Search = () => {
 
             </div>
 
-        </motion.div>
+        </MotionDiv>
     )
 }
 

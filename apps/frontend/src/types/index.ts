@@ -73,3 +73,11 @@ export interface MarqueeTicker {
     change: string
     up: boolean
 }
+
+export interface UpcomingDividend {
+    symbol: string
+    company: string
+    amount: number
+    ex_date: string
+    days_until: number
+}

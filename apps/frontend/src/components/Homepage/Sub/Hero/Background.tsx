@@ -1,6 +1,6 @@
 
 import { useId } from "react"
-import * as motion from "motion/react-m"
+import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
 
 const Background = () => {
 
@@ -9,29 +9,35 @@ const Background = () => {
     const h = 10
 
     return (
-        <motion.svg
+        <MotionDiv
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5, ease: 'easeInOut' }}
-            aria-hidden="true"
-            className="mask-[radial-gradient(300px_circle_at_center,white,transparent)] sm:mask-[radial-gradient(400px_circle_at_center,white,transparent)] md:mask-[radial-gradient(500px_circle_at_center,white,transparent)] lg:mask-[radial-gradient(800px_circle_at_center,white,transparent)] pointer-events-none absolute inset-0 z-10 h-full w-full stroke-[0.5] brightness-20"
-            xmlns="http://www.w3.org/2000/svg">
+            useDefaultInView={false}>
 
-            <defs>
+            <svg
 
-                <pattern id={id} width={w} height={h} patternUnits="userSpaceOnUse">
+                aria-hidden="true"
+                className="mask-[radial-gradient(300px_circle_at_center,white,transparent)] sm:mask-[radial-gradient(400px_circle_at_center,white,transparent)] md:mask-[radial-gradient(500px_circle_at_center,white,transparent)] lg:mask-[radial-gradient(800px_circle_at_center,white,transparent)] pointer-events-none absolute inset-0 z-10 h-full w-full stroke-[0.5] brightness-20"
+                xmlns="http://www.w3.org/2000/svg">
 
-                    <line x1="0" y1={h} x2={w} y2="0" stroke="currentColor" />
-                    <line x1={-w} y1={h} x2="0" y2="0" stroke="currentColor" />
-                    <line x1={w} y1={h} x2={w * 2} y2="0" stroke="currentColor" />
+                <defs>
 
-                </pattern>
+                    <pattern id={id} width={w} height={h} patternUnits="userSpaceOnUse">
 
-            </defs>
+                        <line x1="0" y1={h} x2={w} y2="0" stroke="currentColor" />
+                        <line x1={-w} y1={h} x2="0" y2="0" stroke="currentColor" />
+                        <line x1={w} y1={h} x2={w * 2} y2="0" stroke="currentColor" />
 
-            <rect width="100%" height="100%" fill={`url(#${id})`} />
+                    </pattern>
 
-        </motion.svg>
+                </defs>
+
+                <rect width="100%" height="100%" fill={`url(#${id})`} />
+
+            </svg>
+
+        </MotionDiv>
     )
 }
 

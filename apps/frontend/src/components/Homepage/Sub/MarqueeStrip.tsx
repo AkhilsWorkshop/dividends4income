@@ -1,6 +1,6 @@
 import { fadeUp } from '@/animations/variants'
 import Marquee from '@/components/Common/Reuse/Effects/Marquee'
-import MotionDiv from '@/components/Common/Reuse/MotionDiv'
+import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
 import type { MarqueeTicker } from '@/types'
 
 const TickerItem = ({ symbol, price, change, up }: MarqueeTicker) => (
@@ -26,6 +26,7 @@ export const MarqueeStrip = ({ tickers }: MarqueeStripProps) => {
             variants={fadeUp}
             initial="hidden"
             animate="visible"
+            useDefaultInView={false}
             className="w-full bg-layer/60 border-y border-border/40 py-3 relative">
 
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-10 lg:w-24 h-20 bg-linear-to-r from-background via-background/80 to-transparent z-10 pointer-events-none" />

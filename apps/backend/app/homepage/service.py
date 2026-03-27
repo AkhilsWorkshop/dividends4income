@@ -2,12 +2,24 @@ from fastapi import HTTPException
 import requests
 import time
 import yfinance as yf
+import praw
+from datetime import datetime, timezone
 from typing import List, Dict, Any
 
-from app.config import LOGO_DEV_PUBLIC_KEY, TICKER_URL, SEC_USER_AGENT, SEC_CONTACT_EMAIL
+from app.config import LOGO_DEV_PUBLIC_KEY, TICKER_URL, SEC_USER_AGENT, SEC_CONTACT_EMAIL, REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT
 from app.stock.service import StockService
 
 class HomePageService:
+
+    POPULAR_TICKERS = [
+        'AAPL', 'MSFT', 'JNJ', 'PG', 'KO',
+        'JPM', 'V', 'VZ', 'PFE'
+    ]
+
+    MARQUEE_TICKERS = [
+        'AAPL', 'MSFT', 'JNJ', 'KO', 'PG', 'VZ', 'T', 'MCD', 'MMM', 'PEP',
+        'ABBV', 'CVX', 'XOM', 'ENB', 'O', 'MO', 'AVGO', 'TXN', 'BMY', 'WMT'
+    ]
     
     @staticmethod
     def search_ticker(q: str) -> dict:
@@ -84,16 +96,6 @@ class HomePageService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
         
-    POPULAR_TICKERS = [
-        'AAPL', 'MSFT', 'JNJ', 'PG', 'KO',
-        'JPM', 'V', 'VZ', 'PFE'
-    ]
-
-    MARQUEE_TICKERS = [
-        'AAPL', 'MSFT', 'JNJ', 'KO', 'PG', 'VZ', 'T', 'MCD', 'MMM', 'PEP',
-        'ABBV', 'CVX', 'XOM', 'ENB', 'O', 'MO', 'AVGO', 'TXN', 'BMY', 'WMT'
-    ]
-
     @staticmethod
     def get_marquee_tickers() -> List[Dict[str, Any]]:
 
@@ -160,3 +162,91 @@ class HomePageService:
         return {
             'stocks': stocks_data
         }
+
+    UPCOMING_SCAN_TICKERS = [
+        'AAPL', 'MSFT', 'JNJ', 'KO', 'PG', 'VZ', 'T', 'MCD', 'MMM', 'PEP',
+        'ABBV', 'CVX', 'XOM', 'ENB', 'O', 'MO', 'AVGO', 'TXN', 'BMY', 'WMT',
+        'JPM', 'V', 'PFE', 'HD', 'AMGN', 'IBM', 'MRK', 'CAT', 'GPC', 'CSCO',
+    ]
+
+    @staticmethod
+    def get_upcoming_dividends() -> List[Dict[str, Any]]:
+        today = datetime.now(timezone.utc).date()
+        upcoming = []
+
+        try:
+            tickers = yf.Tickers(' '.join(HomePageService.UPCOMING_SCAN_TICKERS))
+
+            for symbol in HomePageService.UPCOMING_SCAN_TICKERS:
+                try:
+                    info = tickers.tickers[symbol.upper()].info
+
+                    ex_date_ts = info.get('exDividendDate')
+                    if not ex_date_ts:
+                        continue
+
+                    ex_date = datetime.fromtimestamp(ex_date_ts, tz=timezone.utc).date()
+                    days_until = (ex_date - today).days
+
+                    if days_until < 0:
+                        continue
+
+                    amount = info.get('lastDividendValue', 0) or 0
+                    company = info.get('longName') or info.get('shortName') or symbol
+
+                    upcoming.append({
+                        'symbol': symbol.upper(),
+                        'company': company,
+                        'amount': round(float(amount), 4),
+                        'ex_date': ex_date.strftime('%b %d'),
+                        'days_until': days_until,
+                    })
+
+                except Exception as e:
+                    print(f"Error processing upcoming dividend for {symbol}: {e}")
+                    continue
+
+            upcoming.sort(key=lambda x: x['days_until'])
+            return upcoming[:10]
+
+        except Exception as e:
+            print(f"Error fetching upcoming dividends: {e}")
+            return []
+
+    @staticmethod
+    def get_homepage_reddit_posts() -> List[Dict[str, Any]]:
+
+        try:
+
+            reddit = praw.Reddit(
+                client_id=REDDIT_CLIENT_ID,
+                client_secret=REDDIT_CLIENT_SECRET,
+                user_agent=REDDIT_USER_AGENT,
+            )
+
+            subreddit = reddit.subreddit('dividends+dividendinvesting+investing+stocks+wallstreetbets+StockMarket')
+            posts_raw = list(subreddit.hot(limit=20))
+
+            results = []
+
+            for post in posts_raw:
+
+                if post.stickied:
+                    continue
+
+                results.append({
+                    'title': post.title,
+                    'url': post.url,
+                    'score': post.score,
+                    'num_comments': post.num_comments,
+                    'created_utc': datetime.fromtimestamp(post.created_utc).strftime('%Y-%m-%d %H:%M:%S'),
+                    'selftext': post.selftext[:300] if post.selftext else '',
+                    'author': str(post.author) if post.author else 'Unknown',
+                    'subreddit': str(post.subreddit) if post.subreddit else 'Unknown',
+                })
+
+            return results
+
+        except Exception as e:
+            print(f"Error fetching homepage Reddit posts: {e}")
+            return []

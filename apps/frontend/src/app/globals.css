@@ -168,19 +168,6 @@ html.terminal body::before {
     transform: scaleX(1);
 }
 
-/* ─── Aristocrat badge shimmer ─── */
-@keyframes aristocrat-shimmer {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.55;
-    }
-}
-
-.aristocrat-badge:hover {
-    animation: aristocrat-shimmer 1.2s ease-in-out infinite;
+.accent-inset {
+    box-shadow: inset 0 10px 24px var(--accent-inset, rgba(0, 0, 0, 0.12)), 0 6px 18px rgba(0, 0, 0, 0.12);
 }

@@ -1,4 +1,4 @@
-import type { BasicStockInfo, MarqueeTicker } from '@/types'
+import type { BasicStockInfo, MarqueeTicker, RedditPost, UpcomingDividend } from '@/types'
 import { Features } from './Sub/Features'
 import { HowItWorks } from './Sub/HowItWorks'
 import { PopularStocks } from './Sub/PopularStocks'
@@ -9,21 +9,27 @@ import { MarqueeStrip } from './Sub/MarqueeStrip'
 import { UpcomingFeed } from './Sub/UpcomingFeed'
 import { DividendCalendar } from './Sub/DividendCalendar'
 import { Insights } from './Sub/Insights'
+import { Reddit } from './Sub/Reddit'
 
 interface HomepageLayoutProps {
     popularStocks: BasicStockInfo[]
     marqueeTickers: MarqueeTicker[]
+    upcomingDividends: UpcomingDividend[]
+    redditPosts: RedditPost[]
 }
 
-export const HomepageLayout = ({ popularStocks, marqueeTickers }: HomepageLayoutProps) => {
+export const HomepageLayout = ({ popularStocks, marqueeTickers, upcomingDividends, redditPosts }: HomepageLayoutProps) => {
     return (
         <>
             <Hero />
             <MarqueeStrip tickers={marqueeTickers} />
-            {/* <UpcomingFeed />
             <PopularStocks stocks={popularStocks} />
-            <DividendCalendar />
+            <Reddit posts={redditPosts} />
+            <UpcomingFeed dividends={upcomingDividends} />
             <Features />
+            {/* 
+            <DividendCalendar />
+            
             <Insights />
             <HowItWorks />
             <FAQ />
