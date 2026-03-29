@@ -94,11 +94,9 @@ const Feature = ({ i, icon: Icon, title, description, accent, bg, border, accent
 
             <div
                 className={`w-20 h-20 rounded-md flex items-center justify-center shrink-0 ${bg} border ${border} accent-inset`}
-                style={{ ['--accent-inset' as any]: accentColor }}
-            >
+                style={{ ['--accent-inset' as any]: accentColor }}>
                 <Icon className={cn(accent, "size-10")} />
             </div>
-
 
         </MotionDiv >
     )

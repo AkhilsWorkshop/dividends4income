@@ -6,7 +6,6 @@ import { Hero } from './Sub/Hero'
 import { FAQ } from './Sub/FAQ'
 import { PreFooter } from './Sub/PreFooter'
 import { MarqueeStrip } from './Sub/MarqueeStrip'
-import { Insights } from './Sub/Insights'
 import { Reddit } from './Sub/Reddit'
 import { UpcomingDividends } from './Sub/UpcomingDividends'
 
@@ -25,8 +24,7 @@ export const HomepageLayout = ({ popularStocks, marqueeTickers, upcomingDividend
             <PopularStocks stocks={popularStocks} />
             <Reddit posts={redditPosts} />
             <UpcomingDividends dividends={upcomingDividends} />
-            <Features />
-            <Insights />
+            {/* <Features /> */}
             <HowItWorks />
             <FAQ />
             <PreFooter />
