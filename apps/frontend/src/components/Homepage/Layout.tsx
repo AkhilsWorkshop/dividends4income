@@ -6,10 +6,9 @@ import { Hero } from './Sub/Hero'
 import { FAQ } from './Sub/FAQ'
 import { PreFooter } from './Sub/PreFooter'
 import { MarqueeStrip } from './Sub/MarqueeStrip'
-import { UpcomingFeed } from './Sub/UpcomingFeed'
-import { DividendCalendar } from './Sub/DividendCalendar'
 import { Insights } from './Sub/Insights'
 import { Reddit } from './Sub/Reddit'
+import { UpcomingDividends } from './Sub/UpcomingDividends'
 
 interface HomepageLayoutProps {
     popularStocks: BasicStockInfo[]
@@ -25,15 +24,12 @@ export const HomepageLayout = ({ popularStocks, marqueeTickers, upcomingDividend
             <MarqueeStrip tickers={marqueeTickers} />
             <PopularStocks stocks={popularStocks} />
             <Reddit posts={redditPosts} />
-            <UpcomingFeed dividends={upcomingDividends} />
+            <UpcomingDividends dividends={upcomingDividends} />
             <Features />
-            {/* 
-            <DividendCalendar />
-            
             <Insights />
             <HowItWorks />
             <FAQ />
-            <PreFooter /> */}
+            <PreFooter />
         </>
     )
 }

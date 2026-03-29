@@ -85,7 +85,7 @@ const Feature = ({ i, icon: Icon, title, description, accent, bg, border, accent
             variants={scaleIn}
             useDefaultInView={false}
             includeLazyMotion={false}
-            className="border border-border bg-layer/40 p-6 flex items-center justify-center gap-10 hover:border-accent/30 transition-colors duration-300 rounded-xl" >
+            className="border border-border bg-layer/40 p-6 flex items-center justify-center gap-10 rounded-xl" >
 
             <div>
                 <h3 className="text-sm font-semibold text-primary mb-1">{title}</h3>

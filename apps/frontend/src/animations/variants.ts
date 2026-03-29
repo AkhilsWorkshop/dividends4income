@@ -58,29 +58,3 @@ export const shimmer: Variants = {
         },
     },
 }
-
-export const cardHover = {
-    scale: 1.02,
-    y: -4,
-    transition: { type: 'spring' as const, stiffness: 300, damping: 20 },
-}
-
-export const flipInFromLeft: Variants = {
-    hidden: { opacity: 0, x: -40, rotateY: 8 },
-    visible: {
-        opacity: 1,
-        x: 0,
-        rotateY: 0,
-        transition: { duration: 0.55, ease: 'easeOut' },
-    },
-}
-
-export const flipInFromRight: Variants = {
-    hidden: { opacity: 0, x: 40, rotateY: -8 },
-    visible: {
-        opacity: 1,
-        x: 0,
-        rotateY: 0,
-        transition: { duration: 0.55, ease: 'easeOut' },
-    },
-}

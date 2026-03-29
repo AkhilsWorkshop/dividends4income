@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { memo } from 'react'
 import type { BasicStockInfo } from '@/types'
-import { cardHover, fadeUp, flipInFromLeft, flipInFromRight } from '@/animations/variants'
+import { fadeUp } from '@/animations/variants'
 import { cn } from '@/utils'
 import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
 
@@ -11,32 +10,22 @@ interface StockCardProps {
     index?: number
 }
 
-export const StockCard = memo(({ stock, index }: StockCardProps) => {
+export const StockCard = (({ stock, index }: StockCardProps) => {
 
     const isGain = stock.change.startsWith('+')
 
     const useFlip = typeof index === 'number'
 
-    const variant = useFlip
-        ? (index % 2 === 0 ? flipInFromLeft : flipInFromRight)
-        : fadeUp
-
-    const ambientHover = {
-        ...cardHover,
-        boxShadow: isGain
-            ? '0 0 0 1px rgba(0,208,156,0.25), 0 8px 32px rgba(0,208,156,0.12)'
-            : '0 0 0 1px rgba(235,87,87,0.25), 0 8px 32px rgba(235,87,87,0.12)',
-    }
-
     return (
         <MotionDiv
-            variants={variant}
-            whileHover={ambientHover}
+            variants={fadeUp}
             style={{ willChange: 'transform', perspective: useFlip ? '800px' : undefined }}>
 
             <Link
                 href={`/stock/${stock.symbol}`}
-                className="bg-layer p-6 rounded-xl hover:rounded-none space-y-5 text-primary block border border-border hover:border-none transition-all duration-200">
+                className={cn("bg-layer p-6 rounded-xl space-y-5 text-primary block border border-border transition-all duration-200",
+                    isGain ? 'hover:border-gain/20 hover:shadow-lg shadow-gain/10' : 'hover:border-loss/20 hover:shadow-lg shadow-loss/10'
+                )}>
 
                 <div className="flex items-center justify-between">
 
@@ -99,5 +88,3 @@ export const StockCard = memo(({ stock, index }: StockCardProps) => {
         </MotionDiv>
     )
 })
-
-StockCard.displayName = 'StockCard'
