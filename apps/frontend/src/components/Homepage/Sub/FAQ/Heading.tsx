@@ -1,10 +1,10 @@
 import { fadeUp } from '@/animations/variants'
 import { Highlighter } from '@/components/Common/Reuse/Effects/Highlighter'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 export const Heading = () => {
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeUp}
             className="text-center space-y-3 mb-10">
 
@@ -14,7 +14,7 @@ export const Heading = () => {
 
             <p className="text-secondary text-sm md:text-lg">Everything you need to know about dividend investing with our platform</p>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

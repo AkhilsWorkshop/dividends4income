@@ -1,5 +1,5 @@
 import { fadeUp, staggerContainer } from "@/animations/variants"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 import { cn } from "@/utils"
 import { LuMoveRight } from "react-icons/lu"
 
@@ -32,7 +32,7 @@ const STEPS = [
 
 export const Steps = () => {
     return (
-        <MotionDiv
+        <MotionTag
             variants={staggerContainer}
             className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
 
@@ -52,7 +52,7 @@ export const Steps = () => {
                 )
             })}
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 
@@ -69,7 +69,7 @@ type EachStepProps = {
 const EachStep = ({ index, title, description, bg, border, accent, accentColor }: EachStepProps) => {
 
     return (
-        <MotionDiv
+        <MotionTag
             key={index}
             variants={fadeUp}
             useDefaultInView={false}
@@ -93,6 +93,6 @@ const EachStep = ({ index, title, description, bg, border, accent, accentColor }
                 </span>
             )}
 
-        </MotionDiv >
+        </MotionTag >
     )
 }

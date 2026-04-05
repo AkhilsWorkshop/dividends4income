@@ -3,7 +3,7 @@
 import Marquee from "@/components/Common/Reuse/Effects/Marquee"
 import { PostCard } from "./Reuse/PostCard"
 import { RedditPost } from "@/types"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 import { useInView, useScroll, useTransform } from "motion/react"
 import { useRef } from "react"
 
@@ -33,7 +33,7 @@ export const Posts = ({ firstRow, secondRow, thirdRow, fourthRow }: PostsProps) 
             ref={containerRef}
             className="relative flex h-160 w-full flex-row items-center justify-center gap-4 overflow-hidden perspective-near my-12">
 
-            <MotionDiv
+            <MotionTag
                 className="flex flex-row items-center gap-4"
                 style={{
                     x: isInView ? translateX : 0,
@@ -67,7 +67,7 @@ export const Posts = ({ firstRow, secondRow, thirdRow, fourthRow }: PostsProps) 
                     ))}
                 </Marquee>
 
-            </MotionDiv>
+            </MotionTag>
 
             <div className="from-background pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-linear-to-b"></div>
             <div className="from-background pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t"></div>

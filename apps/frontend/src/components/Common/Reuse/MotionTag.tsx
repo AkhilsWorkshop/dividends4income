@@ -6,16 +6,22 @@ import { useRef } from "react"
 
 const loadFeatures = () => import("../../../utils/features").then(res => res.default)
 
-type MotionDivProps = React.ComponentProps<typeof motion.div>
-
-type Props = MotionDivProps & {
+type MotionTagProps = React.ComponentProps<typeof motion.div> & {
+    tag?: keyof typeof motion
     useDefaultInView?: boolean
     includeLazyMotion?: boolean
 }
 
-export const MotionDiv = ({ children, className, useDefaultInView = true, includeLazyMotion = true, ...rest }: Props) => {
+export const MotionTag = ({
+    tag = 'div',
+    children,
+    className,
+    useDefaultInView = true,
+    includeLazyMotion = true,
+    ...rest
+}: MotionTagProps) => {
 
-    const ref = useRef<HTMLDivElement>(null)
+    const ref = useRef<HTMLElement>(null)
     const inView = useInView(ref, { once: true, margin: '-80px' })
 
     const { initial: restInitial, animate: restAnimate, ...otherProps } = rest as any
@@ -23,11 +29,13 @@ export const MotionDiv = ({ children, className, useDefaultInView = true, includ
     const finalInitial = useDefaultInView ? 'hidden' : restInitial
     const finalAnimate = useDefaultInView ? (inView ? 'visible' : 'hidden') : restAnimate
 
+    const Tag = (motion as any)[tag] as React.ComponentType<any>
+
     if (includeLazyMotion) {
         return (
             <LazyMotion features={loadFeatures}>
 
-                <motion.div
+                <Tag
                     ref={useDefaultInView ? ref : undefined}
                     initial={finalInitial}
                     animate={finalAnimate}
@@ -36,14 +44,14 @@ export const MotionDiv = ({ children, className, useDefaultInView = true, includ
 
                     {children}
 
-                </motion.div>
+                </Tag>
 
             </LazyMotion>
         )
     }
 
     return (
-        <motion.div
+        <Tag
             ref={useDefaultInView ? ref : undefined}
             initial={finalInitial}
             animate={finalAnimate}
@@ -52,6 +60,6 @@ export const MotionDiv = ({ children, className, useDefaultInView = true, includ
 
             {children}
 
-        </motion.div>
+        </Tag>
     )
 }

@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
 import { scaleIn } from '@/animations/variants'
 import { cn } from '@/utils'
 import { FaArrowTrendUp } from 'react-icons/fa6'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 interface DividendData {
     date: string
@@ -23,7 +23,6 @@ const CHART_COLOR = '#00d09c'
 export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
 
     const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('all')
-    const shouldReduce = useReducedMotion()
 
     const chartRef = useRef<HTMLDivElement>(null)
     const apexChartRef = useRef<any>(null)
@@ -67,7 +66,7 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
             dropShadow: { enabled: false },
             toolbar: { show: false },
             background: 'transparent',
-            animations: { enabled: !shouldReduce },
+            animations: { enabled: true },
         },
         tooltip: {
             enabled: true,
@@ -105,7 +104,7 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
         },
         yaxis: { show: false },
         theme: { mode: 'dark' as const },
-    }), [filteredData, shouldReduce])
+    }), [filteredData])
 
     useEffect(() => {
 
@@ -159,28 +158,31 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
     }, [dividends])
 
     return (
-        <motion.div
+        <MotionTag
             variants={scaleIn}
-            initial={shouldReduce ? false : 'hidden'}
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="w-full h-full col-span-5 lg:col-span-3 glass-card space-y-4 text-primary">
+            className="w-full h-full col-span-5 lg:col-span-3 space-y-4 text-primary bg-layer/20 rounded-xl block border border-border">
 
             <div className="flex flex-col lg:flex-row gap-3 justify-between items-start p-4 lg:p-6">
 
                 <div className="flex items-center gap-3">
-                    <div className="p-3 glass-card text-accent">
+
+                    <div className="p-3 rounded-xl block border border-border text-accent">
                         <FaArrowTrendUp size={20} />
                     </div>
+
                     <div>
+
                         <h2 className="font-bold text-xl text-primary">Trend</h2>
+
                         <div className="flex items-center gap-1.5 text-sm">
                             {trendData.trend === 'up' && <span className="font-bold text-gain">+${trendData.changeAmount.toFixed(2)}</span>}
                             {trendData.trend === 'down' && <span className="font-bold text-loss">-${trendData.changeAmount.toFixed(2)}</span>}
                             {trendData.trend === 'flat' && <span className="text-secondary">{trendData.hasPreviousData ? 'No change' : 'No data'}</span>}
                             <span className="text-secondary">{trendData.period}</span>
                         </div>
+
                     </div>
+
                 </div>
 
                 <div className="flex gap-1 p-1 glass-card rounded-lg">
@@ -191,9 +193,9 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
 
             </div>
 
-            <div ref={chartRef} className="h-fit w-full px-2 pb-2" />
+            <div ref={chartRef} className="h-fit w-full" />
 
-        </motion.div>
+        </MotionTag>
     )
 }
 

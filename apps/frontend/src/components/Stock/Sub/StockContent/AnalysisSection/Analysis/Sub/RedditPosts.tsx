@@ -1,12 +1,10 @@
-'use client'
-
 import { memo } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
 import { staggerContainer, fadeUp } from '@/animations/variants'
 import { formatDistanceToNow } from 'date-fns'
 import { BiSolidUpvote } from 'react-icons/bi'
 import { FaReddit } from 'react-icons/fa6'
 import { MdForum, MdComment } from 'react-icons/md'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 interface Post {
     title: string
@@ -26,8 +24,6 @@ interface RedditPostsProps {
 
 export const RedditPosts = memo(({ posts, ticker }: RedditPostsProps) => {
 
-    const shouldReduce = useReducedMotion()
-
     const formatTime = (dateString: string) => {
         try {
             return formatDistanceToNow(new Date(dateString), { addSuffix: true })
@@ -40,46 +36,55 @@ export const RedditPosts = memo(({ posts, ticker }: RedditPostsProps) => {
         <div className="space-y-4 lg:space-y-5">
 
             <div className="flex items-center gap-3">
+
                 <div className="p-3 glass-card text-accent">
                     <MdForum size={20} />
                 </div>
+
                 <div>
                     <h2 className="font-bold text-xl text-primary">Recent Discussions</h2>
                     <p className="text-sm text-secondary">Latest Reddit posts about {ticker.toUpperCase()}</p>
                 </div>
+
             </div>
 
             {posts.length === 0 ? (
+
                 <div className="glass-card p-8 text-center text-secondary">
+
                     <p className="text-sm">
                         No recent Reddit discussions about {ticker.toUpperCase()}.
                         <br />
                         Check back later or try a different stock.
                     </p>
+
                 </div>
+
             ) : (
-                <motion.div
+
+                <MotionTag
                     variants={staggerContainer}
-                    initial={shouldReduce ? false : 'hidden'}
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-60px' }}
                     className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
+
                     {posts.map((post, index) => (
-                        <motion.div
+
+                        <MotionTag
                             key={index}
                             variants={fadeUp}
+                            useDefaultInView={false}
+                            includeLazyMotion={false}
                             className="glass-card p-4 space-y-2.5 hover:border-border/60 transition-colors duration-200">
 
                             <div className="flex items-center justify-between gap-2">
                                 <div className="flex items-center gap-2 min-w-0">
                                     <span className="text-xs text-secondary truncate">r/{post.subreddit}</span>
-                                    <span className="text-xs text-secondary/40 flex-shrink-0">{formatTime(post.created_utc)}</span>
+                                    <span className="text-xs text-secondary/40 shrink-0">{formatTime(post.created_utc)}</span>
                                 </div>
                                 <a
                                     href={post.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex-shrink-0 flex items-center gap-1 text-xs font-medium py-1 px-2 rounded-md bg-surface/30 hover:bg-surface/50 text-primary transition-colors duration-150">
+                                    className="shrink-0 flex items-center gap-1 text-xs font-medium py-1 px-2 rounded-md bg-surface/30 hover:bg-surface/50 text-primary transition-colors duration-150">
                                     View <FaReddit size={13} color="#FF4500" />
                                 </a>
                             </div>
@@ -106,9 +111,12 @@ export const RedditPosts = memo(({ posts, ticker }: RedditPostsProps) => {
                                 </div>
                             </div>
 
-                        </motion.div>
+                        </MotionTag>
+
                     ))}
-                </motion.div>
+
+                </MotionTag>
+
             )}
 
         </div>

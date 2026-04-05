@@ -3,7 +3,7 @@ import Background from './Hero/Background'
 import { Title } from './Hero/Title'
 import Search from './Hero/Search'
 import NavigateToStocks from './Hero/NavigateToStocks'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 export const Hero = () => {
     return (
@@ -11,7 +11,7 @@ export const Hero = () => {
 
             <Background />
 
-            <MotionDiv
+            <MotionTag
                 variants={staggerContainer}
                 initial='hidden'
                 animate="visible"
@@ -23,7 +23,7 @@ export const Hero = () => {
 
                 <NavigateToStocks />
 
-            </MotionDiv>
+            </MotionTag>
 
         </section>
     )

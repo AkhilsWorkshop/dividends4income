@@ -1,7 +1,7 @@
 import { staggerContainer, scaleIn } from '@/animations/variants'
 import { MdTrendingUp, MdGroups } from 'react-icons/md'
 import { LuSparkles } from 'react-icons/lu'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 import { cn } from '@/utils'
 
 const FEATURES = [
@@ -37,7 +37,7 @@ const FEATURES = [
 export const FeatureExplainer = () => {
 
     return (
-        <MotionDiv
+        <MotionTag
             variants={staggerContainer}
             initial='hidden'
             whileInView="visible"
@@ -62,7 +62,7 @@ export const FeatureExplainer = () => {
                 )
             })}
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 
@@ -80,7 +80,7 @@ interface FeatureProps {
 const Feature = ({ i, icon: Icon, title, description, accent, bg, border, accentColor }: FeatureProps) => {
 
     return (
-        <MotionDiv
+        <MotionTag
             key={i}
             variants={scaleIn}
             useDefaultInView={false}
@@ -98,6 +98,6 @@ const Feature = ({ i, icon: Icon, title, description, accent, bg, border, accent
                 <Icon className={cn(accent, "size-10")} />
             </div>
 
-        </MotionDiv >
+        </MotionTag >
     )
 }

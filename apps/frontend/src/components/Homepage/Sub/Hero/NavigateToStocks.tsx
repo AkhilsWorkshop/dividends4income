@@ -1,7 +1,7 @@
 "use client"
 
 import { fadeUp } from '@/animations/variants'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 const NavigateToStocks = () => {
 
@@ -11,7 +11,7 @@ const NavigateToStocks = () => {
     }
 
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeUp}
             useDefaultInView={false}
             includeLazyMotion={false}
@@ -23,7 +23,7 @@ const NavigateToStocks = () => {
                 Explore Stocks →
             </button>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

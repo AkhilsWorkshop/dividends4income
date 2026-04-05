@@ -1,5 +1,5 @@
 import { fadeUp } from '@/animations/variants'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 import { Button } from './PreFooter/Button'
 
 export const PreFooter = () => {
@@ -7,7 +7,7 @@ export const PreFooter = () => {
     return (
         <section className="max-w-7xl container mx-auto space-y-6 px-4 lg:px-6 py-15 lg:py-25">
 
-            <MotionDiv
+            <MotionTag
                 variants={fadeUp}
                 className="text-center space-y-8">
 
@@ -20,7 +20,7 @@ export const PreFooter = () => {
 
                 <Button />
 
-            </MotionDiv>
+            </MotionTag>
 
         </section>
     )

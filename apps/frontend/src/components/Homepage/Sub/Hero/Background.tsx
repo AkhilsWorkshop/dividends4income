@@ -1,6 +1,6 @@
 
 import { useId } from "react"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 
 const Background = () => {
 
@@ -9,7 +9,7 @@ const Background = () => {
     const h = 10
 
     return (
-        <MotionDiv
+        <MotionTag
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5, ease: 'easeInOut' }}
@@ -37,7 +37,7 @@ const Background = () => {
 
             </svg>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

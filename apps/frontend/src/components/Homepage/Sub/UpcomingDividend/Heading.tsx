@@ -1,10 +1,10 @@
 import { fadeUp } from "@/animations/variants"
 import { Highlighter } from "@/components/Common/Reuse/Effects/Highlighter"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 
 export const Heading = () => {
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeUp}
             className="flex justify-between gap-4 mb-10">
 
@@ -20,7 +20,7 @@ export const Heading = () => {
 
             </div>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

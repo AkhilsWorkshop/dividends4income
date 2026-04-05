@@ -1,6 +1,6 @@
 import { fadeUp } from '@/animations/variants'
 import Marquee from '@/components/Common/Reuse/Effects/Marquee'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 import type { MarqueeTicker } from '@/types'
 
 const TickerItem = ({ symbol, price, change, up }: MarqueeTicker) => (
@@ -22,7 +22,7 @@ export const MarqueeStrip = ({ tickers }: MarqueeStripProps) => {
     }
 
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeUp}
             initial="hidden"
             animate="visible"
@@ -39,6 +39,6 @@ export const MarqueeStrip = ({ tickers }: MarqueeStripProps) => {
                 ))}
             </Marquee>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }

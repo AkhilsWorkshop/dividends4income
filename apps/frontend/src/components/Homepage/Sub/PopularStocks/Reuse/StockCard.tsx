@@ -3,7 +3,7 @@ import Image from 'next/image'
 import type { BasicStockInfo } from '@/types'
 import { fadeUp } from '@/animations/variants'
 import { cn } from '@/utils'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 interface StockCardProps {
     stock: BasicStockInfo
@@ -17,14 +17,14 @@ export const StockCard = (({ stock, index }: StockCardProps) => {
     const useFlip = typeof index === 'number'
 
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeUp}
             style={{ willChange: 'transform', perspective: useFlip ? '800px' : undefined }}>
 
             <Link
                 href={`/stock/${stock.symbol}`}
                 className={cn("bg-layer p-6 rounded-xl space-y-5 text-primary block border border-border transition-all duration-200",
-                    isGain ? 'hover:border-gain/20 hover:shadow-lg shadow-gain/10' : 'hover:border-loss/20 hover:shadow-lg shadow-loss/10'
+                    isGain ? 'hover:border-gain/20' : 'hover:border-loss/20'
                 )}>
 
                 <div className="flex items-center justify-between">
@@ -85,6 +85,6 @@ export const StockCard = (({ stock, index }: StockCardProps) => {
 
             </Link>
 
-        </MotionDiv>
+        </MotionTag>
     )
 })

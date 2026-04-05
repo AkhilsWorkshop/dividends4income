@@ -1,5 +1,5 @@
 import { fadeUp } from '@/animations/variants'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 import { UpcomingDividend } from '@/types'
 import Link from 'next/link'
 
@@ -9,7 +9,7 @@ type TableValueProps = {
 
 export const TableValue = ({ dividend }: TableValueProps) => {
     return (
-        <MotionDiv
+        <MotionTag
             key={dividend.symbol}
             variants={fadeUp}
             includeLazyMotion={false}>
@@ -45,6 +45,6 @@ export const TableValue = ({ dividend }: TableValueProps) => {
 
             </Link>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }

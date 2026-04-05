@@ -25,12 +25,15 @@ export const Analysis = async ({ ticker, tickerName }: AnalysisProps) => {
                 </div>
 
                 <div>
+
                     <h2 className="font-bold text-xl text-primary">
                         Analysis
                     </h2>
+
                     <p className="text-sm text-secondary">
                         Reddit analysis and discussions for {ticker.toUpperCase()}
                     </p>
+
                 </div>
 
             </div>

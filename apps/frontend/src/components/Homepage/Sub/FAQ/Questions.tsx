@@ -1,7 +1,7 @@
 "use client"
 
 import { fadeUp, staggerContainer } from '@/animations/variants'
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 import { AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 import { FaAngleDown } from 'react-icons/fa6'
@@ -39,7 +39,7 @@ export const Questions = () => {
     const [openIndex, setOpenIndex] = useState<number | null>(0)
 
     return (
-        <MotionDiv
+        <MotionTag
             variants={staggerContainer}
             className="space-y-3 max-w-3xl mx-auto">
 
@@ -55,7 +55,7 @@ export const Questions = () => {
 
             ))}
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 
@@ -68,7 +68,7 @@ type EachQuestionProps = FAQItem & {
 const QuestionItem = ({ question, answer, index, openIndex, setOpenIndex }: EachQuestionProps) => {
 
     return (
-        <MotionDiv key={index} variants={fadeUp} className="bg-background rounded-xl overflow-hidden border border-border hover:border-accent/30 transition-colors duration-200">
+        <MotionTag key={index} variants={fadeUp} className="bg-background rounded-xl overflow-hidden border border-border hover:border-accent/30 transition-colors duration-200">
 
             <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
@@ -88,7 +88,7 @@ const QuestionItem = ({ question, answer, index, openIndex, setOpenIndex }: Each
 
                 {openIndex === index && (
 
-                    <MotionDiv
+                    <MotionTag
                         key="content"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
@@ -103,13 +103,13 @@ const QuestionItem = ({ question, answer, index, openIndex, setOpenIndex }: Each
                             <p className="text-secondary leading-relaxed text-sm">{answer}</p>
                         </div>
 
-                    </MotionDiv>
+                    </MotionTag>
 
                 )}
 
             </AnimatePresence>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

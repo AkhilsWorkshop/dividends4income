@@ -2,7 +2,7 @@
 
 import { searchTickers, Suggestion } from "@/actions/search"
 import { fadeUp } from "@/animations/variants"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 import { useDebounce } from "@/hooks/useDebounce"
 import { cn } from "@/utils"
 import Image from "next/image"
@@ -88,7 +88,7 @@ const Search = () => {
     const showSuggestions = showDropdown && suggestions.length > 0 && !loading
 
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeUp}
             useDefaultInView={false}
             includeLazyMotion={false}
@@ -158,7 +158,7 @@ const Search = () => {
 
             </div>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

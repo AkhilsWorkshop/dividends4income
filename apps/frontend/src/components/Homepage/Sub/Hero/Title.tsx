@@ -1,11 +1,11 @@
 import { fadeIn } from "@/animations/variants"
 import { Counter } from "@/components/Common/Reuse/Effects/Counter"
 import { Highlighter } from "@/components/Common/Reuse/Effects/Highlighter"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 
 export const Title = () => {
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeIn}
             useDefaultInView={false}
             includeLazyMotion={false}
@@ -21,7 +21,7 @@ export const Title = () => {
                 Every day.
             </p>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

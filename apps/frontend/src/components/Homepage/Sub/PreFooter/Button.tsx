@@ -1,6 +1,6 @@
 "use client"
 
-import { MotionDiv } from '@/components/Common/Reuse/MotionDiv'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 export const Button = () => {
 
@@ -14,7 +14,7 @@ export const Button = () => {
     }
 
     return (
-        <MotionDiv
+        <MotionTag
             useDefaultInView={false}
             includeLazyMotion={false}
             className="text-center">
@@ -25,7 +25,7 @@ export const Button = () => {
                 Explore Now
             </button>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 

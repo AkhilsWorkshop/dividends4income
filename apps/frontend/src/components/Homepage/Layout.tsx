@@ -1,5 +1,4 @@
 import type { BasicStockInfo, MarqueeTicker, RedditPost, UpcomingDividend } from '@/types'
-import { Features } from './Sub/Features'
 import { HowItWorks } from './Sub/HowItWorks'
 import { PopularStocks } from './Sub/PopularStocks'
 import { Hero } from './Sub/Hero'
@@ -23,9 +22,8 @@ export const HomepageLayout = ({ popularStocks, marqueeTickers, upcomingDividend
             <MarqueeStrip tickers={marqueeTickers} />
             <PopularStocks stocks={popularStocks} />
             <Reddit posts={redditPosts} />
-            <UpcomingDividends dividends={upcomingDividends} />
-            {/* <Features /> */}
             <HowItWorks />
+            <UpcomingDividends dividends={upcomingDividends} />
             <FAQ />
             <PreFooter />
         </>

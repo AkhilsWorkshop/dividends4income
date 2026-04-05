@@ -1,11 +1,11 @@
 import { fadeUp } from "@/animations/variants"
 import { Highlighter } from "@/components/Common/Reuse/Effects/Highlighter"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 import { FaReddit } from "react-icons/fa6"
 
 export const Heading = () => {
     return (
-        <MotionDiv
+        <MotionTag
             variants={fadeUp}
             className="flex justify-between gap-4 mb-10">
 
@@ -26,7 +26,7 @@ export const Heading = () => {
                 Community
             </div>
 
-        </MotionDiv>
+        </MotionTag>
     )
 }
 
@@ -34,7 +34,7 @@ const HightLight = () => {
     return (
         <div className="relative inline-block">
 
-            <MotionDiv
+            <MotionTag
                 initial={{ opacity: 0, scale: 0, bottom: 0 }}
                 whileInView={{ opacity: 1, scale: 1, bottom: 56 }}
                 viewport={{ once: true }}
@@ -43,7 +43,7 @@ const HightLight = () => {
                 includeLazyMotion={false}
                 className="absolute left-1/2 -translate-x-1/2 bottom-14 -rotate-5 text-accent uppercase font-bold">
                 Real
-            </MotionDiv>
+            </MotionTag>
 
             <Highlighter
                 color="#ffd900"

@@ -1,7 +1,7 @@
 import { RedditPost } from "@/types"
 import { FaReddit } from "react-icons/fa6"
 import { Posts } from "./Posts"
-import { MotionDiv } from "@/components/Common/Reuse/MotionDiv"
+import { MotionTag } from "@/components/Common/Reuse/MotionTag"
 import { fadeUp } from "@/animations/variants"
 
 interface PostsSectionProps {
@@ -19,12 +19,12 @@ export const PostsSection = ({ posts }: PostsSectionProps) => {
 
         posts.length === 0 ?
 
-            <MotionDiv
+            <MotionTag
                 variants={fadeUp}
                 className="bg-layer/40 border border-border rounded-xl p-12 py-20 text-center text-secondary my-12">
                 <FaReddit size={32} className="mx-auto mb-3" color="#FF4500" />
                 <p className="text-sm">Community posts unavailable right now. Check back soon!</p>
-            </MotionDiv>
+            </MotionTag>
 
             :
 
