@@ -1,5 +1,5 @@
-import { KeyMetrics } from './MetricsSection/KeyMetrics'
-import { CompanyDetails } from './MetricsSection/CompanyDetails'
+import { KeyMetrics } from './Sub/MetricsSection/KeyMetrics'
+import { CompanyDetails } from './Sub/MetricsSection/CompanyDetails'
 import type { StockDetail } from '@/types'
 
 interface MetricsSectionProps {

@@ -1,5 +1,5 @@
 import { fadeUp, staggerContainer } from "@/animations/variants"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 import { cn } from "@/utils"
 import { LuMoveRight } from "react-icons/lu"
 

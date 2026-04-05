@@ -8,10 +8,6 @@ export interface BasicStockInfo {
     logo_url: string;
 }
 
-export interface ThemeConfig {
-    isDark: boolean;
-}
-
 export interface ErrorBoundaryState {
     hasError: boolean;
     error?: Error;
@@ -48,8 +44,10 @@ export interface RedditData {
     posts: RedditPost[]
     reddit_key_points: string[]
     reddit_prediction: string
+    reddit_sentiment: string
     ai_key_points: string[]
     ai_prediction: string
+    ai_sentiment: string
 }
 
 export interface RedditPost {

@@ -1,7 +1,7 @@
 import { fadeIn } from "@/animations/variants"
 import { Counter } from "@/components/Common/Reuse/Effects/Counter"
 import { Highlighter } from "@/components/Common/Reuse/Effects/Highlighter"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 
 export const Title = () => {
     return (

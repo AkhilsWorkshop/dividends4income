@@ -1,6 +1,6 @@
 
 import { useId } from "react"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 
 const Background = () => {
 

@@ -1,7 +1,7 @@
 import { RedditPost } from "@/types"
 import { FaReddit } from "react-icons/fa6"
 import { Posts } from "./Posts"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 import { fadeUp } from "@/animations/variants"
 
 interface PostsSectionProps {

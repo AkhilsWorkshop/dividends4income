@@ -1,6 +1,6 @@
 "use client"
 
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 
 export const Button = () => {
 

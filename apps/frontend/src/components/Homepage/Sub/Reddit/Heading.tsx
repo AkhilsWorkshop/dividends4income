@@ -1,6 +1,6 @@
 import { fadeUp } from "@/animations/variants"
 import { Highlighter } from "@/components/Common/Reuse/Effects/Highlighter"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 import { FaReddit } from "react-icons/fa6"
 
 export const Heading = () => {

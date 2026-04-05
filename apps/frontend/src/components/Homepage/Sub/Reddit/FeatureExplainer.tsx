@@ -1,7 +1,7 @@
 import { staggerContainer, scaleIn } from '@/animations/variants'
 import { MdTrendingUp, MdGroups } from 'react-icons/md'
 import { LuSparkles } from 'react-icons/lu'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 import { cn } from '@/utils'
 
 const FEATURES = [

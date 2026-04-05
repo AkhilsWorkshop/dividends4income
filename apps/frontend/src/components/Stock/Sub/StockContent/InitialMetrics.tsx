@@ -1,5 +1,5 @@
-import { PriceInfo } from './InitialMetrics/PriceInfo'
-import { ShortCard } from './InitialMetrics/Reuse/ShortCard'
+import { PriceInfo } from './Sub/InitialMetrics/PriceInfo'
+import { ShortCard } from './Sub/InitialMetrics/Reuse/ShortCard'
 
 type InitialMetricsProps = {
     currentPrice: string | number

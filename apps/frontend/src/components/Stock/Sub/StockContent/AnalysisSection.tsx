@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
-import { ChartSkeleton, MetricCardSkeleton } from '@/components/Skeleton'
-import { Analysis } from './AnalysisSection/Analysis'
+import { Analysis } from './Sub/AnalysisSection/Analysis'
+import { AnalysisSectionSkeleton } from './Sub/AnalysisSection/Skeleton'
 
 interface AnalysisSectionProps {
     ticker: string
@@ -9,17 +9,8 @@ interface AnalysisSectionProps {
 
 export const AnalysisSection = ({ ticker, tickerName }: AnalysisSectionProps) => {
     return (
-        <Suspense fallback={<LoadingState />}>
+        <Suspense fallback={<AnalysisSectionSkeleton />}>
             <Analysis ticker={ticker} tickerName={tickerName} />
         </Suspense>
-    )
-}
-
-const LoadingState = () => {
-    return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
-            <ChartSkeleton />
-            <MetricCardSkeleton />
-        </div>
     )
 }

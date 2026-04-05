@@ -1,5 +1,5 @@
 import { staggerContainer } from "@/animations/variants"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 import type { UpcomingDividend } from '@/types'
 import { TableValue } from "./Reuse/TableValue"
 

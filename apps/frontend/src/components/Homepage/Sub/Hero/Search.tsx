@@ -2,7 +2,7 @@
 
 import { searchTickers, Suggestion } from "@/actions/search"
 import { fadeUp } from "@/animations/variants"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 import { useDebounce } from "@/hooks/useDebounce"
 import { cn } from "@/utils"
 import Image from "next/image"
@@ -16,15 +16,15 @@ const Search = () => {
 
     const router = useRouter()
 
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState<string>('')
     const [suggestions, setSuggestions] = useState<Suggestion[]>([])
-    const [loading, setLoading] = useState(false)
-    const [showDropdown, setShowDropdown] = useState(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [showDropdown, setShowDropdown] = useState<boolean>(false)
 
     const inputRef = useRef<HTMLInputElement>(null)
     const dropdownRef = useRef<HTMLDivElement>(null)
 
-    const debouncedQuery = useDebounce(query, 600)
+    const debouncedQuery = useDebounce<string>(query, 600)
 
     const fetchSuggestions = useCallback(async (searchQuery: string) => {
 

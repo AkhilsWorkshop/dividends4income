@@ -1,6 +1,6 @@
 import { ErrorBox } from '@/components/Common/Reuse/MessageBox/ErrorBox'
-import { DividendsChart } from '@/components/Stock/Sub/StockContent/DividendsSection/DividendsChart'
-import { DividendsTable } from '@/components/Stock/Sub/StockContent/DividendsSection/DividendsTable'
+import { DividendsChart } from '@/components/Stock/Sub/StockContent/Sub/DividendsSection/DividendsChart'
+import { DividendsTable } from '@/components/Stock/Sub/StockContent/Sub/DividendsSection/DividendsTable'
 
 interface DividendData {
     date: string

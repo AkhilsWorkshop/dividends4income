@@ -1,5 +1,5 @@
-import { BackButton } from './Head/BackButton'
-import { CompanyInfo } from './Head/CompanyInfo'
+import { BackButton } from './Sub/Head/BackButton'
+import { CompanyInfo } from './Sub/Head/CompanyInfo'
 
 interface HeadProps {
     stock: {

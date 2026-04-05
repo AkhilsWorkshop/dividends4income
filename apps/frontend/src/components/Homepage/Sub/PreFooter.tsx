@@ -1,5 +1,5 @@
 import { fadeUp } from '@/animations/variants'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 import { Button } from './PreFooter/Button'
 
 export const PreFooter = () => {

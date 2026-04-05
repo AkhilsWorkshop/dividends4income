@@ -14,7 +14,6 @@ export function Header() {
     const [activeSection, setActiveSection] = useState('')
     const [isOnHomepage, setIsOnHomepage] = useState(false)
     const [scrolled, setScrolled] = useState(false)
-    const [terminal, setTerminal] = useState(false)
 
     const headerRef = useRef<HTMLElement>(null)
     const scrollTimeoutRef = useRef<number | null>(null)
@@ -26,21 +25,6 @@ export function Header() {
         { name: 'Popular Stocks', href: '#popular-stocks' },
         { name: 'FAQ', href: '#faq' }
     ]).current
-
-    useEffect(() => {
-        const stored = localStorage.getItem('terminal-mode')
-        if (stored === '1') {
-            setTerminal(true)
-            document.documentElement.classList.add('terminal')
-        }
-    }, [])
-
-    const toggleTerminal = () => {
-        const next = !terminal
-        setTerminal(next)
-        document.documentElement.classList.toggle('terminal', next)
-        localStorage.setItem('terminal-mode', next ? '1' : '0')
-    }
 
     useEffect(() => {
         const newIsOnHomepage = pathname === '/'
@@ -151,7 +135,7 @@ export function Header() {
                     <motion.a
                         href="/"
                         onClick={handleLogoClick}
-                        className="hover:opacity-80 duration-300 transition-opacity flex-shrink-0"
+                        className="hover:opacity-80 duration-300 transition-opacity shrink-0"
                         initial={shouldReduce ? false : { opacity: 0, x: -16 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, ease: 'easeOut' }}>
@@ -180,19 +164,6 @@ export function Header() {
                     </nav>
 
                     <div className="flex items-center gap-2">
-
-                        {/* Terminal mode toggle */}
-                        <button
-                            onClick={toggleTerminal}
-                            title={terminal ? 'Exit terminal mode' : 'Enter terminal mode'}
-                            className={cn(
-                                'hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-mono font-semibold transition-all duration-200 border',
-                                terminal
-                                    ? 'text-accent border-accent/40 bg-accent/10'
-                                    : 'text-secondary border-border/40 hover:text-primary hover:border-border'
-                            )}>
-                            {'>'}_
-                        </button>
 
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}

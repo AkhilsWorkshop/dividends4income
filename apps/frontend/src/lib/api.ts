@@ -57,26 +57,6 @@ export const fetchMarqueeTickers = async (): Promise<MarqueeTicker[]> => {
     return res.json()
 }
 
-export const fetchStockData = async (ticker: string): Promise<StockDetail | null> => {
-
-    const { url, apiKey } = BASE()
-
-    const res = await fetch(`${url}/stocks/${ticker}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'Dividends4Income Frontend',
-            'x-api-key': apiKey || '',
-        },
-        cache: 'no-store',
-    })
-
-    if (res.status === 404) notFound()
-    if (!res.ok) return null
-
-    return res.json()
-}
-
 export const fetchUpcomingDividends = async (): Promise<UpcomingDividend[]> => {
 
     const { url, apiKey } = BASE()
@@ -115,6 +95,26 @@ export const fetchHomepageRedditPosts = async (): Promise<RedditPost[]> => {
     })
 
     if (!res.ok) return []
+
+    return res.json()
+}
+
+export const fetchStockData = async (ticker: string): Promise<StockDetail | null> => {
+
+    const { url, apiKey } = BASE()
+
+    const res = await fetch(`${url}/stocks/${ticker}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Dividends4Income Frontend',
+            'x-api-key': apiKey || '',
+        },
+        cache: 'no-store',
+    })
+
+    if (res.status === 404) notFound()
+    if (!res.ok) return null
 
     return res.json()
 }

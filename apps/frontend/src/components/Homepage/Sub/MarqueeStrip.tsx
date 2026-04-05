@@ -1,6 +1,6 @@
 import { fadeUp } from '@/animations/variants'
 import Marquee from '@/components/Common/Reuse/Effects/Marquee'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 import type { MarqueeTicker } from '@/types'
 
 const TickerItem = ({ symbol, price, change, up }: MarqueeTicker) => (

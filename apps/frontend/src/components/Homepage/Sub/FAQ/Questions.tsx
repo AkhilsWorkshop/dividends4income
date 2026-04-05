@@ -1,7 +1,7 @@
 "use client"
 
 import { fadeUp, staggerContainer } from '@/animations/variants'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 import { AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 import { FaAngleDown } from 'react-icons/fa6'

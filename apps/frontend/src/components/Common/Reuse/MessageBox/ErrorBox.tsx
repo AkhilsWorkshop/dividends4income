@@ -1,5 +1,5 @@
 import { MdError } from 'react-icons/md'
-import { MotionTag } from '../MotionTag'
+import { MotionTag } from '../Animation/MotionTag'
 import { fadeUp } from '@/animations/variants'
 
 type ErrorBoxProps = {

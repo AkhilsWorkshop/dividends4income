@@ -1,7 +1,7 @@
 "use client"
 
 import { fadeUp } from '@/animations/variants'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 
 const NavigateToStocks = () => {
 

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import type { BasicStockInfo } from '@/types'
 import { fadeUp } from '@/animations/variants'
 import { cn } from '@/utils'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 
 interface StockCardProps {
     stock: BasicStockInfo

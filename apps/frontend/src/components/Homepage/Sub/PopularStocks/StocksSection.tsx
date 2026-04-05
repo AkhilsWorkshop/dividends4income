@@ -1,5 +1,5 @@
 import { fadeUp } from "@/animations/variants"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 import { BasicStockInfo } from "@/types"
 import { RiStockFill } from "react-icons/ri"
 import { Stocks } from "./Stocks"

@@ -3,7 +3,7 @@ import Background from './Hero/Background'
 import { Title } from './Hero/Title'
 import Search from './Hero/Search'
 import NavigateToStocks from './Hero/NavigateToStocks'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { MotionTag } from '@/components/Common/Reuse/Animation/MotionTag'
 
 export const Hero = () => {
     return (

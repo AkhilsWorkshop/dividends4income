@@ -3,7 +3,7 @@
 import Marquee from "@/components/Common/Reuse/Effects/Marquee"
 import { PostCard } from "./Reuse/PostCard"
 import { RedditPost } from "@/types"
-import { MotionTag } from "@/components/Common/Reuse/MotionTag"
+import { MotionTag } from "@/components/Common/Reuse/Animation/MotionTag"
 import { useInView, useScroll, useTransform } from "motion/react"
 import { useRef } from "react"
 

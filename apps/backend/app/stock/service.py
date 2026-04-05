@@ -17,10 +17,10 @@ GROQ_PRIMARY_MODEL = "llama-3.1-8b-instant"
 EMPTY_SUMMARY = {
     "reddit_key_points": [],
     "reddit_prediction": None,
-    "reddit_overall_sentiment": None,
+    "reddit_sentiment": None,
     "ai_key_points": [],
     "ai_prediction": None,
-    "ai_overall_sentiment": None
+    "ai_sentiment": None
 }
 
 class StockService:
@@ -173,11 +173,11 @@ class RedditSummaryService:
         prompt = f"""
             Analyze Reddit posts about {ticker_symbol} stock. Return JSON with:
             - reddit_key_points: 3 key points from posts
-            - reddit_prediction: Community outlook
-            - reddit_overall_sentiment: positive/negative/neutral
+            - reddit_prediction: Community outlook in a single sentence
+            - reddit_sentiment: positive/negative/neutral
             - ai_key_points: 3 AI insights (not including Reddit posts but real market data)
-            - ai_prediction: AI market outlook (not including Reddit posts but real market data)
-            - ai_overall_sentiment: positive/negative/neutral (not including Reddit posts but real market data)
+            - ai_prediction: AI market outlook in a single sentence (not including Reddit posts but real market data)
+            - ai_sentiment: positive/negative/neutral (not including Reddit posts but real market data)
 
             Posts: {combined_text[:3000]}
 
@@ -356,10 +356,10 @@ class RedditSummaryService:
             'posts': posts_data['serialized_posts'],
             'reddit_key_points': summary.get('reddit_key_points', []),
             'reddit_prediction': summary.get('reddit_prediction', None),
-            'reddit_overall_sentiment': summary.get('reddit_overall_sentiment', None),
+            'reddit_sentiment': summary.get('reddit_sentiment', None),
             'ai_key_points': summary.get('ai_key_points', []),
             'ai_prediction': summary.get('ai_prediction', None),
-            'ai_overall_sentiment': summary.get('ai_overall_sentiment', None)
+            'ai_sentiment': summary.get('ai_sentiment', None)
         }
 
         if data:
