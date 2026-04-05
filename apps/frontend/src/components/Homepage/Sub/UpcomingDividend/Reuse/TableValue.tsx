@@ -34,7 +34,7 @@ export const TableValue = ({ dividend }: TableValueProps) => {
                     <span className="text-xs text-secondary">{dividend.ex_date}</span>
 
                     <span className="bg-accent/10 text-accent text-[10px] font-semibold px-2 py-0.5 rounded-md border border-accent/20">
-                        In {dividend.days_until} days
+                        In {dividend.days_until === 1 ? '1 day' : `${dividend.days_until} days`}
                     </span>
 
                     <span className="font-bold text-gain text-sm min-w-12 text-right">
