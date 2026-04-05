@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { scaleIn } from '@/animations/variants'
+import { fadeUp } from '@/animations/variants'
 import { cn } from '@/utils'
 import { FaArrowTrendUp } from 'react-icons/fa6'
 import { MotionTag } from '@/components/Common/Reuse/MotionTag'
@@ -159,7 +159,7 @@ export const DividendsChart = ({ dividends = [] }: StockChartProps) => {
 
     return (
         <MotionTag
-            variants={scaleIn}
+            variants={fadeUp}
             className="w-full h-full col-span-5 lg:col-span-3 space-y-4 text-primary bg-layer/20 rounded-xl block border border-border">
 
             <div className="flex flex-col lg:flex-row gap-3 justify-between items-start p-4 lg:p-6">

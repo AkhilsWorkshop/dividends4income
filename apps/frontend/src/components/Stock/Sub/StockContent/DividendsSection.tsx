@@ -1,3 +1,4 @@
+import { ErrorBox } from '@/components/Common/Reuse/MessageBox/ErrorBox'
 import { DividendsChart } from '@/components/Stock/Sub/StockContent/DividendsSection/DividendsChart'
 import { DividendsTable } from '@/components/Stock/Sub/StockContent/DividendsSection/DividendsTable'
 
@@ -15,11 +16,7 @@ interface DividendsSectionProps {
 export const DividendsSection = ({ dividends, ticker }: DividendsSectionProps) => {
 
     if (dividends.length === 0) {
-        return (
-            <div className="p-8 text-center text-secondary bg-layer/20 rounded-xl block border border-border">
-                <p className="text-sm">No dividend history available for {ticker.toUpperCase()}</p>
-            </div>
-        )
+        return <ErrorBox message={`No dividend history available for ${ticker.toUpperCase()}`} />
     }
 
     return (

@@ -12,8 +12,6 @@ export const CompanyInfo = ({ logoUrl, symbol, name }: CompanyInfoProps) => {
     return (
         <MotionTag
             variants={fadeUp}
-            useDefaultInView={false}
-            includeLazyMotion={false}
             className="flex items-center gap-3">
 
             <Image

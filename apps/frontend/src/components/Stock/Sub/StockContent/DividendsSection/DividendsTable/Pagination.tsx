@@ -68,7 +68,9 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             <button
                 onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
                 disabled={currentPage === 1}
-                className="h-8 w-8 text-sm text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary not-disabled:cursor-pointer duration-300 transition-all rounded-sm flex justify-center items-center">
+                className={cn(
+                    currentPage === 1 && "brightness-25",
+                    "h-8 w-8 text-sm text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary not-disabled:cursor-pointer duration-300 transition-all rounded-sm flex justify-center items-center")}>
                 <FaArrowLeft size={15} />
             </button>
 
@@ -103,7 +105,9 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             <button
                 onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="h-8 w-8 text-sm disabled:cursor-not-allowed text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary duration-300 transition-all rounded-sm cursor-pointer flex justify-center items-center">
+                className={cn(
+                    currentPage === totalPages && "brightness-25",
+                    "h-8 w-8 text-sm text-primary not-disabled:hover:text-background not-disabled:hover:bg-primary not-disabled:cursor-pointer duration-300 transition-all rounded-sm flex justify-center items-center")}>
                 <FaArrowRight size={15} />
             </button>
 

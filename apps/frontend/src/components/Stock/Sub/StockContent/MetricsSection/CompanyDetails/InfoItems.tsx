@@ -1,5 +1,6 @@
 import { staggerContainer, fadeUp } from '@/animations/variants'
 import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { BusinessSummary } from './BusinessSummary'
 
 interface InfoItem {
     label: string
@@ -7,10 +8,11 @@ interface InfoItem {
 }
 
 interface InfoItemsProps {
-    items: InfoItem[]
+    items: InfoItem[],
+    businessSummary: string
 }
 
-export const InfoItems = ({ items }: InfoItemsProps) => {
+export const InfoItems = ({ items, businessSummary }: InfoItemsProps) => {
     return (
         <MotionTag
             variants={staggerContainer}>
@@ -21,6 +23,8 @@ export const InfoItems = ({ items }: InfoItemsProps) => {
                     label={item.label}
                     value={item.value} />
             ))}
+
+            <BusinessSummary businessSummary={businessSummary} />
 
         </MotionTag>
     )

@@ -1,10 +1,14 @@
+import { fadeUp } from '@/animations/variants'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 import { MdOutlineInsertChart } from 'react-icons/md'
 
 export const Header = () => {
     return (
-        <div className="flex items-center gap-3">
+        <MotionTag
+            variants={fadeUp}
+            className="flex items-center gap-3">
 
-            <div className="p-3 glass-card text-accent">
+            <div className="p-3 rounded-xl block border border-border text-accent">
                 <MdOutlineInsertChart size={22} />
             </div>
 
@@ -13,6 +17,6 @@ export const Header = () => {
                 <p className="text-sm text-secondary">Important financial metrics and ratios</p>
             </div>
 
-        </div>
+        </MotionTag>
     )
 }

@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { Header } from './CompanyDetails/Header'
 import { InfoItems } from './CompanyDetails/InfoItems'
-import { BusinessSummary } from './CompanyDetails/BusinessSummary'
 
 interface CompanyDetailsProps {
     sector?: string
@@ -38,13 +37,11 @@ export const CompanyDetails = memo(({
     ]
 
     return (
-        <div className="glass-card p-4 lg:p-6 text-primary space-y-6">
+        <div className="py-4 lg:py-6 text-primary space-y-6">
 
             <Header name={name} logoURL={logoURL} />
 
-            <InfoItems items={infoItems} />
-
-            <BusinessSummary businessSummary={businessSummary} />
+            <InfoItems items={infoItems} businessSummary={businessSummary} />
 
         </div>
     )

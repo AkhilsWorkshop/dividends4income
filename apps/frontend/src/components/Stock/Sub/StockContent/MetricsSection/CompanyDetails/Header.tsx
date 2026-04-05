@@ -1,3 +1,5 @@
+import { fadeUp } from '@/animations/variants'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 import Image from 'next/image'
 import { FaBuilding } from 'react-icons/fa6'
 
@@ -8,9 +10,11 @@ interface HeaderProps {
 
 export const Header = ({ name, logoURL }: HeaderProps) => {
     return (
-        <div className="flex items-center gap-3">
+        <MotionTag
+            variants={fadeUp}
+            className="flex items-center gap-3">
 
-            <div className="p-3 glass-card text-accent">
+            <div className="p-3 rounded-xl block border border-border text-accent">
                 <FaBuilding size={20} />
             </div>
 
@@ -27,6 +31,6 @@ export const Header = ({ name, logoURL }: HeaderProps) => {
                     width={36}
                     className="w-9 h-9 rounded-lg ml-auto" />}
 
-        </div>
+        </MotionTag>
     )
 }

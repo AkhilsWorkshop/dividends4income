@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { MdExpandMore } from 'react-icons/md'
 import { cn } from '@/utils'
+import { fadeUp } from '@/animations/variants'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 interface BusinessSummaryProps {
     businessSummary: string
@@ -15,7 +17,11 @@ export const BusinessSummary = ({ businessSummary }: BusinessSummaryProps) => {
     if (!businessSummary) return null
 
     return (
-        <div className="space-y-2">
+        <MotionTag
+            variants={fadeUp}
+            useDefaultInView={false}
+            includeLazyMotion={false}
+            className="space-y-2 pt-6">
 
             <h3 className="text-xs font-semibold text-primary uppercase tracking-wide">About</h3>
 
@@ -34,6 +40,6 @@ export const BusinessSummary = ({ businessSummary }: BusinessSummaryProps) => {
 
             </button>
 
-        </div>
+        </MotionTag>
     )
 }

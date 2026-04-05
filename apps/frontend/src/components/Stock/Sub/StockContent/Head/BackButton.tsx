@@ -1,14 +1,12 @@
 import Link from 'next/link'
-import { scaleIn } from '@/animations/variants'
+import { fadeUp } from '@/animations/variants'
 import { FaArrowLeft } from 'react-icons/fa6'
 import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 export const BackButton = () => {
     return (
         <MotionTag
-            variants={scaleIn}
-            useDefaultInView={false}
-            includeLazyMotion={false}>
+            variants={fadeUp}>
 
             <Link
                 href="/"

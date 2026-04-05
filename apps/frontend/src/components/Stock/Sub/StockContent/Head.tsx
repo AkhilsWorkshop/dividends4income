@@ -1,8 +1,5 @@
-import { staggerContainer } from '@/animations/variants'
 import { BackButton } from './Head/BackButton'
 import { CompanyInfo } from './Head/CompanyInfo'
-import { PriceInfo } from './Head/PriceInfo'
-import { MotionTag } from '@/components/Common/Reuse/MotionTag'
 
 interface HeadProps {
     stock: {
@@ -17,9 +14,7 @@ interface HeadProps {
 export const Head = ({ stock }: HeadProps) => {
 
     return (
-        <MotionTag
-            variants={staggerContainer}
-            className="flex flex-wrap items-center gap-4 py-2">
+        <section className="flex flex-wrap items-center gap-4 py-2">
 
             <BackButton />
 
@@ -29,11 +24,6 @@ export const Head = ({ stock }: HeadProps) => {
                 name={stock.name}
             />
 
-            <PriceInfo
-                price={stock.price}
-                change={stock.change}
-            />
-
-        </MotionTag>
+        </section>
     )
 }

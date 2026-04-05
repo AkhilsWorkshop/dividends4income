@@ -65,7 +65,7 @@ export const KeyMetrics = memo(({
     ]
 
     return (
-        <div className="glass-card p-4 lg:p-6 text-primary space-y-6">
+        <div className="py-4 lg:py-6 text-primary space-y-6">
 
             <Header />
 

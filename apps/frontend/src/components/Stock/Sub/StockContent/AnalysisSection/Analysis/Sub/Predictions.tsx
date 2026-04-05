@@ -1,7 +1,8 @@
 import { memo } from 'react'
 import { staggerContainer, fadeUp } from '@/animations/variants'
-import { FaThumbsUp } from 'react-icons/fa6'
 import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { ErrorBox } from '@/components/Common/Reuse/MessageBox/ErrorBox'
+import { SentimentBadge } from '../Reuse/SentimentBadge'
 
 interface PredictionsProps {
     aiPrediction?: string
@@ -11,38 +12,28 @@ interface PredictionsProps {
 export const Predictions = memo(({ aiPrediction, keyPoints }: PredictionsProps) => {
 
     if (!aiPrediction) {
-        return (
-            <div className="glass-card p-6 text-center py-10 text-secondary">
-                <p className="text-sm">No AI analysis available</p>
-            </div>
-        )
+        return <ErrorBox message={`No AI analysis available for this stock. Please check back later!`} />
     }
 
     return (
-        <div className="glass-card p-4 lg:p-6 space-y-4">
+        <MotionTag
+            variants={fadeUp}
+            className="p-4 lg:p-6 space-y-4 bg-layer/20 rounded-xl block border border-border">
 
-            <div>
-                <p className="font-bold text-lg text-primary">Our Prediction</p>
-                <p className="text-sm text-secondary">AI-powered insights and analysis</p>
+            <div className='flex justify-between items-center gap-4'>
+
+                <div>
+                    <p className="font-bold text-lg text-primary">Our Prediction</p>
+                    <p className="text-sm text-secondary">AI-powered insights and analysis</p>
+                </div>
+
+                <SentimentBadge sentiment={aiPrediction} />
+
             </div>
-
-            <p className="text-sm text-secondary leading-relaxed italic">&ldquo;{aiPrediction}&rdquo;</p>
 
             <div className="w-full h-px bg-border/40" />
 
-            <div className="flex items-center gap-3">
-
-                <p className="text-sm text-primary font-medium">Overall sentiment</p>
-
-                <MotionTag
-                    tag='span'
-                    animate={{ opacity: [1, 0.6, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-gain/10 text-gain border border-gain/20">
-                    Positive <FaThumbsUp size={12} />
-                </MotionTag>
-
-            </div>
+            <p className="text-sm text-secondary leading-relaxed italic">&ldquo;{aiPrediction}&rdquo;</p>
 
             <div className="w-full h-px bg-border/40" />
 
@@ -67,7 +58,7 @@ export const Predictions = memo(({ aiPrediction, keyPoints }: PredictionsProps) 
 
             )}
 
-        </div>
+        </MotionTag>
     )
 })
 

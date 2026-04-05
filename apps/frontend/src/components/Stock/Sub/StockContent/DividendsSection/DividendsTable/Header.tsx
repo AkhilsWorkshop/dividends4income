@@ -12,17 +12,20 @@ export const Header = ({ startIndex, endIndex, totalItems }: HeaderProps) => {
 
             <div className="flex items-center gap-3">
 
-                <div className="p-3 glass-card text-accent">
+                <div className="p-3 rounded-xl block border border-border text-accent">
                     <RiStockFill size={20} />
                 </div>
 
                 <div>
+
                     <h2 className="font-bold text-xl text-primary">
                         Dividends
                     </h2>
+
                     <p className="text-sm text-secondary">
                         Payments history
                     </p>
+
                 </div>
 
             </div>

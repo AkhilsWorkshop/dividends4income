@@ -3,8 +3,14 @@ import { BiSolidUpvote } from 'react-icons/bi'
 import { FaReddit } from 'react-icons/fa6'
 import { MdComment } from 'react-icons/md'
 import type { RedditPost } from '@/types'
+import { cn } from '@/utils'
 
-export const PostCard = ({ post }: { post: RedditPost }) => {
+type PostCardProps = {
+    post: RedditPost
+    curvedRadius?: boolean
+}
+
+export const PostCard = ({ post, curvedRadius }: PostCardProps) => {
 
     const formatTime = (dateString: string) => {
         try {
@@ -22,7 +28,9 @@ export const PostCard = ({ post }: { post: RedditPost }) => {
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-border bg-layer p-4 flex flex-col gap-2.5 hover:border-accent/30 transition-colors duration-200 group/card">
+            className={cn("border border-border bg-layer p-4 flex flex-col h-full gap-2.5 hover:border-accent/30 transition-colors duration-200 group/card",
+                curvedRadius && 'rounded-xl'
+            )}>
 
             <div className="flex items-center justify-between gap-2">
 
@@ -61,7 +69,7 @@ export const PostCard = ({ post }: { post: RedditPost }) => {
                 <span className="truncate text-secondary/50 min-w-0">u/{post.author}</span>
 
                 <div className="flex items-center gap-1 ml-auto shrink-0">
-                    <BiSolidUpvote size={11} className="text-accent/60" />
+                    <BiSolidUpvote size={11} className="text-[#FF4500]" />
                     <span>{formatScore(post.score)}</span>
                 </div>
 

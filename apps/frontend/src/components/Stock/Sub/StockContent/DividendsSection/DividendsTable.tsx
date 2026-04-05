@@ -6,6 +6,8 @@ import { TableHeader } from './DividendsTable/TableHeader'
 import { TableBody } from './DividendsTable/TableBody'
 import { Pagination } from './DividendsTable/Pagination'
 import type { SortField, SortDirection } from './DividendsTable/Reuse/SortIcon'
+import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { fadeUp } from '@/animations/variants'
 
 interface DividendData {
     date: string
@@ -73,7 +75,9 @@ export const DividendsTable = ({ dividends }: DividendsTableProps) => {
     }
 
     return (
-        <div className='w-full col-span-5 lg:col-span-2 glass-card text-primary'>
+        <MotionTag
+            variants={fadeUp}
+            className='w-full col-span-5 lg:col-span-2 text-primary bg-layer/20 rounded-xl block border border-border'>
 
             <>
 
@@ -85,7 +89,7 @@ export const DividendsTable = ({ dividends }: DividendsTableProps) => {
 
                 <div className="overflow-x-auto">
 
-                    <table className="min-w-full table-auto dividend-table">
+                    <table className="min-w-full table-auto">
 
                         <TableHeader
                             onSort={handleSort}
@@ -107,6 +111,6 @@ export const DividendsTable = ({ dividends }: DividendsTableProps) => {
 
             </>
 
-        </div>
+        </MotionTag>
     )
 }

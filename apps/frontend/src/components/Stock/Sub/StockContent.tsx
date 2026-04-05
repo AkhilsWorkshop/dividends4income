@@ -24,6 +24,7 @@ export const StockContent = ({ ticker, stockInfo }: StockContentProps) => {
                 dividendYield={stockInfo.dividend_yield || 'N/A'}
                 dividendRate={stockInfo.dividend_rate || 'N/A'}
                 dividendsLength={dividends.length}
+                change={stockInfo.change || '0%'}
             />
 
             <DividendsSection dividends={dividends} ticker={ticker} />

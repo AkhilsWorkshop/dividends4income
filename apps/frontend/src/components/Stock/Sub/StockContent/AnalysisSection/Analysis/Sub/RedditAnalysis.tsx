@@ -1,7 +1,8 @@
 import { memo } from 'react'
 import { staggerContainer, fadeUp } from '@/animations/variants'
-import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa6'
 import { MotionTag } from '@/components/Common/Reuse/MotionTag'
+import { ErrorBox } from '@/components/Common/Reuse/MessageBox/ErrorBox'
+import { SentimentBadge } from '../Reuse/SentimentBadge'
 
 interface SentimentAnalysisProps {
     redditPrediction?: string
@@ -11,29 +12,28 @@ interface SentimentAnalysisProps {
 export const RedditAnalysis = memo(({ redditPrediction, keyPoints }: SentimentAnalysisProps) => {
 
     if (!redditPrediction) {
-        return (
-            <div className="glass-card p-6 text-center py-10 text-secondary">
-                <p className="text-sm">No Reddit analysis available</p>
-            </div>
-        )
+        return <ErrorBox message='No Reddit analysis available for this stock. Please check back later!' />
     }
 
     return (
-        <div className="glass-card p-4 lg:p-6 space-y-4">
+        <MotionTag
+            variants={fadeUp}
+            className="p-4 lg:p-6 space-y-4 bg-layer/20 rounded-xl block border border-border">
 
-            <div>
-                <p className="font-bold text-lg text-primary">Reddit</p>
-                <p className="text-sm text-secondary">Community discussions and analysis</p>
+            <div className='flex justify-between items-center gap-4'>
+
+                <div>
+                    <p className="font-bold text-lg text-primary">Reddit</p>
+                    <p className="text-sm text-secondary">Community discussions and analysis</p>
+                </div>
+
+                <SentimentBadge sentiment={redditPrediction} />
+
             </div>
-
-            <p className="text-sm text-secondary leading-relaxed italic">&ldquo;{redditPrediction}&rdquo;</p>
 
             <div className="w-full h-px bg-border/40" />
 
-            <div className="flex items-center gap-3">
-                <p className="text-sm text-primary font-medium">Overall sentiment</p>
-                <SentimentBadge sentiment={redditPrediction} />
-            </div>
+            <p className="text-sm text-secondary leading-relaxed italic">&ldquo;{redditPrediction}&rdquo;</p>
 
             <div className="w-full h-px bg-border/40" />
 
@@ -58,7 +58,7 @@ export const RedditAnalysis = memo(({ redditPrediction, keyPoints }: SentimentAn
 
             )}
 
-        </div>
+        </MotionTag>
     )
 })
 
@@ -77,33 +77,5 @@ const KeyPoint = ({ point }: { point: string }) => {
             <span className="text-secondary">{point}</span>
 
         </MotionTag>
-    )
-}
-
-const SentimentBadge = ({ sentiment }: { sentiment: string }) => {
-
-    const lower = sentiment.toLowerCase()
-
-    if (lower === 'positive') {
-        return (
-            <span
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-gain/10 text-gain border border-gain/20">
-                Positive <FaThumbsUp size={12} />
-            </span>
-        )
-    }
-
-    if (lower === 'negative') {
-        return (
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-loss/10 text-loss border border-loss/20">
-                Negative <FaThumbsDown size={12} />
-            </span>
-        )
-    }
-
-    return (
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-surface/30 text-secondary border border-border/60">
-            Neutral ~
-        </span>
     )
 }
